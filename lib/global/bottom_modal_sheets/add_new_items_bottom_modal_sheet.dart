@@ -25,11 +25,7 @@ class AddNewItemsBottomModalSheet {
                       Navigator.of(context).pop();
                       Navigator.push(
                           context,
-                          PageTransition(
-                              type: PageTransitionType.bottomToTop,
-                              child: const AddItemScreen(),
-                              inheritTheme: true,
-                              ctx: context));
+                         CupertinoPageRoute(builder: (context)=> AddItemScreen()));
                     },
                     child: listTileAddFileFolder(Icons.file_open_outlined, 'Add Items')),
                 listTileAddFileFolder(Icons.file_open_outlined, 'Add Folders'),
