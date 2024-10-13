@@ -15,7 +15,11 @@ class _FoldersListScreenState extends State<FoldersListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: FolderSummaryTopBar()),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+          backgroundColor: Colors.white,
+          title: FolderSummaryTopBar()),
       body: const Padding(
         padding: EdgeInsets.all(8.0),
         child: Column(
@@ -33,7 +37,7 @@ class _FoldersListScreenState extends State<FoldersListScreen> {
         child: Container(
           height: 50,
           width: 50,
-          decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(16)),
+          decoration: BoxDecoration(color: Colors.orangeAccent, borderRadius: BorderRadius.circular(16)),
           child: const Icon(Icons.add, size: 36, color: Colors.white),
         ),
       ),

@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:inventory/features/add_items/widgets/add_colors_list_widget.dart';
 import 'package:inventory/features/add_items/widgets/image_upload_button.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
@@ -21,6 +23,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   updateListOfImages(List<File> pickedImages) {
     listOfImages.value = [...listOfImages.value, ...pickedImages];
   }
+
   removeListOfImages(int index) {
     listOfImages.value.removeAt(index);
   }
@@ -28,10 +31,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
           scrolledUnderElevation: 0.0,
-          surfaceTintColor: Colors.white,
           elevation: 0.0,
+          backgroundColor: Colors.white,
           title: AppText(
             'Add Items',
             style: const TextStyle().defaultTextStyle(fontSize: 18),
@@ -94,6 +98,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
               const AppText('Shortage (%)'),
               customTextField(
                   hintText: 'Shortage', inputType: TextInputType.number),
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => const AddColorsListWidget()));
+                  },
+                  child: const Text('Add Colors'))
             ],
           ),
         ),
@@ -183,7 +195,7 @@ Widget customTextField(
         hintText: hintText,
         filled: true,
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
+            const EdgeInsets.symmetric(horizontal: 8, vertical: 8.0),
         border: const OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.all(Radius.circular(16)),

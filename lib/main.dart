@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'features/cubits/add_item_cubit.dart';
 import 'folders_list_screen.dart';
 
 void main() {
@@ -11,14 +13,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Inventory',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: FoldersListScreen());
+    return BlocProvider(
+      create: (context) => AddItemCubit(),
+      child: MaterialApp(
+          title: 'Inventory',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: FoldersListScreen()),
+    );
   }
 }
 
@@ -26,6 +31,7 @@ class SignInScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   SignInScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +71,7 @@ class SignInScreen extends StatelessWidget {
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius:
-                              BorderRadius.all(Radius.circular(50)),
+                                  BorderRadius.all(Radius.circular(50)),
                             ),
                           ),
                           keyboardType: TextInputType.phone,
@@ -86,7 +92,7 @@ class SignInScreen extends StatelessWidget {
                               border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(50)),
+                                    BorderRadius.all(Radius.circular(50)),
                               ),
                             ),
                             onSaved: (passaword) {
@@ -119,12 +125,12 @@ class SignInScreen extends StatelessWidget {
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .color!
-                                  .withOpacity(0.64),
-                            ),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color!
+                                      .withOpacity(0.64),
+                                ),
                           ),
                         ),
                         TextButton(
@@ -143,12 +149,12 @@ class SignInScreen extends StatelessWidget {
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .color!
-                                  .withOpacity(0.64),
-                            ),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color!
+                                      .withOpacity(0.64),
+                                ),
                           ),
                         ),
                       ],
