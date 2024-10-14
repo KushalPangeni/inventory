@@ -10,6 +10,7 @@ class FolderItemMoreBottomModalSheet {
 
   showBottomSheet({String title = 'Folder/Item Name ;'}) {
     showModalBottomSheet(
+        backgroundColor: Colors.white,
         context: context,
         builder: (context) {
           return Padding(

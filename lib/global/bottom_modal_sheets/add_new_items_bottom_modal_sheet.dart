@@ -11,6 +11,7 @@ class AddNewItemsBottomModalSheet {
 
   showBottomSheet() {
     showModalBottomSheet(
+        backgroundColor: Colors.white,
         context: context,
         builder: (context) {
           return Padding(

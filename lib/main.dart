@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'features/cubits/add_item_cubit.dart';
 import 'folders_list_screen.dart';
+import 'home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          home: FoldersListScreen()),
+          home: const HomeScreen()),
     );
   }
 }
@@ -66,12 +67,11 @@ class SignInScreen extends StatelessWidget {
                             hintText: 'Phone',
                             filled: true,
                             fillColor: Color(0xFFF5FCF9),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16.0 * 1.5, vertical: 16.0),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 16.0 * 1.5, vertical: 16.0),
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                              borderRadius: BorderRadius.all(Radius.circular(50)),
                             ),
                           ),
                           keyboardType: TextInputType.phone,
@@ -91,8 +91,7 @@ class SignInScreen extends StatelessWidget {
                                   horizontal: 16.0 * 1.5, vertical: 16.0),
                               border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
+                                borderRadius: BorderRadius.all(Radius.circular(50)),
                               ),
                             ),
                             onSaved: (passaword) {
@@ -121,10 +120,7 @@ class SignInScreen extends StatelessWidget {
                           onPressed: () {},
                           child: Text(
                             'Forgot Password?',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyLarge!
@@ -145,10 +141,7 @@ class SignInScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyLarge!
