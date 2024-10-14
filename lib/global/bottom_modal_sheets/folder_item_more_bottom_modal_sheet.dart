@@ -2,14 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory/features/add_items/view/add_item_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
-import 'package:page_transition/page_transition.dart';
 
-class AddNewItemsBottomModalSheet {
+class FolderItemMoreBottomModalSheet {
   final BuildContext context;
 
-  AddNewItemsBottomModalSheet(this.context);
+  FolderItemMoreBottomModalSheet(this.context);
 
-  showBottomSheet() {
+  showBottomSheet({String title = 'Folder/Item Name ;'}) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -22,13 +21,13 @@ class AddNewItemsBottomModalSheet {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Flexible(
+                    Flexible(
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: AppText('Add Items and Folders',
+                        padding: const EdgeInsets.all(8.0),
+                        child: AppText(title,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 18)),
+                            style: const TextStyle(fontSize: 18)),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -46,15 +45,17 @@ class AddNewItemsBottomModalSheet {
                 ),
                 const SizedBox(height: 36),
                 const Divider(),
-                const SizedBox(height: 10),
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.push(
                           context, CupertinoPageRoute(builder: (context) => const AddItemScreen()));
                     },
-                    child: listTileAddFileFolder(Icons.file_open_outlined, 'Add Items')),
-                listTileAddFileFolder(Icons.folder_outlined, 'Add Folders'),
+                    child: listTileAddFileFolder(Icons.move_down_rounded, 'Move')),
+                listTileAddFileFolder(Icons.history_rounded, 'History'),
+                listTileAddFileFolder(Icons.upload_file_rounded, 'Export'),
+                listTileAddFileFolder(Icons.details_rounded, 'Details'),
+                listTileAddFileFolder(Icons.delete_forever, 'Delete'),
               ],
             ),
           );
@@ -91,7 +92,7 @@ Widget listTileAddFileFolder(IconData iconData, String title) {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          children: [Icon(iconData, size: 36), const SizedBox(width: 20), AppText(title)],
+          children: [Icon(iconData, size: 24), const SizedBox(width: 20), AppText(title)],
         ),
       ),
     ),

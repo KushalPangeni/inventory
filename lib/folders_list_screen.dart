@@ -19,14 +19,14 @@ class _FoldersListScreenState extends State<FoldersListScreen> {
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
           backgroundColor: Colors.white,
-          title: FolderSummaryTopBar()),
+          title: const FolderSummaryTopBar()),
       body: const Padding(
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
             FolderWidget(folderName: 'Folder 1'),
             FolderWidget(folderName: 'Folder 2'),
-            FolderWidget(folderName: 'Folder 1 Folder 1 Folder 1 Folder 1 Folder 1'),
+            FolderWidget(folderName: 'Folder 1 Folder 1 Folder 1 Folder 1 Folder Folder 1 Folder  1'),
           ],
         ),
       ),

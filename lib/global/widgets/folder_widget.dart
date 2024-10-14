@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventory/global/bottom_modal_sheets/folder_item_more_bottom_modal_sheet.dart';
 
 class FolderWidget extends StatelessWidget {
   final String folderName;
@@ -15,8 +16,7 @@ class FolderWidget extends StatelessWidget {
         children: [
           //Image
           Container(
-            decoration: BoxDecoration(
-                color: Colors.teal, borderRadius: BorderRadius.circular(8)),
+            decoration: BoxDecoration(color: Colors.teal, borderRadius: BorderRadius.circular(8)),
             child: const Icon(Icons.ac_unit, size: 80),
           ),
           const SizedBox(width: 10),
@@ -32,15 +32,18 @@ class FolderWidget extends StatelessWidget {
                 Text(folderName,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w700)),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                 const Text('1500 Units / \$1,00,000',
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500))
               ],
             ),
           ),
           //Menu
-          const Icon(Icons.more_vert_rounded)
+          GestureDetector(
+              onTap: () {
+                FolderItemMoreBottomModalSheet(context).showBottomSheet(title: folderName);
+              },
+              child: const Icon(Icons.more_vert_rounded))
         ],
       ),
     );
