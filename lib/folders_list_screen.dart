@@ -26,7 +26,7 @@ class _FoldersListScreenState extends State<FoldersListScreen> {
           children: [
             FolderWidget(folderName: 'Folder 1'),
             FolderWidget(folderName: 'Folder 2'),
-            FolderWidget(folderName: 'Folder 1 Folder 1 Folder 1 Folder 1 Folder Folder 1 Folder  1'),
+            FolderWidget(folderName: 'Folder 1 replace and testing two line text'),
           ],
         ),
       ),

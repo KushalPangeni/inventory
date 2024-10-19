@@ -65,12 +65,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
               customTextField(hintText: 'Name', inputType: TextInputType.text),
               //Fabric No.
               const AppText('Fabric Number'),
-              customTextField(
-                  hintText: 'Fabric Number', inputType: TextInputType.number),
+              customTextField(hintText: 'Fabric Number', inputType: TextInputType.number),
               //Shop name
               const AppText('Shop name'),
-              customTextField(
-                  hintText: 'Shop Name', inputType: TextInputType.text),
+              customTextField(hintText: 'Shop Name', inputType: TextInputType.text),
               const Row(
                 children: [
                   Expanded(child: AppText('Width')),
@@ -81,29 +79,21 @@ class _AddItemScreenState extends State<AddItemScreen> {
               Row(
                 children: [
                   Expanded(
-                      child: customTextField(
-                          hintText: '150 cm', inputType: TextInputType.number)),
+                      child: customTextField(hintText: '150 cm', inputType: TextInputType.number)),
                   const SizedBox(width: 10),
-                  Expanded(
-                      child: customTextField(
-                          hintText: 'GSM', inputType: TextInputType.text)),
+                  Expanded(child: customTextField(hintText: 'GSM', inputType: TextInputType.text)),
                 ],
               ),
               const AppText('1 kg'),
-              customTextField(
-                  hintText: 'Enter in meter', inputType: TextInputType.text),
+              customTextField(hintText: 'Enter in meter', inputType: TextInputType.text),
               const AppText('Average'),
-              customTextField(
-                  hintText: 'Average', inputType: TextInputType.text),
+              customTextField(hintText: 'Average', inputType: TextInputType.text),
               const AppText('Shortage (%)'),
-              customTextField(
-                  hintText: 'Shortage', inputType: TextInputType.number),
+              customTextField(hintText: 'Shortage', inputType: TextInputType.number),
               TextButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) => const AddColorsListWidget()));
+                    Navigator.push(context,
+                        CupertinoPageRoute(builder: (context) => const AddColorsListWidget()));
                   },
                   child: const Text('Add Colors'))
             ],
@@ -112,10 +102,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 8.0,
-            right: 16,
-            left: 16,
-            top: 4),
+            bottom: MediaQuery.of(context).viewInsets.bottom + 8.0, right: 16, left: 16, top: 4),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -130,10 +117,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
             const SizedBox(width: 10),
             Flexible(
                 flex: 2,
-                child: AppButton(
-                    title: 'Save',
-                    color: Colors.orangeAccent,
-                    onPressed: () {})),
+                child: AppButton(title: 'Save', color: Colors.orangeAccent, onPressed: () {})),
           ],
         ),
       ),
@@ -150,16 +134,38 @@ class _AddItemScreenState extends State<AddItemScreen> {
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.start,
               children: [
-                const AppText('Pick Images'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AppText('Pick Images',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 18)),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.black.withOpacity(0.1)),
+                          child: const Icon(Icons.close_rounded)),
+                    )
+                  ],
+                ),
                 const SizedBox(height: 10),
                 pickOptionWidget('Gallery', () async {
                   Navigator.of(context).pop();
-                  final List<XFile>? pickedImages =
-                      await ImagePicker().pickMultiImage();
+                  final List<XFile>? pickedImages = await ImagePicker().pickMultiImage();
                   log(pickedImages!.toString());
                   if (pickedImages != null && pickedImages.isNotEmpty) {
-                    List<File> images =
-                        pickedImages.map((xFile) => File(xFile.path)).toList();
+                    List<File> images = pickedImages.map((xFile) => File(xFile.path)).toList();
                     updateListOfImages(images);
                   }
                 }),
@@ -177,8 +183,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   }
 }
 
-Widget customTextField(
-    {String hintText = '', TextInputType inputType = TextInputType.text}) {
+Widget customTextField({String hintText = '', TextInputType inputType = TextInputType.text}) {
   return Padding(
     padding: const EdgeInsets.only(top: 8, bottom: 8),
     child: TextFormField(
@@ -186,16 +191,14 @@ Widget customTextField(
       maxLines: 5,
       inputFormatters: inputType == TextInputType.number
           ? [
-              FilteringTextInputFormatter
-                  .singleLineFormatter, // Only allows digits
+              FilteringTextInputFormatter.singleLineFormatter, // Only allows digits
               SingleDecimalInputFormatter(), // Custom formatter for decimal
             ]
           : [],
       decoration: InputDecoration(
         hintText: hintText,
         filled: true,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 8, vertical: 8.0),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8.0),
         border: const OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -231,8 +234,7 @@ pickOptionWidget(String text, void Function()? onPressed) {
 
 class SingleDecimalInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // Allow only numbers and one decimal point
     if (newValue.text.isEmpty) {
       return newValue; // Allow empty input

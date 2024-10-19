@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:inventory/features/add_items/view/add_item_screen.dart';
+import 'package:inventory/features/move/view/move_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
 class FolderItemMoreBottomModalSheet {
@@ -50,7 +50,7 @@ class FolderItemMoreBottomModalSheet {
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.push(
-                          context, CupertinoPageRoute(builder: (context) => const AddItemScreen()));
+                          context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
                     },
                     child: listTileAddFileFolder(Icons.move_down_rounded, 'Move')),
                 listTileAddFileFolder(Icons.history_rounded, 'History'),
