@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:inventory/features/add_folders/view/add_folder_screen.dart';
 import 'package:inventory/features/add_items/view/add_item_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:page_transition/page_transition.dart';
@@ -55,7 +56,13 @@ class AddNewItemsBottomModalSheet {
                           context, CupertinoPageRoute(builder: (context) => const AddItemScreen()));
                     },
                     child: listTileAddFileFolder(Icons.file_open_outlined, 'Add Items')),
-                listTileAddFileFolder(Icons.folder_outlined, 'Add Folders'),
+                GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (context) => const AddFolderScreen()));
+                    },
+                    child: listTileAddFileFolder(Icons.folder_outlined, 'Add Folders')),
               ],
             ),
           );

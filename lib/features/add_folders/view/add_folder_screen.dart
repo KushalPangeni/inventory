@@ -10,14 +10,14 @@ import 'package:inventory/features/add_items/widgets/image_upload_button.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
-class AddItemScreen extends StatefulWidget {
-  const AddItemScreen({super.key});
+class AddFolderScreen extends StatefulWidget {
+  const AddFolderScreen({super.key});
 
   @override
-  State<AddItemScreen> createState() => _AddItemScreenState();
+  State<AddFolderScreen> createState() => _AddFolderScreenState();
 }
 
-class _AddItemScreenState extends State<AddItemScreen> {
+class _AddFolderScreenState extends State<AddFolderScreen> {
   ValueNotifier<List<File>> listOfImages = ValueNotifier([]);
 
   updateListOfImages(List<File> pickedImages) {
@@ -37,7 +37,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
           elevation: 0.0,
           backgroundColor: Colors.white,
           title: AppText(
-            'Add Items',
+            'Add Folder',
             style: const TextStyle().defaultTextStyle(fontSize: 18),
           )),
       body: Padding(
@@ -59,59 +59,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         listOfImages: listOfImages.value);
                   }),
               const SizedBox(height: 16),
-
               //Name
-              const AppText('Name'),
-              customTextField(hintText: 'Name', inputType: TextInputType.text),
-              //Fabric No.
-              const AppText('Fabric Number'),
-              customTextField(hintText: 'Fabric Number', inputType: TextInputType.number),
-              //Shop name
-              const AppText('Shop name'),
-              customTextField(hintText: 'Shop Name', inputType: TextInputType.text),
-              const Row(
-                children: [
-                  Expanded(child: AppText('Width')),
-                  SizedBox(width: 10),
-                  Expanded(child: AppText('GSM')),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: customTextField(hintText: '150 cm', inputType: TextInputType.number)),
-                  const SizedBox(width: 10),
-                  Expanded(child: customTextField(hintText: 'GSM', inputType: TextInputType.text)),
-                ],
-              ),
-              const Row(
-                children: [
-                  Expanded(child: AppText('Min. Quantity')),
-                  SizedBox(width: 10),
-                  Expanded(child: AppText('Unit')),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(child: customTextField(hintText: '0', inputType: TextInputType.number)),
-                  const SizedBox(width: 10),
-                  Expanded(child: customTextField(hintText: 'meter', inputType: TextInputType.text)),
-                ],
-              ),
-              const AppText('1 kg'),
-              customTextField(hintText: 'Enter in meter', inputType: TextInputType.text),
-              const AppText('Average'),
-              customTextField(hintText: 'Average', inputType: TextInputType.text),
-              const AppText('Shortage (%)'),
-              customTextField(hintText: 'Shortage', inputType: TextInputType.number),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        CupertinoPageRoute(builder: (context) => const AddColorsListWidget()));
-                  },
-                  child: const Text('Add Colors')),
-              const AppText('Notes'),
-              customTextField(hintText: 'Notes', inputType: TextInputType.text),
+              const AppText('Folder Name'),
+              customTextField(hintText: 'Enter Folder Name', inputType: TextInputType.text),
+
+              //Tags
+              const AppText('Tags'),
+              customTextField(hintText: 'Select Tags', inputType: TextInputType.text),
+
+              //Description
+              const AppText('Description'),
+              customTextField(hintText: 'Enter Description', inputType: TextInputType.text),
             ],
           ),
         ),
