@@ -35,79 +35,89 @@ class _AddTagsScreenState extends State<AddTagsScreen> {
       body: BlocBuilder<TagsCubit, TagsState>(builder: (context, state) {
         return state.status is LoadingState
             ? const Center(child: CircularProgressIndicator())
-            : ListView.separated(
-                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 1),
-                itemCount: state.listOfTags.length + 1,
-                itemBuilder: (context, index) {
-                  return index < state.listOfTags.length
-                      ? Padding(
-                          padding: const EdgeInsets.only(left: 8.0, bottom: 1, right: 8),
-                          child: InkWell(
-                            onTap: () {
-                              BlocProvider.of<TagsCubit>(context).addRemove(state.listOfTags[index]);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: state.listOfSelectedTags.contains(state.listOfTags[index])
-                                      ? Colors.orangeAccent[100]
-                                      : Colors.white,
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const SizedBox(width: 4),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: state.listOfSelectedTags.contains(state.listOfTags[index])
-                                                  ? Colors.orangeAccent
-                                                  : Colors.orangeAccent[100],
-                                              borderRadius: BorderRadius.circular(4)),
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(2.0),
-                                            child: Icon(
-                                              Icons.tag_rounded,
-                                              size: 28,
-                                            ),
-                                          )),
-                                      const SizedBox(width: 2),
-                                      Flexible(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                                          child: AppText(
-                                            maxLines: 1,
-                                            state.listOfTags[index].name,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  PopupMenuButton<String>(
-                                    initialValue: '',
-                                    onSelected: (String item) {
-                                      BlocProvider.of<TagsCubit>(context)
-                                          .deleteTag(context, state.listOfTags[index].id);
+            : state.status is ErrorState
+                ? const Center(child: Text('Error occurred.'))
+                : state.listOfTags.isEmpty
+                    ? const Center(
+                        child: AppText(
+                        maxLines: 1,
+                        'No tags found.',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ))
+                    : ListView.separated(
+                        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                        separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 1),
+                        itemCount: state.listOfTags.length + 1,
+                        itemBuilder: (context, index) {
+                          return index < state.listOfTags.length
+                              ? Padding(
+                                  padding: const EdgeInsets.only(left: 8.0, bottom: 1, right: 8),
+                                  child: InkWell(
+                                    onTap: () {
+                                      BlocProvider.of<TagsCubit>(context).addRemove(state.listOfTags[index]);
                                     },
-                                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                                      PopupMenuItem<String>(
-                                        value: state.listOfTags[index].name,
-                                        child: const Text('Delete'),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: state.listOfSelectedTags.contains(state.listOfTags[index])
+                                              ? Colors.orangeAccent[100]
+                                              : Colors.white,
+                                          borderRadius: BorderRadius.circular(4)),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const SizedBox(width: 4),
+                                              Container(
+                                                  decoration: BoxDecoration(
+                                                      color: state.listOfSelectedTags.contains(state.listOfTags[index])
+                                                          ? Colors.orangeAccent
+                                                          : Colors.orangeAccent[100],
+                                                      borderRadius: BorderRadius.circular(4)),
+                                                  child: const Padding(
+                                                    padding: EdgeInsets.all(2.0),
+                                                    child: Icon(
+                                                      Icons.tag_rounded,
+                                                      size: 28,
+                                                    ),
+                                                  )),
+                                              const SizedBox(width: 2),
+                                              Flexible(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                                                  child: AppText(
+                                                    maxLines: 1,
+                                                    state.listOfTags[index].name,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          PopupMenuButton<String>(
+                                            initialValue: '',
+                                            onSelected: (String item) {
+                                              BlocProvider.of<TagsCubit>(context)
+                                                  .deleteTag(context, state.listOfTags[index].id);
+                                            },
+                                            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                              PopupMenuItem<String>(
+                                                value: state.listOfTags[index].name,
+                                                child: const Text('Delete'),
+                                              ),
+                                            ],
+                                            child: const Icon(Icons.more_vert_rounded),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                    child: const Icon(Icons.more_vert_rounded),
+                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      : const SizedBox(height: 60);
-                });
+                                )
+                              : const SizedBox(height: 60);
+                        });
       }),
       floatingActionButton: GestureDetector(
         onTap: () {

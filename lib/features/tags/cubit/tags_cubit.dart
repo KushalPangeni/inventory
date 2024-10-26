@@ -17,8 +17,8 @@ class TagsCubit extends Cubit<TagsState> {
 
   TagsCubit(this.repository) : super(const TagsState());
 
-  Future<void> getTags() async {
-    emit(state.copyWith(status: const LoadingState()));
+  Future<void> getTags({bool showLoading = true}) async {
+    emit(state.copyWith(status: showLoading ? const LoadingState() : const InitialState()));
     final response = await repository.getTags();
     response.fold(
       (l) {
@@ -45,9 +45,14 @@ class TagsCubit extends Cubit<TagsState> {
         (l) {
           emit(state.copyWith(status: const ErrorState()));
           log('Error fetching tags $l');
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              elevation: 10,
+              backgroundColor: Colors.white,
+              duration: Duration(milliseconds: 600),
+              content: AppText('Error when adding tag.')));
         },
         (r) {
-          listOfTag.add(Tag(id: 123, name: tag));
+          getTags(showLoading: false);
         },
       );
     } else {
@@ -82,7 +87,7 @@ class TagsCubit extends Cubit<TagsState> {
             content: AppText('Error when deleting tag.')));
       },
       (r) {
-        getTags();
+        getTags(showLoading: false);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             elevation: 10,
             backgroundColor: Colors.white,
