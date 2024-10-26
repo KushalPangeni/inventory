@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inventory/features/add_folders/repository/add_folder_repository.dart';
 import 'package:inventory/features/add_items/model/color_model.dart';
 
 part 'add_item_state.dart';
@@ -7,7 +8,8 @@ part 'add_item_state.dart';
 part 'add_item_cubit.freezed.dart';
 
 class AddItemCubit extends Cubit<AddItemState> {
-  AddItemCubit() : super(const AddItemState());
+  AddFolderRepository repository;
+  AddItemCubit(this.repository) : super(const AddItemState());
 
   addColorInColorList() {
     List<ColorModel> listOfColorModel = List.from(state.colorList);

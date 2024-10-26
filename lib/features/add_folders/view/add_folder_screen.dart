@@ -65,6 +65,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
 
               //Tags
               const AppText('Tags'),
+              Container(color: Colors.teal,height: 45,),
               customTextField(hintText: 'Select Tags', inputType: TextInputType.text),
 
               //Description

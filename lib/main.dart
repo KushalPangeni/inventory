@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory/features/tags/cubit/tags_cubit.dart';
 
-import 'features/cubits/add_item_cubit.dart';
-import 'folders_list_screen.dart';
+import 'core/injectors/dependency_injectors.dart';
+import 'features/add_items/cubits/add_item_cubit.dart';
 import 'home_screen.dart';
 
 void main() {
+  setupLocator();
   runApp(const MyApp());
 }
+
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AddItemCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AddItemCubit>(create: (BuildContext context) => AddItemCubit(di())),
+        BlocProvider<TagsCubit>(create: (BuildContext context) => TagsCubit(di()))
+      ],
       child: MaterialApp(
           title: 'Inventory',
           debugShowCheckedModeBanner: false,
@@ -52,10 +60,7 @@ class SignInScreen extends StatelessWidget {
                   SizedBox(height: constraints.maxHeight * 0.1),
                   Text(
                     "Sign In",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: constraints.maxHeight * 0.05),
                   Form(
@@ -67,9 +72,8 @@ class SignInScreen extends StatelessWidget {
                             hintText: 'Phone',
                             filled: true,
                             fillColor: Color(0xFFF5FCF9),
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 16.0 * 1.5, vertical: 16.0),
-                            border: const OutlineInputBorder(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 16.0 * 1.5, vertical: 16.0),
+                            border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.all(Radius.circular(50)),
                             ),
@@ -87,8 +91,7 @@ class SignInScreen extends StatelessWidget {
                               hintText: 'Password',
                               filled: true,
                               fillColor: Color(0xFFF5FCF9),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0 * 1.5, vertical: 16.0),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16.0 * 1.5, vertical: 16.0),
                               border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -121,11 +124,7 @@ class SignInScreen extends StatelessWidget {
                           child: Text(
                             'Forgot Password?',
                             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color!
-                                      .withOpacity(0.64),
+                                  color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.64),
                                 ),
                           ),
                         ),
@@ -142,11 +141,7 @@ class SignInScreen extends StatelessWidget {
                               ],
                             ),
                             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color!
-                                      .withOpacity(0.64),
+                                  color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.64),
                                 ),
                           ),
                         ),

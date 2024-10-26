@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:inventory/features/add_items/cubits/add_item_cubit.dart';
 import 'package:inventory/features/add_items/model/color_model.dart';
 import 'package:inventory/features/add_items/view/add_item_screen.dart';
-import 'package:inventory/features/cubits/add_item_cubit.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
