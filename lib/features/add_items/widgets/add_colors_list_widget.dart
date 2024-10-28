@@ -75,8 +75,7 @@ class _AddColorsListWidgetState extends State<AddColorsListWidget> {
 
 Widget colorWidget(BuildContext context, int index, ColorModel colorModel) {
   TextEditingController colorController = TextEditingController(text: colorModel.colorName);
-  TextEditingController quantityController =
-      TextEditingController(text: colorModel.quantity.toString());
+  TextEditingController quantityController = TextEditingController(text: colorModel.quantity.toString());
   TextEditingController rollController = TextEditingController(text: colorModel.roll.toString());
 
   return Table(
@@ -107,8 +106,7 @@ Widget colorWidget(BuildContext context, int index, ColorModel colorModel) {
               controller: colorController,
               hintText: 'Color name',
               onTyped: (s) {
-                BlocProvider.of<AddItemCubit>(context)
-                    .editColorItem(index, s, colorModel.quantity, colorModel.roll);
+                BlocProvider.of<AddItemCubit>(context).editColorItem(index, s, colorModel.quantity, colorModel.roll);
               }),
           customTextField(
               inputType: TextInputType.number,
@@ -134,6 +132,7 @@ Widget colorWidget(BuildContext context, int index, ColorModel colorModel) {
 
 Widget customTextField(
     {String hintText = '',
+      int maxLines = 2,
     TextInputType inputType = TextInputType.text,
     required TextEditingController controller,
     required Function(String) onTyped}) {
@@ -141,7 +140,7 @@ Widget customTextField(
     padding: const EdgeInsets.only(top: 8, bottom: 8, right: 4),
     child: TextFormField(
       minLines: 1,
-      maxLines: 2,
+      maxLines: maxLines,
       controller: controller,
       inputFormatters: inputType == TextInputType.number
           ? [
@@ -150,12 +149,17 @@ Widget customTextField(
             ]
           : [],
       decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0xFFE4E4E7), width: 1.0),
+        ),
         hintText: hintText,
         filled: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-        border: const OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+        fillColor: Colors.white,
+        border:  OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide:  const BorderSide(color: Colors.orange, width: 1.0),
         ),
       ),
       onChanged: (s) {

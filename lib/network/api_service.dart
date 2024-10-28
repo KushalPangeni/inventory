@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -114,7 +115,7 @@ class DioClient {
   }) async {
     Response response = await _client.post(endPoint,
         options: Options(
-          headers: Request.createHeader(isFormData: true),
+          headers: Request.createHeader(/*isFormData: true*/),
         ),
         data: formData);
     return request(endPoint: endPoint, response: response);
@@ -177,6 +178,7 @@ class DioClient {
     try {
       final response = await request;
       if (response.statusCode >= 200 && response.statusCode < 300) {
+        log('Response ===> $response');
         try {
           if (fromJsonModel != null) {
             if (response.data is List) {

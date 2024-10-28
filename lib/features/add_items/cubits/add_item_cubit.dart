@@ -1,15 +1,93 @@
+import 'dart:developer';
+import 'dart:ffi';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:inventory/features/add_folders/repository/add_folder_repository.dart';
+import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
+import 'package:inventory/features/add_folders/model/folder_model.dart';
 import 'package:inventory/features/add_items/model/color_model.dart';
+import 'package:inventory/features/add_items/repository/add_item_repository.dart';
+import 'package:inventory/features/tags/cubit/tags_cubit.dart';
+import 'package:inventory/network/api_request_state/api_request_state.dart';
 
 part 'add_item_state.dart';
 
 part 'add_item_cubit.freezed.dart';
 
 class AddItemCubit extends Cubit<AddItemState> {
-  AddFolderRepository repository;
-  AddItemCubit(this.repository) : super(const AddItemState());
+  AddItemRepository repository;
+
+  AddItemCubit(this.repository) : super(const AddItemState()) {
+    initializeTextController();
+  }
+
+  TextEditingController itemNameController = TextEditingController();
+  TextEditingController fabricNumberController = TextEditingController();
+  TextEditingController shopNameController = TextEditingController();
+  TextEditingController widthController = TextEditingController();
+  TextEditingController gsmController = TextEditingController();
+  TextEditingController minQuantityController = TextEditingController();
+  TextEditingController oneKgController = TextEditingController();
+  TextEditingController averageController = TextEditingController();
+  TextEditingController shortageController = TextEditingController();
+  TextEditingController notesController = TextEditingController();
+
+  initializeTextController() {
+    itemNameController.text = '';
+    fabricNumberController.text = '';
+    shortageController.text = '0';
+    shopNameController.text = '';
+    widthController.text = '0';
+    gsmController.text = '0';
+    minQuantityController.text = '0';
+    oneKgController.text = '0';
+    averageController.text = '0';
+    notesController.text = ' ';
+  }
+
+  getItems({bool showLoading = true}) async {
+    emit(state.copyWith(status: showLoading ? const LoadingState() : const InitialState()));
+    var response = await repository.getItems();
+    response.fold((l) {
+      emit(state.copyWith(status: const ErrorState()));
+      log('Get Items === > $l');
+    }, (r) {
+      log('Get Items === > ${r.data}');
+      ItemModelResponse itemModelResponse = r.data;
+      emit(state.copyWith(status: const LoadedState(), listOfItems: itemModelResponse.result));
+    });
+  }
+
+  addItems(BuildContext context, int? folderId) async {
+    emit(state.copyWith(status: const LoadingState()));
+    var response = await repository.postItems(
+        folderId: folderId,
+        itemName: itemNameController.text,
+        fabricNumber: fabricNumberController.text,
+        shopName: shopNameController.text,
+        width: int.parse(widthController.text),
+        gsm: int.parse(gsmController.text),
+        quantity: int.parse(minQuantityController.text),
+        kgToMeter: int.parse(oneKgController.text),
+        shortage: int.parse(shortageController.text),
+        notes: notesController.text,
+        average: int.parse(averageController.text),
+        sku: '');
+    response.fold((l) {
+      emit(state.copyWith(status: const ErrorState()));
+      log('Post Items === > $l');
+    }, (r) {
+      log('Post Items === > ${r.data}');
+      emit(state.copyWith(status: const LoadedState()));
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      BlocProvider.of<FolderCubit>(context).getFolders();
+      BlocProvider.of<TagsCubit>(context).getTags();
+      initializeTextController();
+    });
+  }
 
   addColorInColorList() {
     List<ColorModel> listOfColorModel = List.from(state.colorList);
@@ -29,5 +107,15 @@ class AddItemCubit extends Cubit<AddItemState> {
     listOfColorModel[index].quantity = quantity;
     listOfColorModel[index].roll = roll;
     emit(state.copyWith(colorList: listOfColorModel));
+  }
+
+  deleteItem(int itemId) async {
+    var response = await repository.deleteItems(itemId);
+    response.fold((l) {
+      emit(state.copyWith(status: const ErrorState()));
+      log('Delete Items === > $l');
+    }, (r) {
+      log('Delete Items === > ${r.data}');
+    });
   }
 }

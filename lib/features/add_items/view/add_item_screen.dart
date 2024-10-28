@@ -4,14 +4,20 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:inventory/features/add_items/cubits/add_item_cubit.dart';
 import 'package:inventory/features/add_items/widgets/add_colors_list_widget.dart';
 import 'package:inventory/features/add_items/widgets/image_upload_button.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
+import 'package:inventory/network/api_request_state/api_request_state.dart';
 
 class AddItemScreen extends StatefulWidget {
-  const AddItemScreen({super.key});
+  final bool isEditScreen;
+  final int? folderId;
+
+  const AddItemScreen({super.key, this.folderId, this.isEditScreen = false});
 
   @override
   State<AddItemScreen> createState() => _AddItemScreenState();
@@ -30,6 +36,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var bloc = BlocProvider.of<AddItemCubit>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -37,7 +44,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
           elevation: 0.0,
           backgroundColor: Colors.white,
           title: AppText(
-            'Add Items',
+            '${widget.isEditScreen ? 'Edit' : 'Add'} Item',
             style: const TextStyle().defaultTextStyle(fontSize: 18),
           )),
       body: Padding(
@@ -62,13 +69,25 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
               //Name
               const AppText('Name'),
-              customTextField(hintText: 'Name', inputType: TextInputType.text),
+              customTextField(
+                  hintText: 'Name',
+                  inputType: TextInputType.text,
+                  controller: bloc.itemNameController,
+                  onTyped: (s) {}),
               //Fabric No.
               const AppText('Fabric Number'),
-              customTextField(hintText: 'Fabric Number', inputType: TextInputType.number),
+              customTextField(
+                  hintText: 'Fabric Number',
+                  inputType: TextInputType.number,
+                  controller: bloc.fabricNumberController,
+                  onTyped: (s) {}),
               //Shop name
               const AppText('Shop name'),
-              customTextField(hintText: 'Shop Name', inputType: TextInputType.text),
+              customTextField(
+                  hintText: 'Shop Name',
+                  inputType: TextInputType.text,
+                  controller: bloc.shopNameController,
+                  onTyped: (s) {}),
               const Row(
                 children: [
                   Expanded(child: AppText('Width')),
@@ -79,9 +98,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
               Row(
                 children: [
                   Expanded(
-                      child: customTextField(hintText: '150 cm', inputType: TextInputType.number)),
+                      child: customTextField(
+                          hintText: '150 cm',
+                          inputType: TextInputType.number,
+                          controller: bloc.widthController,
+                          onTyped: (s) {})),
                   const SizedBox(width: 10),
-                  Expanded(child: customTextField(hintText: 'GSM', inputType: TextInputType.text)),
+                  Expanded(
+                      child: customTextField(
+                          hintText: 'GSM',
+                          inputType: TextInputType.number,
+                          controller: bloc.gsmController,
+                          onTyped: (s) {})),
                 ],
               ),
               const Row(
@@ -93,49 +121,102 @@ class _AddItemScreenState extends State<AddItemScreen> {
               ),
               Row(
                 children: [
-                  Expanded(child: customTextField(hintText: '0', inputType: TextInputType.number)),
+                  Expanded(
+                      child: customTextField(
+                          hintText: '0',
+                          inputType: TextInputType.number,
+                          controller: bloc.minQuantityController,
+                          onTyped: (s) {})),
                   const SizedBox(width: 10),
-                  Expanded(child: customTextField(hintText: 'meter', inputType: TextInputType.text)),
+                  Expanded(
+                      child: customTextField(
+                          hintText: 'meter',
+                          inputType: TextInputType.number,
+                          controller: TextEditingController(),
+                          onTyped: (s) {})),
                 ],
               ),
               const AppText('1 kg'),
-              customTextField(hintText: 'Enter in meter', inputType: TextInputType.text),
+              customTextField(
+                  hintText: 'Enter in meter',
+                  inputType: TextInputType.number,
+                  controller: bloc.oneKgController,
+                  onTyped: (s) {}),
               const AppText('Average'),
-              customTextField(hintText: 'Average', inputType: TextInputType.text),
+              customTextField(
+                  hintText: 'Average',
+                  inputType: TextInputType.number,
+                  controller: bloc.averageController,
+                  onTyped: (s) {}),
               const AppText('Shortage (%)'),
-              customTextField(hintText: 'Shortage', inputType: TextInputType.number),
+              customTextField(
+                  hintText: 'Shortage',
+                  inputType: TextInputType.number,
+                  controller: bloc.shortageController,
+                  onTyped: (s) {}),
               TextButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        CupertinoPageRoute(builder: (context) => const AddColorsListWidget()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context) => const AddColorsListWidget()));
                   },
                   child: const Text('Add Colors')),
               const AppText('Notes'),
-              customTextField(hintText: 'Notes', inputType: TextInputType.text),
+              customTextField(
+                  hintText: 'Notes', inputType: TextInputType.text, controller: bloc.notesController, onTyped: (s) {}),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 8.0, right: 16, left: 16, top: 4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Flexible(
-                flex: 2,
-                child: AppButton(
-                    title: 'Cancel',
-                    color: Colors.grey,
+      bottomNavigationBar: BlocBuilder<AddItemCubit, AddItemState>(
+        builder: (context, state) {
+          return Padding(
+            padding:
+                EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 8.0, right: 16, left: 16, top: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                    flex: 2,
+                    child: AppButton(
+                        title: 'Cancel',
+                        color: Colors.grey,
+                        onPressed: () {
+                          if (state.status is! LoadingState) {
+                            Navigator.of(context).pop();
+                          }
+                        })),
+                const SizedBox(width: 10),
+                Flexible(
+                  flex: 2,
+                  child: AppButton(
+                    title: 'Save',
+                    isLoading: state.status is LoadingState,
+                    color: Colors.orangeAccent,
                     onPressed: () {
-                      Navigator.of(context).pop();
-                    })),
-            const SizedBox(width: 10),
-            Flexible(
-                flex: 2,
-                child: AppButton(title: 'Save', color: Colors.orangeAccent, onPressed: () {})),
-          ],
-        ),
+                      var bloc = BlocProvider.of<AddItemCubit>(context);
+                      if (bloc.itemNameController.text.trim().isNotEmpty &&
+                          bloc.fabricNumberController.text.trim().isNotEmpty &&
+                          bloc.notesController.text.trim().isNotEmpty &&
+                          bloc.shopNameController.text.trim().isNotEmpty) {
+                        if (state.status is! LoadingState) {
+                          BlocProvider.of<AddItemCubit>(context).addItems(context, widget.folderId);
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            elevation: 10,
+                            backgroundColor: Colors.white,
+                            duration: Duration(seconds: 1),
+                            content: AppText(
+                              'Item name, Fabric number, Shop Name and Notes is required.',
+                              maxLines: 2,
+                            )));
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -157,9 +238,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: AppText('Pick Images',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 18)),
+                            maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 18)),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -169,8 +248,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       },
                       child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Colors.black.withOpacity(0.1)),
+                              borderRadius: BorderRadius.circular(8), color: Colors.black.withOpacity(0.1)),
                           child: const Icon(Icons.close_rounded)),
                     )
                   ],
@@ -187,8 +265,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 }),
                 pickOptionWidget('Camera', () async {
                   Navigator.of(context).pop();
-                  final XFile? pickedImages =
-                      await ImagePicker().pickImage(source: ImageSource.camera);
+                  final XFile? pickedImages = await ImagePicker().pickImage(source: ImageSource.camera);
                   log(pickedImages!.toString());
                   updateListOfImages([File(pickedImages.path)]);
                 }),
@@ -199,7 +276,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   }
 }
 
-Widget customTextField({String hintText = '', TextInputType inputType = TextInputType.text}) {
+/*Widget customTextField({String hintText = '', TextInputType inputType = TextInputType.text}) {
   return Padding(
     padding: const EdgeInsets.only(top: 8, bottom: 8),
     child: TextFormField(
@@ -217,7 +294,7 @@ Widget customTextField({String hintText = '', TextInputType inputType = TextInpu
         contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8.0),
         border: const OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: BorderRadius.all(Radius.circular(16)),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
       ),
       keyboardType: inputType,
@@ -226,7 +303,7 @@ Widget customTextField({String hintText = '', TextInputType inputType = TextInpu
       },
     ),
   );
-}
+}*/
 
 pickOptionWidget(String text, void Function()? onPressed) {
   return InkWell(

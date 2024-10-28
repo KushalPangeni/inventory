@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
+import 'package:inventory/features/add_folders/model/folder_model.dart';
+import 'package:inventory/features/add_folders/view/add_folder_screen.dart';
 import 'package:inventory/features/move/view/move_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
 class FolderItemMoreBottomModalSheet {
+  final Folder folder;
   final BuildContext context;
+  final int folderId;
 
-  FolderItemMoreBottomModalSheet(this.context);
+  FolderItemMoreBottomModalSheet(this.context, this.folder, this.folderId);
 
   showBottomSheet({String title = 'Folder/Item Name ;'}) {
     showModalBottomSheet(
@@ -26,9 +32,7 @@ class FolderItemMoreBottomModalSheet {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: AppText(title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 18)),
+                            maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w600)),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -38,8 +42,7 @@ class FolderItemMoreBottomModalSheet {
                       },
                       child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Colors.black.withOpacity(0.1)),
+                              borderRadius: BorderRadius.circular(8), color: Colors.black.withOpacity(0.1)),
                           child: const Icon(Icons.close_rounded)),
                     )
                   ],
@@ -49,14 +52,27 @@ class FolderItemMoreBottomModalSheet {
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.push(
-                          context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
+                      Navigator.push(context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
                     },
                     child: listTileAddFileFolder(Icons.move_down_rounded, 'Move')),
                 listTileAddFileFolder(Icons.history_rounded, 'History'),
                 listTileAddFileFolder(Icons.upload_file_rounded, 'Export'),
-                listTileAddFileFolder(Icons.details_rounded, 'Details'),
-                listTileAddFileFolder(Icons.delete_forever, 'Delete'),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) =>
+                                  AddFolderScreen(isEditScreen: true, folder: folder, folderId: folderId)));
+                    },
+                    child: listTileAddFileFolder(Icons.details_rounded, 'Details')),
+                GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).pop();
+                      BlocProvider.of<FolderCubit>(context).deleteFolder(folderId);
+                    },
+                    child: listTileAddFileFolder(Icons.delete_forever, 'Delete')),
               ],
             ),
           );
@@ -93,7 +109,7 @@ Widget listTileAddFileFolder(IconData iconData, String title) {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          children: [Icon(iconData, size: 24), const SizedBox(width: 20), AppText(title)],
+          children: [Icon(iconData, size: 24), const SizedBox(width: 20), AppText(title,style: TextStyle().defaultTextStyle(fontWeight: FontWeight.w600),)],
         ),
       ),
     ),
