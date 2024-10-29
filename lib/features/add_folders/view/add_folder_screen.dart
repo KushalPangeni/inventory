@@ -67,7 +67,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
             backgroundColor: Colors.white,
             title: AppText(
               '${widget.isEditScreen ? 'Edit' : 'Add'} Folder',
-              style: const TextStyle().defaultTextStyle(fontSize: 18),
+              style:  const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             )),
         body: BlocBuilder<FolderCubit, FolderState>(
           builder: (context, state) {
@@ -91,7 +91,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                         }),
                     const SizedBox(height: 16),
                     //Name
-                    const AppText('Folder Name'),
+                     AppText('Folder Name',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                     customTextField(
                         hintText: 'Enter Folder Name',
                         inputType: TextInputType.text,
@@ -101,7 +101,8 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                         }),
 
                     //Tags
-                    const AppText('Tags'),
+                     AppText('Tags',
+                        style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context,
@@ -117,11 +118,11 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                             border: Border.all(color: const Color(0xFFE4E4E7), width: 1.0),
                           ),
                           child: state.foldersTag.isEmpty
-                              ? const Align(
+                              ?  Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
                                     padding: EdgeInsets.all(16.0),
-                                    child: AppText('Select Tag'),
+                                    child: AppText('Select Tag',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                                   ),
                                 )
                               : Align(
@@ -149,7 +150,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                     ),
 
                     //Description
-                    const AppText('Description'),
+                     AppText('Description',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                     customTextField(
                         hintText: 'Enter Description',
                         inputType: TextInputType.text,

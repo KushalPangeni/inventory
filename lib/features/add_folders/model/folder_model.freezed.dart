@@ -1436,16 +1436,16 @@ class _$ItemImpl implements _Item {
   const _$ItemImpl(
       {required this.id,
       required this.name,
-      @JsonKey(name: 'fabric_number') this.fabricNumber,
-      @JsonKey(name: 'shop_name') this.shopName,
+      @JsonKey(name: 'fabric_number') this.fabricNumber = '',
+      @JsonKey(name: 'shop_name') this.shopName = '',
       this.width = 0,
       this.gsm = '',
       @JsonKey(name: 'kg_to_meter_ratio') this.kgToMeterRatio,
-      this.average,
-      this.shortage,
-      this.quantity,
-      @JsonKey(name: 'unit_id') this.unitId,
-      @JsonKey(name: 'accessories_notes') this.accessoriesNotes,
+      this.average = 0,
+      this.shortage = 0,
+      this.quantity = 0,
+      @JsonKey(name: 'unit_id') this.unitId = 1,
+      @JsonKey(name: 'accessories_notes') this.accessoriesNotes = '',
       this.folder_id = 0,
       this.sku = ''});
 
@@ -1474,12 +1474,15 @@ class _$ItemImpl implements _Item {
   @JsonKey(name: 'kg_to_meter_ratio')
   final double? kgToMeterRatio;
   @override
+  @JsonKey()
   final double? average;
 // made nullable
   @override
+  @JsonKey()
   final double? shortage;
 // made nullable
   @override
+  @JsonKey()
   final int? quantity;
 // made nullable
   @override

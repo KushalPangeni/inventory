@@ -6,6 +6,8 @@ import 'package:inventory/features/auth/repository/auth_repository.dart';
 import 'package:inventory/features/auth/repository/auth_repository_impl.dart';
 import 'package:inventory/features/tags/repository/tag_repository.dart';
 import 'package:inventory/features/tags/repository/tag_repository_impl.dart';
+import 'package:inventory/features/units/repository/unit_repository.dart';
+import 'package:inventory/features/units/repository/unit_repository_impl.dart';
 
 import 'dependency_injectors.dart';
 
@@ -24,6 +26,10 @@ void setupRepositoryLocator() {
 
   di.registerLazySingleton<TagRepository>(
     () => TagRepositoryImpl(di()),
+  );
+
+  di.registerLazySingleton<UnitRepository>(
+    () => UnitRepositoryImpl(di()),
   );
 
 }

@@ -6,8 +6,7 @@ abstract class Request {
   static Map<String, String> createHeader({isFormData = false}) {
     final authHeader = <String, String>{};
     authHeader['Accept'] = 'application/json';
-    authHeader['Content-Type'] =
-        isFormData ? 'multipart/form-data' : 'application/json';
+    authHeader['Content-Type'] = 'application/json';
     return authHeader;
   }
 

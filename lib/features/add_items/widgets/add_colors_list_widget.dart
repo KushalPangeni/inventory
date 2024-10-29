@@ -22,7 +22,7 @@ class _AddColorsListWidgetState extends State<AddColorsListWidget> {
           scrolledUnderElevation: 0.0,
           backgroundColor: Colors.white,
           elevation: 0.0,
-          title: AppText('Add Colors', style: const TextStyle().defaultTextStyle(fontSize: 18))),
+          title: AppText('Add Colors',style: const TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600))),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: BlocBuilder<AddItemCubit, AddItemState>(
@@ -82,12 +82,12 @@ Widget colorWidget(BuildContext context, int index, ColorModel colorModel) {
     children: [
       TableRow(
         children: [
-          const AppText('Color'),
-          const AppText('Quantity'),
+           AppText('Color',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+           AppText('Quantity',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const AppText('Roll'),
+               AppText('Roll',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               InkWell(
                   onTap: () {
                     BlocProvider.of<AddItemCubit>(context).deleteColorInColorList(index);

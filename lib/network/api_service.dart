@@ -128,7 +128,7 @@ class DioClient {
   }) async {
     Response response = await _client.put(endPoint,
         options: Options(
-          headers: Request.createHeader(isFormData: true),
+          headers: Request.createHeader(/*isFormData: true*/),
         ),
         data: formData);
     return request(endPoint: endPoint, response: response);
@@ -137,12 +137,14 @@ class DioClient {
   Future<Response?> put({
     required String endPoint,
     Map<String, String>? headers,
+    Map<String, dynamic>? body,
     Map<String, dynamic>? queryParameters,
   }) async {
     Response response = await _client.put(endPoint,
         options: Options(
           headers: Request.createHeader(),
         ),
+        data: body,
         queryParameters: queryParameters);
     return request(endPoint: endPoint, response: response);
   }

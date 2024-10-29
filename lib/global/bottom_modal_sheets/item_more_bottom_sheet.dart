@@ -32,7 +32,9 @@ class ItemMoreBottomModalSheet {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: AppText(title,
-                            maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 18)),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -54,29 +56,32 @@ class ItemMoreBottomModalSheet {
                       Navigator.of(context).pop();
                       Navigator.push(context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
                     },
-                    child: listTileAddFileFolder(const Icon(Icons.move_down_rounded), 'Move')),
-                listTileAddFileFolder(const Icon(Icons.history_rounded), 'History'),
-                listTileAddFileFolder(const Icon(Icons.upload_file_rounded), 'Export'),
+                    child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
+                listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History'),
+                listTileAddFileFolder(Image.asset('assets/export.png', height: 28), 'Export'),
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.push(context, CupertinoPageRoute(builder: (context)=>AddItemScreen(folderId: folderId,)));
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => AddItemScreen(folderId: folderId, isEditScreen: true, item: item)));
                     },
-                    child: listTileAddFileFolder(const Icon(Icons.details_rounded), 'Details')),
+                    child: listTileAddFileFolder(Image.asset('assets/edit.png', height: 28), 'Edit')),
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
                       BlocProvider.of<AddItemCubit>(context).deleteItem(item.id);
                       BlocProvider.of<AddItemCubit>(context).getItems();
                     },
-                    child: listTileAddFileFolder(const Icon(Icons.delete_forever), 'Delete')),
+                    child: listTileAddFileFolder(Image.asset('assets/delete.png', height: 28), 'Delete')),
               ],
             ),
           );
         });
   }
 
-  showDialogModal() {
+  /*showDialogModal() {
     showDialog(
         context: context,
         builder: (context) {
@@ -95,7 +100,7 @@ class ItemMoreBottomModalSheet {
             ),
           );
         });
-  }
+  }*/
 }
 
 Widget listTileAddFileFolder(Widget icon, String title) {
@@ -107,7 +112,10 @@ Widget listTileAddFileFolder(Widget icon, String title) {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            icon, const SizedBox(width: 20), AppText(title)],
+            icon,
+            const SizedBox(width: 20),
+            AppText(title, style: const TextStyle().defaultTextStyle(fontWeight: FontWeight.w600))
+          ],
         ),
       ),
     ),

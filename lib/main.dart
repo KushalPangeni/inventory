@@ -10,6 +10,7 @@ import 'package:inventory/splash/splash_screen.dart';
 import 'core/injectors/dependency_injectors.dart';
 import 'features/add_items/cubits/add_item_cubit.dart';
 import 'features/auth/cubit/auth_cubit.dart';
+import 'features/units/cubit/unit_cubit.dart';
 import 'global/widgets/app_text.dart';
 import 'home_screen.dart';
 
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<FolderCubit>(create: (BuildContext context) => FolderCubit(di())),
         BlocProvider<AuthCubit>(create: (BuildContext context) => AuthCubit(di())),
         BlocProvider<AddItemCubit>(create: (BuildContext context) => AddItemCubit(di())),
-        BlocProvider<TagsCubit>(create: (BuildContext context) => TagsCubit(di()))
+        BlocProvider<TagsCubit>(create: (BuildContext context) => TagsCubit(di())),
+        BlocProvider<UnitCubit>(create: (BuildContext context) => UnitCubit(di())),
       ],
       child: MaterialApp(
           title: 'Inventory',

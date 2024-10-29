@@ -10,7 +10,7 @@ class SearchScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const AppText('Search', style: TextStyle(fontSize: 20)),
+        title: AppText('Search', style: TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
       ),
     );
   }

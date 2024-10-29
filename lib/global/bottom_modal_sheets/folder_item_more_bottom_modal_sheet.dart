@@ -2,13 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
-import 'package:inventory/features/add_folders/model/folder_model.dart';
+import 'package:inventory/features/add_folders/model/folder_model.dart' as folder_model;
 import 'package:inventory/features/add_folders/view/add_folder_screen.dart';
 import 'package:inventory/features/move/view/move_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
+import 'add_new_items_bottom_modal_sheet.dart';
+
 class FolderItemMoreBottomModalSheet {
-  final Folder folder;
+  final folder_model.Folder folder;
   final BuildContext context;
   final int folderId;
 
@@ -32,7 +34,9 @@ class FolderItemMoreBottomModalSheet {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: AppText(title,
-                            maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w600)),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -54,9 +58,9 @@ class FolderItemMoreBottomModalSheet {
                       Navigator.of(context).pop();
                       Navigator.push(context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
                     },
-                    child: listTileAddFileFolder(Icons.move_down_rounded, 'Move')),
-                listTileAddFileFolder(Icons.history_rounded, 'History'),
-                listTileAddFileFolder(Icons.upload_file_rounded, 'Export'),
+                    child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
+                listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History'),
+                listTileAddFileFolder(Image.asset('assets/export.png', height: 28), 'Export'),
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
@@ -66,20 +70,20 @@ class FolderItemMoreBottomModalSheet {
                               builder: (context) =>
                                   AddFolderScreen(isEditScreen: true, folder: folder, folderId: folderId)));
                     },
-                    child: listTileAddFileFolder(Icons.details_rounded, 'Details')),
+                    child: listTileAddFileFolder(Image.asset('assets/edit.png', height: 28), 'Edit')),
                 GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.of(context).pop();
                       BlocProvider.of<FolderCubit>(context).deleteFolder(folderId);
                     },
-                    child: listTileAddFileFolder(Icons.delete_forever, 'Delete')),
+                    child: listTileAddFileFolder(Image.asset('assets/delete.png', height: 28), 'Delete')),
               ],
             ),
           );
         });
   }
 
-  showDialogModal() {
+/*showDialogModal() {
     showDialog(
         context: context,
         builder: (context) {
@@ -91,17 +95,17 @@ class FolderItemMoreBottomModalSheet {
                 children: [
                   const Text('Adding to Items:'),
                   const SizedBox(height: 10),
-                  listTileAddFileFolder(Icons.file_open_outlined, 'Add Items'),
-                  listTileAddFileFolder(Icons.file_open_outlined, 'Add Folders'),
+                  listTileAddFileFolder(Image.asset('assets/inventory.png', height: 24), 'Add Items'),
+                  listTileAddFileFolder(Image.asset('assets/folder.png', height: 24), 'Add Folders'),
                 ],
               ),
             ),
           );
         });
-  }
+  }*/
 }
 
-Widget listTileAddFileFolder(IconData iconData, String title) {
+/*Widget listTileAddFileFolder(IconData iconData, String title) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 10),
     child: Container(
@@ -114,4 +118,4 @@ Widget listTileAddFileFolder(IconData iconData, String title) {
       ),
     ),
   );
-}
+}*/

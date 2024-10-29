@@ -30,10 +30,7 @@ class _AddTagsScreenState extends State<AddTagsScreen> {
         scrolledUnderElevation: 0.0,
         elevation: 0.0,
         backgroundColor: Colors.white,
-        title: AppText(
-          'Tags',
-          style: const TextStyle().defaultTextStyle(fontSize: 20),
-        ),
+        title: AppText('Tags', style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
       ),
       body: BlocBuilder<FolderCubit, FolderState>(
         builder: (context, folderState) {
@@ -62,7 +59,7 @@ class _AddTagsScreenState extends State<AddTagsScreen> {
                                         onTap: () {
                                           if (widget.saveToFolderTag) {
                                             BlocProvider.of<FolderCubit>(context).addRemove(state.listOfTags[index]);
-                                          }/* else {
+                                          } /* else {
                                             BlocProvider.of<TagsCubit>(context).addRemove(state.listOfTags[index]);
                                           }*/
                                         },
@@ -74,7 +71,7 @@ class _AddTagsScreenState extends State<AddTagsScreen> {
                                                       : Colors.white
                                                   /*: state.listOfSelectedTags.contains(state.listOfTags[index])
                                                       ? Colors.orangeAccent[100]*/
-                                                      : Colors.white,
+                                                  : Colors.white,
                                               borderRadius: BorderRadius.circular(4)),
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,24 +80,12 @@ class _AddTagsScreenState extends State<AddTagsScreen> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   const SizedBox(width: 4),
-                                                  Container(
-                                                      decoration: BoxDecoration(
-                                                          color: widget.saveToFolderTag
-                                                              ? folderState.foldersTag.contains(state.listOfTags[index])
-                                                                  ? Colors.orangeAccent
-                                                                  : Colors.orangeAccent[100]
-                                                              /*: state.listOfSelectedTags
-                                                                      .contains(state.listOfTags[index])
-                                                                  ? Colors.orangeAccent*/
-                                                                  : Colors.orangeAccent[100],
-                                                          borderRadius: BorderRadius.circular(4)),
-                                                      child: const Padding(
-                                                        padding: EdgeInsets.all(2.0),
-                                                        child: Icon(
-                                                          Icons.tag_rounded,
-                                                          size: 28,
-                                                        ),
-                                                      )),
+                                                  SizedBox(
+                                                      height: 28,
+                                                      width: 28,
+                                                      child: Padding(
+                                                          padding: const EdgeInsets.all(2.0),
+                                                          child: Image.asset('assets/price-tag.png', height: 28))),
                                                   const SizedBox(width: 2),
                                                   Flexible(
                                                     child: Padding(
@@ -110,7 +95,7 @@ class _AddTagsScreenState extends State<AddTagsScreen> {
                                                         state.listOfTags[index].name,
                                                         overflow: TextOverflow.ellipsis,
                                                         style:
-                                                            const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                                            const TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                                       ),
                                                     ),
                                                   )
@@ -168,7 +153,7 @@ addTags(BuildContext context) {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const AppText('Add Tags', style: TextStyle(fontSize: 18)),
+                   AppText('Add Tags', style:   const TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   const Divider(),
                   TextField(
                     controller: tagController,

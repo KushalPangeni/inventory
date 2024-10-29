@@ -57,7 +57,7 @@ class AddNewItemsBottomModalSheet {
                       onTap: () {
                         Navigator.of(context).pop();
                         Navigator.push(
-                            context, CupertinoPageRoute(builder: (context) => AddItemScreen(folderId: folderId,isEditScreen: true)));
+                            context, CupertinoPageRoute(builder: (context) => AddItemScreen(folderId: folderId)));
                       },
                       child: listTileAddFileFolder(Image.asset('assets/inventory.png', height: 40), 'Add Items')),
                 if (canBuildFolder)

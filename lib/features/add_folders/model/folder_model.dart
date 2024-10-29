@@ -72,16 +72,16 @@ class Item with _$Item {
   const factory Item({
     required int id,
     required String name,
-    @JsonKey(name: 'fabric_number') String? fabricNumber,
-    @JsonKey(name: 'shop_name') String? shopName,
+    @JsonKey(name: 'fabric_number') @Default('') String? fabricNumber,
+    @JsonKey(name: 'shop_name') @Default('') String? shopName,
     @Default(0) int? width, // made nullable
     @Default('') String? gsm, // made nullable
     @JsonKey(name: 'kg_to_meter_ratio') double? kgToMeterRatio,
-    double? average, // made nullable
-    double? shortage, // made nullable
-    int? quantity, // made nullable
-    @JsonKey(name: 'unit_id') int? unitId,
-    @JsonKey(name: 'accessories_notes') String? accessoriesNotes,
+    @Default(0) double? average, // made nullable
+    @Default(0) double? shortage, // made nullable
+    @Default(0) int? quantity, // made nullable
+    @JsonKey(name: 'unit_id') @Default(1) int? unitId,
+    @JsonKey(name: 'accessories_notes') @Default('') String? accessoriesNotes,
     @Default(0) int? folder_id,
     @Default('') String? sku// made nullable
   }) = _Item;

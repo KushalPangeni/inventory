@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:inventory/features/add_folders/model/folder_model.dart';
 import 'package:inventory/features/add_items/cubits/add_item_cubit.dart';
 import 'package:inventory/features/add_items/widgets/add_colors_list_widget.dart';
 import 'package:inventory/features/add_items/widgets/image_upload_button.dart';
@@ -16,8 +17,9 @@ import 'package:inventory/network/api_request_state/api_request_state.dart';
 class AddItemScreen extends StatefulWidget {
   final bool isEditScreen;
   final int? folderId;
+  final Item? item;
 
-  const AddItemScreen({super.key, this.folderId, this.isEditScreen = false});
+  const AddItemScreen({super.key, this.folderId, this.isEditScreen = false, this.item});
 
   @override
   State<AddItemScreen> createState() => _AddItemScreenState();
@@ -35,6 +37,16 @@ class _AddItemScreenState extends State<AddItemScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.isEditScreen && widget.item != null) {
+      BlocProvider.of<AddItemCubit>(context).initializeEditScreenTextController(widget.item!);
+    } else {
+      BlocProvider.of<AddItemCubit>(context).initializeTextController();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     var bloc = BlocProvider.of<AddItemCubit>(context);
     return Scaffold(
@@ -45,7 +57,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
           backgroundColor: Colors.white,
           title: AppText(
             '${widget.isEditScreen ? 'Edit' : 'Add'} Item',
-            style: const TextStyle().defaultTextStyle(fontSize: 18),
+            style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           )),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -68,31 +80,31 @@ class _AddItemScreenState extends State<AddItemScreen> {
               const SizedBox(height: 16),
 
               //Name
-              const AppText('Name'),
+               AppText('Name',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               customTextField(
                   hintText: 'Name',
                   inputType: TextInputType.text,
                   controller: bloc.itemNameController,
                   onTyped: (s) {}),
               //Fabric No.
-              const AppText('Fabric Number'),
+               AppText('Fabric Number',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               customTextField(
                   hintText: 'Fabric Number',
                   inputType: TextInputType.number,
                   controller: bloc.fabricNumberController,
                   onTyped: (s) {}),
               //Shop name
-              const AppText('Shop name'),
+               AppText('Shop name',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               customTextField(
                   hintText: 'Shop Name',
                   inputType: TextInputType.text,
                   controller: bloc.shopNameController,
                   onTyped: (s) {}),
-              const Row(
+               Row(
                 children: [
-                  Expanded(child: AppText('Width')),
+                  Expanded(child: AppText('Width',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
                   SizedBox(width: 10),
-                  Expanded(child: AppText('GSM')),
+                  Expanded(child: AppText('GSM',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
                 ],
               ),
               Row(
@@ -112,11 +124,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           onTyped: (s) {})),
                 ],
               ),
-              const Row(
+               Row(
                 children: [
-                  Expanded(child: AppText('Min. Quantity')),
+                  Expanded(child: AppText('Min. Quantity',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
                   SizedBox(width: 10),
-                  Expanded(child: AppText('Unit')),
+                  Expanded(child: AppText('Unit',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
                 ],
               ),
               Row(
@@ -136,19 +148,19 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           onTyped: (s) {})),
                 ],
               ),
-              const AppText('1 kg'),
+               AppText('1 kg',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               customTextField(
                   hintText: 'Enter in meter',
                   inputType: TextInputType.number,
                   controller: bloc.oneKgController,
                   onTyped: (s) {}),
-              const AppText('Average'),
+               AppText('Average',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               customTextField(
                   hintText: 'Average',
                   inputType: TextInputType.number,
                   controller: bloc.averageController,
                   onTyped: (s) {}),
-              const AppText('Shortage (%)'),
+               AppText('Shortage (%)',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               customTextField(
                   hintText: 'Shortage',
                   inputType: TextInputType.number,
@@ -158,8 +170,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   onPressed: () {
                     Navigator.push(context, CupertinoPageRoute(builder: (context) => const AddColorsListWidget()));
                   },
-                  child: const Text('Add Colors')),
-              const AppText('Notes'),
+                  child:  Text('Add Colors',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600,color: Colors.blue))),
+               AppText('Notes',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
               customTextField(
                   hintText: 'Notes', inputType: TextInputType.text, controller: bloc.notesController, onTyped: (s) {}),
             ],
@@ -188,7 +200,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 Flexible(
                   flex: 2,
                   child: AppButton(
-                    title: 'Save',
+                    title: widget.isEditScreen ? 'Update' : 'Save',
                     isLoading: state.status is LoadingState,
                     color: Colors.orangeAccent,
                     onPressed: () {
@@ -198,7 +210,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           bloc.notesController.text.trim().isNotEmpty &&
                           bloc.shopNameController.text.trim().isNotEmpty) {
                         if (state.status is! LoadingState) {
-                          BlocProvider.of<AddItemCubit>(context).addItems(context, widget.folderId);
+                          if (widget.isEditScreen) {
+                            BlocProvider.of<AddItemCubit>(context).editItems(context, widget.folderId, widget.item!.id);
+                          } else {
+                            BlocProvider.of<AddItemCubit>(context).addItems(context, widget.folderId);
+                          }
                         }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

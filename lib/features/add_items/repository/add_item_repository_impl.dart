@@ -20,17 +20,59 @@ class AddItemRepositoryImpl implements AddItemRepository {
   }
 
   @override
-  EitherResponse editItems() {
-    // TODO: implement editItems
-    throw UnimplementedError();
-  }
-
-  @override
   EitherResponse getItems() async {
     var request = _client.get(
       endPoint: Request.createUrl('api/items'),
     );
     return await _client.handleNetworkCall(request, ItemModelResponse.fromJson);
+  }
+
+  @override
+  EitherResponse editItems(
+      {required String itemName,
+      required String fabricNumber,
+      required String shopName,
+      required int width,
+      required int gsm,
+      required int kgToMeter,
+      required int average,
+      required int shortage,
+      required int quantity,
+      required String notes,
+      int? folderId,
+      int? itemId,
+      required String sku}) async {
+    final formData = FormData.fromMap({
+      "name": itemName,
+      "fabric_number": fabricNumber,
+      "shop_name": shopName,
+      "width": width,
+      "gsm": 0,
+      "kg_to_meter_ratio": kgToMeter,
+      "average": average,
+      "shortage": shortage,
+      "quantity": quantity,
+      "unit_id": 1,
+      "accessories_notes": notes,
+      "folder_id": folderId,
+      "sku": " ",
+    });
+    var request = _client.put(endPoint: Request.createUrl('api/items/$itemId'), body: {
+      "name": itemName,
+      "fabric_number": fabricNumber,
+      "shop_name": shopName,
+      "width": width,
+      "gsm": 0,
+      "kg_to_meter_ratio": kgToMeter,
+      "average": average,
+      "shortage": shortage,
+      "quantity": quantity,
+      "unit_id": 1,
+      "accessories_notes": notes,
+      "folder_id": folderId,
+      "sku": "dsfs ",
+    });
+    return await _client.handleNetworkCall(request);
   }
 
   @override
@@ -45,7 +87,7 @@ class AddItemRepositoryImpl implements AddItemRepository {
       required int shortage,
       required int quantity,
       required String notes,
-       int? folderId,
+      int? folderId,
       required String sku}) async {
     final formData = FormData.fromMap({
       "name": itemName,

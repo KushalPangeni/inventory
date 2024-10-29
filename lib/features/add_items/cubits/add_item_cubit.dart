@@ -1,8 +1,6 @@
 import 'dart:developer';
-import 'dart:ffi';
 
-import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
@@ -19,9 +17,7 @@ part 'add_item_cubit.freezed.dart';
 class AddItemCubit extends Cubit<AddItemState> {
   AddItemRepository repository;
 
-  AddItemCubit(this.repository) : super(const AddItemState()) {
-    initializeTextController();
-  }
+  AddItemCubit(this.repository) : super(const AddItemState());
 
   TextEditingController itemNameController = TextEditingController();
   TextEditingController fabricNumberController = TextEditingController();
@@ -45,6 +41,19 @@ class AddItemCubit extends Cubit<AddItemState> {
     oneKgController.text = '0';
     averageController.text = '0';
     notesController.text = ' ';
+  }
+
+  initializeEditScreenTextController(Item item) {
+    itemNameController.text = item.name;
+    fabricNumberController.text = item.fabricNumber ?? '';
+    shortageController.text = item.shortage.toString() ?? '0';
+    shopNameController.text = item.shopName ?? '';
+    widthController.text = item.width.toString();
+    gsmController.text = item.gsm.toString();
+    minQuantityController.text = item.quantity.toString();
+    oneKgController.text = item.kgToMeterRatio.toString();
+    averageController.text = item.average.toString();
+    notesController.text = item.accessoriesNotes ?? '';
   }
 
   getItems({bool showLoading = true}) async {
@@ -89,6 +98,36 @@ class AddItemCubit extends Cubit<AddItemState> {
     });
   }
 
+  editItems(BuildContext context, int? folderId, int? itemId) async {
+    emit(state.copyWith(status: const LoadingState()));
+    var response = await repository.editItems(
+        folderId: folderId,
+        itemId: itemId,
+        itemName: itemNameController.text,
+        fabricNumber: fabricNumberController.text,
+        shopName: shopNameController.text,
+        width: int.parse(widthController.text),
+        gsm: int.parse(gsmController.text),
+        quantity: int.parse(minQuantityController.text),
+        kgToMeter: double.parse(oneKgController.text).toInt(),
+        shortage: double.parse(shortageController.text).toInt(),
+        notes: notesController.text,
+        average: double.parse(averageController.text).toInt(),
+        sku: '');
+    response.fold((l) {
+      emit(state.copyWith(status: const ErrorState()));
+      log('Post Items === > $l');
+    }, (r) {
+      log('Post Items === > ${r.data}');
+      emit(state.copyWith(status: const LoadedState()));
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      BlocProvider.of<FolderCubit>(context).getFolders();
+      BlocProvider.of<TagsCubit>(context).getTags();
+      initializeTextController();
+    });
+  }
+
   addColorInColorList() {
     List<ColorModel> listOfColorModel = List.from(state.colorList);
     listOfColorModel.add(ColorModel(colorName: '', quantity: 0, roll: 0));
@@ -117,5 +156,18 @@ class AddItemCubit extends Cubit<AddItemState> {
     }, (r) {
       log('Delete Items === > ${r.data}');
     });
+  }
+
+  clearTextFields() {
+    itemNameController.clear();
+    fabricNumberController.clear();
+    shopNameController.clear();
+    widthController.clear();
+    gsmController.clear();
+    minQuantityController.clear();
+    oneKgController.clear();
+    averageController.clear();
+    shortageController.clear();
+    notesController.clear();
   }
 }

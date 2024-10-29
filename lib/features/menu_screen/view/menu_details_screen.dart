@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory/features/auth/cubit/auth_cubit.dart';
 import 'package:inventory/features/tags/view/add_tags_screen.dart';
+import 'package:inventory/features/units/view/add_units_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:inventory/splash/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,11 +35,11 @@ class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppText('Menu', style: TextStyle(fontSize: 20)),
-            Divider(),
+            AppText('Menu', style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const Divider(),
           ],
         ),
       ),
@@ -59,17 +60,44 @@ class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
                     child: Row(
                       children: [
                         Container(
+                          height: 28,
+                            width: 28,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
+                            child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Image.asset('assets/price-tag.png', height: 28))),
+                        const SizedBox(width: 8),
+                        AppText('Tags', style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
+                )),
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(context, CupertinoPageRoute(builder: (context) => const AddUnitsScreen()));
+                },
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        Container(
+                            height: 28,
+                            width: 28,
                             decoration:
                                 BoxDecoration(color: Colors.orangeAccent[100], borderRadius: BorderRadius.circular(4)),
-                            child: const Padding(
-                              padding: EdgeInsets.all(2.0),
-                              child: Icon(
-                                Icons.tag_rounded,
-                                size: 28,
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Center(
+                                child: AppText('U',
+                                    style:  const TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                               ),
                             )),
                         const SizedBox(width: 8),
-                        const AppText('Tags', style: TextStyle(fontSize: 18)),
+                        AppText('Units',
+                            style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
@@ -93,7 +121,7 @@ class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
                         Container(
                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
                             child: Padding(
-                                padding: EdgeInsets.all(2.0),
+                                padding: const EdgeInsets.all(2.0),
                                 child: Image.asset(
                                   'assets/logout.png',
                                   height: 32,
