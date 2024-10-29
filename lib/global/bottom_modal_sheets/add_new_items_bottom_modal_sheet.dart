@@ -1,15 +1,24 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:inventory/features/add_folders/view/add_folder_screen.dart';
 import 'package:inventory/features/add_items/view/add_item_screen.dart';
+import 'package:inventory/global/widgets/app_text.dart';
 import 'package:page_transition/page_transition.dart';
 
 class AddNewItemsBottomModalSheet {
+  final int? folderId;
   final BuildContext context;
+  final bool canBuildItem;
+  final bool canBuildFolder;
 
-  AddNewItemsBottomModalSheet(this.context);
+  AddNewItemsBottomModalSheet(this.context, this.folderId, {this.canBuildItem = true, this.canBuildFolder = true});
 
   showBottomSheet() {
+    log('Folder id ==> $folderId');
     showModalBottomSheet(
+        backgroundColor: Colors.white,
         context: context,
         builder: (context) {
           return Padding(
@@ -18,21 +27,46 @@ class AddNewItemsBottomModalSheet {
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.start,
               children: [
-                const Text('Adding to Items:'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                     Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AppText('Add Items and Folders',
+                            maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle().defaultTextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8), color: Colors.black.withOpacity(0.1)),
+                          child: const Icon(Icons.close_rounded)),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 36),
+                const Divider(),
                 const SizedBox(height: 10),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.bottomToTop,
-                              child: const AddItemScreen(),
-                              inheritTheme: true,
-                              ctx: context));
-                    },
-                    child: listTileAddFileFolder(Icons.file_open_outlined, 'Add Items')),
-                listTileAddFileFolder(Icons.file_open_outlined, 'Add Folders'),
+                if (canBuildItem)
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context, CupertinoPageRoute(builder: (context) => AddItemScreen(folderId: folderId)));
+                      },
+                      child: listTileAddFileFolder(Image.asset('assets/inventory.png', height: 40), 'Add Items')),
+                if (canBuildFolder)
+                  GestureDetector(
+                      onTap: () async {
+                        Navigator.of(context).pop();
+                        Navigator.push(context, CupertinoPageRoute(builder: (context) => const AddFolderScreen()));
+                      },
+                      child: listTileAddFileFolder(Image.asset('assets/folder.png', height: 40), 'Add Folders')),
               ],
             ),
           );
@@ -51,8 +85,8 @@ class AddNewItemsBottomModalSheet {
                 children: [
                   const Text('Adding to Items:'),
                   const SizedBox(height: 10),
-                  listTileAddFileFolder(Icons.file_open_outlined, 'Add Items'),
-                  listTileAddFileFolder(Icons.file_open_outlined, 'Add Folders'),
+                  listTileAddFileFolder(Image.asset('assets/inventory.png', height: 24), 'Add Items'),
+                  listTileAddFileFolder(Image.asset('assets/inventory.png', height: 24), 'Add Folders'),
                 ],
               ),
             ),
@@ -61,7 +95,7 @@ class AddNewItemsBottomModalSheet {
   }
 }
 
-Widget listTileAddFileFolder(IconData iconData, String title) {
+Widget listTileAddFileFolder(Widget icon, String title) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 10),
     child: Container(
@@ -69,7 +103,7 @@ Widget listTileAddFileFolder(IconData iconData, String title) {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          children: [Icon(iconData, size: 40), const SizedBox(width: 20), Text(title)],
+          children: [icon, const SizedBox(width: 20), AppText(title,style: TextStyle().defaultTextStyle(fontSize: 16,fontWeight: FontWeight.w600))],
         ),
       ),
     ),

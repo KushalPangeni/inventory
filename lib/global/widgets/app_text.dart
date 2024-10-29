@@ -8,7 +8,7 @@ extension TextStylingExtension on TextStyle {
     double? letterSpacing,
     Color color = Colors.black,
     TextDecoration decoration = TextDecoration.none,
-    String? family ,
+    String? family = 'Mulish',
   }) {
     return TextStyle(
         fontSize: fontSize,
