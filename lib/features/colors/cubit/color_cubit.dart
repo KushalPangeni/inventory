@@ -3,23 +3,23 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:inventory/features/units/model/unit_model.dart';
-import 'package:inventory/features/units/repository/unit_repository.dart';
+import 'package:inventory/features/colors/model/color_model.dart';
+import 'package:inventory/features/colors/repository/color_repository.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
 
-part 'unit_state.dart';
+part 'color_state.dart';
 
-part 'unit_cubit.freezed.dart';
+part 'color_cubit.freezed.dart';
 
-class UnitCubit extends Cubit<UnitState> {
-  UnitRepository repository;
+class ColorCubit extends Cubit<ColorState> {
+  ColorRepository repository;
 
-  UnitCubit(this.repository) : super(const UnitState());
+  ColorCubit(this.repository) : super(const ColorState());
 
   Future<void> getUnits({bool showLoading = true}) async {
     emit(state.copyWith(status: showLoading ? const LoadingState() : const InitialState()));
-    final response = await repository.getUnits();
+    final response = await repository.getColors();
     response.fold(
       (l) {
         emit(state.copyWith(status: const ErrorState()));
@@ -27,20 +27,20 @@ class UnitCubit extends Cubit<UnitState> {
       },
       (r) {
         log('Fetched Units ==> ${r.data}');
-        List<Unit> docTypeList = r.data.result;
+        List<Color> docTypeList = r.data.result;
         emit(state.copyWith(status: const LoadedState(), listOfUnits: docTypeList));
       },
     );
   }
 
-  addUnits(Unit unit, BuildContext context) async {
-    List<Unit> listOfUnit = List.from(state.listOfUnits);
-    String lowerUnit = unit.name.toLowerCase();
+  addColors(Color color, BuildContext context) async {
+    List<Color> listOfUnit = List.from(state.listOfUnits);
+    String lowerUnit = color.name.toLowerCase();
     bool unitExists = listOfUnit.any((existingUnit) => existingUnit.name.toLowerCase() == lowerUnit);
 
     if (!unitExists) {
-      final response = await repository.postUnit(unit);
-      log('Unit added $response');
+      final response = await repository.postColors(color);
+      log('Color added $response');
       response.fold(
         (l) {
           emit(state.copyWith(status: const ErrorState()));
@@ -49,7 +49,7 @@ class UnitCubit extends Cubit<UnitState> {
               elevation: 10,
               backgroundColor: Colors.white,
               duration: Duration(milliseconds: 600),
-              content: AppText('Error when adding Unit.')));
+              content: AppText('Error when adding Color.')));
         },
         (r) {
           getUnits(showLoading: false);
@@ -60,7 +60,7 @@ class UnitCubit extends Cubit<UnitState> {
           elevation: 10,
           backgroundColor: Colors.white,
           duration: const Duration(milliseconds: 900),
-          content: AppText('${unit.name} already exists.')));
+          content: AppText('${color.name} already exists.')));
     }
     emit(state.copyWith(listOfUnits: listOfUnit));
   }
@@ -73,7 +73,7 @@ class UnitCubit extends Cubit<UnitState> {
       listOfUnit.add(unit);
     }
     emit(state.copyWith(listOfSelectedUnits: listOfUnit));
-  }*/
+  }
 
   deleteUnit(BuildContext context, int unitId) async {
     final response = await repository.deleteUnits(unitId);
@@ -95,5 +95,5 @@ class UnitCubit extends Cubit<UnitState> {
             content: AppText('Unit deleted successfully.')));
       },
     );
-  }
+  }*/
 }

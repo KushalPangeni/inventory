@@ -103,6 +103,13 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "accessories_notes": notes,
       "folder_id": folderId,
       "sku": "string",
+      "colors": [
+        {
+          "color_id": 0,
+          "quantitys": 0,
+          "rolls": 0
+        }
+      ]
     });
     /*final formData = FormData.fromMap({
       "name": itemName,

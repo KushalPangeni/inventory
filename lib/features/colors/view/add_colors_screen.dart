@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
+import 'package:inventory/features/colors/cubit/color_cubit.dart';
+import 'package:inventory/features/colors/model/color_model.dart';
 import 'package:inventory/features/tags/cubit/tags_cubit.dart';
 import 'package:inventory/features/units/cubit/unit_cubit.dart';
 import 'package:inventory/features/units/model/unit_model.dart';
@@ -8,20 +10,20 @@ import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
 
-class AddUnitsScreen extends StatefulWidget {
+class AddColorsScreen extends StatefulWidget {
   final bool saveToFolderTag;
 
-  const AddUnitsScreen({super.key, this.saveToFolderTag = false});
+  const AddColorsScreen({super.key, this.saveToFolderTag = false});
 
   @override
-  State<AddUnitsScreen> createState() => _AddUnitsScreenState();
+  State<AddColorsScreen> createState() => _AddColorsScreenState();
 }
 
-class _AddUnitsScreenState extends State<AddUnitsScreen> {
+class _AddColorsScreenState extends State<AddColorsScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<UnitCubit>(context).getUnits();
+    BlocProvider.of<ColorCubit>(context).getUnits();
   }
 
   @override
@@ -33,13 +35,13 @@ class _AddUnitsScreenState extends State<AddUnitsScreen> {
         elevation: 0.0,
         backgroundColor: Colors.white,
         title: AppText(
-          'Units',
+          'Colors',
           style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
       ),
       body: BlocBuilder<FolderCubit, FolderState>(
         builder: (context, folderState) {
-          return BlocBuilder<UnitCubit, UnitState>(builder: (context, state) {
+          return BlocBuilder<ColorCubit, ColorState>(builder: (context, state) {
             return state.status is LoadingState
                 ? const Center(child: CircularProgressIndicator())
                 : state.status is ErrorState
@@ -48,7 +50,7 @@ class _AddUnitsScreenState extends State<AddUnitsScreen> {
                         ? const Center(
                             child: AppText(
                             maxLines: 1,
-                            'No tags found.',
+                            'No Colors found.',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                           ))
@@ -129,7 +131,7 @@ class _AddUnitsScreenState extends State<AddUnitsScreen> {
       ),
       floatingActionButton: GestureDetector(
         onTap: () {
-          addTags(context);
+          addColors(context);
         },
         child: Container(
           height: 50,
@@ -142,7 +144,7 @@ class _AddUnitsScreenState extends State<AddUnitsScreen> {
   }
 }
 
-addTags(BuildContext context) {
+addColors(BuildContext context) {
   TextEditingController unitNameController = TextEditingController();
   TextEditingController unitSlugController = TextEditingController();
   showDialog(
@@ -156,12 +158,12 @@ addTags(BuildContext context) {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AppText('Add Units',
+                  AppText('Add Colors',
                       style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                   const Divider(),
                   Row(
                     children: [
-                      AppText('Unit Name: ',
+                      AppText('Color Name: ',
                           style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                       Flexible(
                         child: TextField(
@@ -193,20 +195,17 @@ addTags(BuildContext context) {
                               })),
                       const SizedBox(width: 8),
                       Flexible(
-                          child: AppButton(
-                              height: 40,
-                              title: 'Save',
-                              color: Colors.orangeAccent,
-                              onPressed: () {
-                                BlocProvider.of<UnitCubit>(context).addUnits(
-                                    Unit(
-                                        id: 0,
-                                        name: unitNameController.text,
-                                        slug: unitSlugController.text,
-                                        label: unitNameController.text),
-                                    context);
-                                Navigator.of(context).pop();
-                              })),
+                        child: AppButton(
+                          height: 40,
+                          title: 'Save',
+                          color: Colors.orangeAccent,
+                          onPressed: () {
+                            BlocProvider.of<ColorCubit>(context).addColors(
+                                Color(id: 0, name: unitNameController.text, slug: unitSlugController.text), context);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ],

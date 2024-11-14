@@ -195,8 +195,8 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                                 if (widget.isEditScreen) {
                                   log('Is Edit Screen');
 
-                                  // BlocProvider.of<FolderCubit>(context)
-                                  //     .editFolders(context, images: listOfImages.value, folderId: widget.folderId);
+                                  BlocProvider.of<FolderCubit>(context)
+                                      .editFolders(context, images: listOfImages.value, folderId: widget.folderId);
                                 } else {
                                   BlocProvider.of<FolderCubit>(context).addFolders(context, images: listOfImages.value);
                                 }
