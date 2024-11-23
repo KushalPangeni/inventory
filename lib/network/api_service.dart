@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:inventory/network/request.dart';
 import 'package:inventory/network/response_type_def.dart';
+import 'package:toastification/toastification.dart';
 import 'data_response.dart';
 import 'exception.dart';
 
@@ -38,8 +39,7 @@ class DioClient {
   late Dio _client;
 
   init() async {
-    _client.interceptors
-        .add(LogInterceptor(requestBody: true, responseBody: true));
+    _client.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
     // _client.interceptors.add(AuthInterceptor());
     _client.interceptors.add(
       InterceptorsWrapper(
@@ -65,12 +65,10 @@ class DioClient {
               ));
             }
             handler.next(error);
-          } else if (error.response?.statusCode == 500 ||
-              error.response?.statusCode == 502) {
+          } else if (error.response?.statusCode == 500 || error.response?.statusCode == 502) {
             handler.reject(error);
           } else {
-            handleApiResponse(
-                error.response!, error.response!.requestOptions.path);
+            handleApiResponse(error.response!, error.response!.requestOptions.path);
             handler.next(error);
           }
         },
@@ -164,8 +162,7 @@ class DioClient {
     return request(endPoint: endPoint, response: response);
   }
 
-  Future<Response?> request(
-      {required String endPoint, required Response response}) async {
+  Future<Response?> request({required String endPoint, required Response response}) async {
     try {
       handleApiResponse(response, endPoint);
       return response;
@@ -184,9 +181,7 @@ class DioClient {
         try {
           if (fromJsonModel != null) {
             if (response.data is List) {
-              return Right(DataResponse.success((response.data as List)
-                  .map((e) => fromJsonModel(e))
-                  .toList()));
+              return Right(DataResponse.success((response.data as List).map((e) => fromJsonModel(e)).toList()));
             } else {
               return Right(DataResponse.success(fromJsonModel(response.data)));
             }
@@ -206,6 +201,7 @@ class DioClient {
       }
     } catch (e) {
       if (e is DioException) {
+        log('Message Exception 5 ==> ${e.message}');
         if (e.type == DioExceptionType.connectionError) {
           return Left(DataResponse.error('No Internet Connection'));
         } else {
@@ -215,5 +211,8 @@ class DioClient {
       return Left(DataResponse.error("Error!"));
     }
   }
+}
 
+showSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
 }

@@ -1,12 +1,13 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:inventory/network/response_type_def.dart';
 
 abstract class AddFolderRepository {
-  EitherResponse postFolders(String tag, List<File> images,
+  EitherResponse postFolders(String tag, List<MultipartFile> images,
       {String folderName = '',
       String folderDescription = '',
-      int parentFolderName = 0,
+      int? parentFolderId,
       required List<int> listOfTagsId});
 
   EitherResponse editFolders(String tag, List<File> images,
@@ -17,8 +18,9 @@ abstract class AddFolderRepository {
       int parentFolderName = 0,
       required List<int> listOfTagsId});
 
-  EitherResponse getFolders();
+  EitherResponse getFolders({int? folderId});
 
 
   EitherResponse deleteFolders(int tagId);
+  EitherResponse moveFolder({required int folderId, required int destinationFolderId, required String reasonToMove});
 }

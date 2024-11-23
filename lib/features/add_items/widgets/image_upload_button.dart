@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:inventory/global/widgets/app_text.dart';
+import 'package:inventory/features/add_folders/model/folder_model.dart' as folder_model;
+import 'package:inventory/network/api_url.dart';
 
 import 'dotted_container.dart';
 
@@ -11,6 +14,7 @@ class AddImageButton extends StatelessWidget {
   final bool isEditScreen;
   final bool isFromDraftScreen;
   final List<File> listOfImages;
+  final List<folder_model.Image> listOfUrlImages;
 
   const AddImageButton(
       {super.key,
@@ -18,7 +22,8 @@ class AddImageButton extends StatelessWidget {
       required this.isEditScreen,
       required this.onDelete,
       required this.isFromDraftScreen,
-      required this.listOfImages});
+      required this.listOfImages,
+      required this.listOfUrlImages});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +31,12 @@ class AddImageButton extends StatelessWidget {
       height: 150,
       padding: const EdgeInsets.all(0.5),
       constraints: const BoxConstraints(minHeight: 145),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
       child: DashedRect(
         child: Container(
             width: MediaQuery.sizeOf(context).width,
             padding: const EdgeInsets.only(left: 10, bottom: 10),
-            child: listOfImages.isEmpty
+            child: (listOfImages.length + listOfUrlImages.length == 0)
                 ? GestureDetector(
                     onTap: onTap,
                     child: Container(
@@ -48,76 +52,130 @@ class AddImageButton extends StatelessWidget {
                           const SizedBox(height: 8),
                           AppText(
                             'Add Images',
-                            style: const TextStyle().defaultTextStyle(
-                                color: Colors.grey, fontSize: 14),
+                            style: const TextStyle().defaultTextStyle(color: Colors.grey, fontSize: 14),
                           ),
                         ],
                       ),
                     ),
                   )
-                : ListView.builder(
-                    shrinkWrap: true,
+                : SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    itemCount: listOfImages.length,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (index == 0)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 12),
-                              child: GestureDetector(
-                                onTap: onTap,
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.only(left: 6, top: 12),
-                                  height: 115,
-                                  width: 103,
-                                  child: const DashedRect(
-                                    child: Icon(
-                                      Icons.add_circle_outline,
-                                      color: Colors.grey,
-                                      size: 24,
-                                    ),
-                                  ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: GestureDetector(
+                            onTap: onTap,
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 6, top: 12),
+                              height: 115,
+                              width: 103,
+                              child: const DashedRect(
+                                child: Icon(
+                                  Icons.add_circle_outline,
+                                  color: Colors.grey,
+                                  size: 24,
                                 ),
                               ),
                             ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  margin:
-                                      const EdgeInsets.only(right: 10, top: 10),
-                                  height: 120,
-                                  width: 110,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.transparent, width: 2),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [Image.file(listOfImages[index])],
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 0,
-                                  child: GestureDetector(
-                                    onTap: () {},
-                                    child: const Icon(Icons.delete,
-                                        color: Colors.red),
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
-                        ],
-                      );
-                    })),
+                        ),
+                        SizedBox(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: listOfImages.length,
+                              itemBuilder: (context, index) {
+                                // File file = File(listOfImages[index].path);
+                                // // Read the bytes from the file
+                                // Uint8List bytes = file.readAsBytesSync();
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(right: 10, top: 10),
+                                          height: 120,
+                                          width: 110,
+                                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.transparent, width: 2),
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: Stack(
+                                            alignment: Alignment.bottomCenter,
+                                            children: [
+                                              // Image.network('${ApiUrl.baseUrl}${listOfImages[index]}'),
+                                              // Image.memory(Uint8List.fromList(bytes)),
+                                              Image.file(listOfImages[index]),
+                                            ],
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: const Icon(Icons.delete, color: Colors.red),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              }),
+                        ),
+                        SizedBox(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: listOfUrlImages.length,
+                              itemBuilder: (context, index) {
+                                // File file = File(listOfImages[index].path);
+                                // // Read the bytes from the file
+                                // Uint8List bytes = file.readAsBytesSync();
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(right: 10, top: 10),
+                                          height: 120,
+                                          width: 110,
+                                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.transparent, width: 2),
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: Stack(
+                                            alignment: Alignment.bottomCenter,
+                                            children: [
+                                              Image.network(listOfUrlImages[index].path),
+                                              // Image.memory(Uint8List.fromList(bytes)),
+                                              // Image.file(listOfImages[index]),
+                                            ],
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: const Icon(Icons.delete, color: Colors.red),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
+                  )),
       ),
     );
   }

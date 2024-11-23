@@ -119,15 +119,27 @@ _$ItemImpl _$$ItemImplFromJson(Map<String, dynamic> json) => _$ItemImpl(
       name: json['name'] as String,
       fabricNumber: json['fabric_number'] as String? ?? '',
       shopName: json['shop_name'] as String? ?? '',
-      width: (json['width'] as num?)?.toInt() ?? 0,
+      partyName: json['party_name'] as String? ?? '',
+      width: json['width'] as String? ?? '',
       gsm: json['gsm'] as String? ?? '',
-      kgToMeterRatio: (json['kg_to_meter_ratio'] as num?)?.toDouble(),
-      average: (json['average'] as num?)?.toDouble() ?? 0,
-      shortage: (json['shortage'] as num?)?.toDouble() ?? 0,
+      kgToMeterRatio: json['kg_to_meter_ratio'] as String?,
+      average: json['average'] as String? ?? '',
+      shortage: json['shortage'] as String? ?? '',
       quantity: (json['quantity'] as num?)?.toInt() ?? 0,
-      unitId: (json['unit_id'] as num?)?.toInt() ?? 1,
+      unitId: (json['unit_id'] as num?)?.toInt() ?? 0,
+      averageUnit: json['avg_unit'] as String? ?? '',
+      orderQuantity: json['order_quantity'] as String? ?? '0',
+      minimumQuantity: (json['minimum_quantity'] as num?)?.toInt() ?? 0,
       accessoriesNotes: json['accessories_notes'] as String? ?? '',
-      folder_id: (json['folder_id'] as num?)?.toInt() ?? 0,
+      images: (json['images'] as List<dynamic>?)
+              ?.map((e) => Image.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      colors: (json['colors'] as List<dynamic>?)
+              ?.map((e) => ColorModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      folderId: (json['folder_id'] as num?)?.toInt() ?? 0,
       sku: json['sku'] as String? ?? '',
     );
 
@@ -137,6 +149,7 @@ Map<String, dynamic> _$$ItemImplToJson(_$ItemImpl instance) =>
       'name': instance.name,
       'fabric_number': instance.fabricNumber,
       'shop_name': instance.shopName,
+      'party_name': instance.partyName,
       'width': instance.width,
       'gsm': instance.gsm,
       'kg_to_meter_ratio': instance.kgToMeterRatio,
@@ -144,7 +157,28 @@ Map<String, dynamic> _$$ItemImplToJson(_$ItemImpl instance) =>
       'shortage': instance.shortage,
       'quantity': instance.quantity,
       'unit_id': instance.unitId,
+      'avg_unit': instance.averageUnit,
+      'order_quantity': instance.orderQuantity,
+      'minimum_quantity': instance.minimumQuantity,
       'accessories_notes': instance.accessoriesNotes,
-      'folder_id': instance.folder_id,
+      'images': instance.images,
+      'colors': instance.colors,
+      'folder_id': instance.folderId,
       'sku': instance.sku,
+    };
+
+_$ColorModelImpl _$$ColorModelImplFromJson(Map<String, dynamic> json) =>
+    _$ColorModelImpl(
+      colorId: (json['color_id'] as num?)?.toInt(),
+      quantitys: (json['quantitys'] as num).toInt(),
+      rolls: (json['rolls'] as num).toInt(),
+      number: (json['number'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$ColorModelImplToJson(_$ColorModelImpl instance) =>
+    <String, dynamic>{
+      'color_id': instance.colorId,
+      'quantitys': instance.quantitys,
+      'rolls': instance.rolls,
+      'number': instance.number,
     };

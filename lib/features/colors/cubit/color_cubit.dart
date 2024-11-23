@@ -17,7 +17,7 @@ class ColorCubit extends Cubit<ColorState> {
 
   ColorCubit(this.repository) : super(const ColorState());
 
-  Future<void> getUnits({bool showLoading = true}) async {
+  Future<void> getColors({bool showLoading = true}) async {
     emit(state.copyWith(status: showLoading ? const LoadingState() : const InitialState()));
     final response = await repository.getColors();
     response.fold(
@@ -27,14 +27,14 @@ class ColorCubit extends Cubit<ColorState> {
       },
       (r) {
         log('Fetched Units ==> ${r.data}');
-        List<Color> docTypeList = r.data.result;
+        List<ColorModel> docTypeList = r.data.result;
         emit(state.copyWith(status: const LoadedState(), listOfUnits: docTypeList));
       },
     );
   }
 
-  addColors(Color color, BuildContext context) async {
-    List<Color> listOfUnit = List.from(state.listOfUnits);
+  addColors(ColorModel color, BuildContext context) async {
+    List<ColorModel> listOfUnit = List.from(state.listOfUnits);
     String lowerUnit = color.name.toLowerCase();
     bool unitExists = listOfUnit.any((existingUnit) => existingUnit.name.toLowerCase() == lowerUnit);
 
@@ -52,7 +52,7 @@ class ColorCubit extends Cubit<ColorState> {
               content: AppText('Error when adding Color.')));
         },
         (r) {
-          getUnits(showLoading: false);
+          getColors(showLoading: false);
         },
       );
     } else {

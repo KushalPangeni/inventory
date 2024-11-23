@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -21,18 +23,23 @@ class AddItemCubit extends Cubit<AddItemState> {
 
   TextEditingController itemNameController = TextEditingController();
   TextEditingController fabricNumberController = TextEditingController();
+  TextEditingController partyNameController = TextEditingController();
   TextEditingController shopNameController = TextEditingController();
   TextEditingController widthController = TextEditingController();
   TextEditingController gsmController = TextEditingController();
+  TextEditingController orderQuantityController = TextEditingController();
   TextEditingController minQuantityController = TextEditingController();
   TextEditingController oneKgController = TextEditingController();
   TextEditingController averageController = TextEditingController();
+  TextEditingController averageUnitController = TextEditingController();
   TextEditingController shortageController = TextEditingController();
   TextEditingController notesController = TextEditingController();
 
   initializeTextController() {
     itemNameController.text = '';
     fabricNumberController.text = '';
+    partyNameController.text = '';
+    orderQuantityController.text = '';
     shortageController.text = '0';
     shopNameController.text = '';
     widthController.text = '0';
@@ -40,20 +47,33 @@ class AddItemCubit extends Cubit<AddItemState> {
     minQuantityController.text = '0';
     oneKgController.text = '0';
     averageController.text = '0';
+    averageUnitController.text = '';
     notesController.text = ' ';
   }
 
   initializeEditScreenTextController(Item item) {
+    List<ColorModelF> colorsList = [];
     itemNameController.text = item.name;
     fabricNumberController.text = item.fabricNumber ?? '';
+    partyNameController.text = item.partyName ?? '';
     shortageController.text = item.shortage.toString() ?? '0';
+    orderQuantityController.text = item.orderQuantity ?? '';
     shopNameController.text = item.shopName ?? '';
     widthController.text = item.width.toString();
     gsmController.text = item.gsm.toString();
     minQuantityController.text = item.quantity.toString();
     oneKgController.text = item.kgToMeterRatio.toString();
     averageController.text = item.average.toString();
+    averageUnitController.text = item.averageUnit.toString();
     notesController.text = item.accessoriesNotes ?? '';
+
+    if (item.colors != null && item.colors!.isNotEmpty) {
+      colorsList = item.colors!
+          .map((color) =>
+              ColorModelF(colorId: color.colorId, number: color.number, quantity: color.quantitys, roll: color.rolls))
+          .toList();
+    }
+    emit(state.copyWith(colorList: colorsList));
   }
 
   getItems({bool showLoading = true}) async {
@@ -69,20 +89,38 @@ class AddItemCubit extends Cubit<AddItemState> {
     });
   }
 
-  addItems(BuildContext context, int? folderId) async {
+  addItems(BuildContext context, int? folderId, List<File> listOfFiles, int unitId) async {
     emit(state.copyWith(status: const LoadingState()));
-    var response = await repository.postItems(
+    List<MultipartFile> listOfMultipartFiles = [];
+    for (int i = 0; i < listOfFiles.length; i++) {
+      listOfMultipartFiles.add(await MultipartFile.fromFile(
+        listOfFiles[i].path,
+        filename: listOfFiles[i].path.split('/').last, // Specify the file name explicitly
+      ));
+    }
+    List listOfColors = state.colorList
+        .map((colorModelF) =>
+            {"color_id": colorModelF.colorId, "quantitys": colorModelF.quantity, "rolls": colorModelF.roll})
+        .toList();
+
+    var response = await repository.postItems(listOfMultipartFiles,
         folderId: folderId,
         itemName: itemNameController.text,
         fabricNumber: fabricNumberController.text,
+        partyName: partyNameController.text,
         shopName: shopNameController.text,
-        width: int.parse(widthController.text),
-        gsm: int.parse(gsmController.text),
+        width: widthController.text,
+        gsm: gsmController.text,
+        unitId: unitId,
         quantity: int.parse(minQuantityController.text),
-        kgToMeter: int.parse(oneKgController.text),
-        shortage: int.parse(shortageController.text),
+        minimumQuantity: minQuantityController.text,
+        kgToMeter: oneKgController.text,
+        shortage: shortageController.text,
         notes: notesController.text,
-        average: int.parse(averageController.text),
+        listOfColors: listOfColors,
+        average: averageController.text,
+        orderQuantity: orderQuantityController.text,
+        averageUnit: averageUnitController.text,
         sku: '');
     response.fold((l) {
       emit(state.copyWith(status: const ErrorState()));
@@ -98,21 +136,40 @@ class AddItemCubit extends Cubit<AddItemState> {
     });
   }
 
-  editItems(BuildContext context, int? folderId, int? itemId) async {
+  editItems(BuildContext context, int? folderId, List<File> listOfFiles, int unitId, int? itemId) async {
     emit(state.copyWith(status: const LoadingState()));
-    var response = await repository.editItems(
+
+    List<MultipartFile> listOfMultipartFiles = [];
+    for (int i = 0; i < listOfFiles.length; i++) {
+      listOfMultipartFiles.add(await MultipartFile.fromFile(
+        listOfFiles[i].path,
+        filename: listOfFiles[i].path.split('/').last,
+      ));
+    }
+    List listOfColors = state.colorList
+        .map((colorModelF) =>
+            {"color_id": colorModelF.colorId, "quantitys": colorModelF.quantity, "rolls": colorModelF.roll})
+        .toList();
+
+    var response = await repository.editItems(listOfMultipartFiles,
         folderId: folderId,
+        itemName: itemNameController.text,
+        fabricNumber: fabricNumberController.text,
+        partyName: partyNameController.text,
+        shopName: shopNameController.text,
+        width: widthController.text,
+        gsm: gsmController.text,
+        unitId: unitId,
+        quantity: int.parse(minQuantityController.text),
+        minimumQuantity: minQuantityController.text,
+        kgToMeter: oneKgController.text,
+        shortage: shortageController.text,
+        notes: notesController.text,
+        listOfColors: listOfColors,
+        average: averageController.text,
+        orderQuantity: orderQuantityController.text,
+        averageUnit: averageUnitController.text,
         itemId: itemId,
-        itemName: itemNameController.text,
-        fabricNumber: fabricNumberController.text,
-        shopName: shopNameController.text,
-        width: int.parse(widthController.text),
-        gsm: int.parse(gsmController.text),
-        quantity: int.parse(minQuantityController.text),
-        kgToMeter: double.parse(oneKgController.text).toInt(),
-        shortage: double.parse(shortageController.text).toInt(),
-        notes: notesController.text,
-        average: double.parse(averageController.text).toInt(),
         sku: '');
     response.fold((l) {
       emit(state.copyWith(status: const ErrorState()));
@@ -128,23 +185,24 @@ class AddItemCubit extends Cubit<AddItemState> {
     });
   }
 
-  addColorInColorList() {
-    List<ColorModel> listOfColorModel = List.from(state.colorList);
-    listOfColorModel.add(ColorModel(colorName: '', quantity: 0, roll: 0));
+  addColorInColorList(ColorModelF color) {
+    List<ColorModelF> listOfColorModel = List.from(state.colorList);
+    listOfColorModel.add(ColorModelF(quantity: 0, roll: 0));
     emit(state.copyWith(colorList: listOfColorModel));
   }
 
   deleteColorInColorList(int index) {
-    List<ColorModel> listOfColorModel = List.from(state.colorList);
+    List<ColorModelF> listOfColorModel = List.from(state.colorList);
     listOfColorModel.removeAt(index);
     emit(state.copyWith(colorList: listOfColorModel));
   }
 
-  editColorItem(int index, String colorName, int quantity, int roll) {
-    List<ColorModel> listOfColorModel = List.from(state.colorList);
-    listOfColorModel[index].colorName = colorName;
-    listOfColorModel[index].quantity = quantity;
-    listOfColorModel[index].roll = roll;
+  editColorItem(int index, {int? colorId, int? number, int? quantity, int? roll}) {
+    List<ColorModelF> listOfColorModel = List.from(state.colorList);
+    listOfColorModel[index].colorId = colorId ?? listOfColorModel[index].colorId;
+    listOfColorModel[index].number = number ?? listOfColorModel[index].number;
+    listOfColorModel[index].quantity = quantity ?? listOfColorModel[index].quantity;
+    listOfColorModel[index].roll = roll ?? listOfColorModel[index].roll;
     emit(state.copyWith(colorList: listOfColorModel));
   }
 
@@ -167,6 +225,8 @@ class AddItemCubit extends Cubit<AddItemState> {
     minQuantityController.clear();
     oneKgController.clear();
     averageController.clear();
+    averageUnitController.clear();
+    orderQuantityController.clear();
     shortageController.clear();
     notesController.clear();
   }

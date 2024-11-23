@@ -28,22 +28,30 @@ class AddItemRepositoryImpl implements AddItemRepository {
   }
 
   @override
-  EitherResponse editItems(
+  EitherResponse editItems(List<MultipartFile> listOfFiles,
       {required String itemName,
       required String fabricNumber,
+      required String partyName,
+      required String orderQuantity,
+      required String minimumQuantity,
       required String shopName,
-      required int width,
-      required int gsm,
-      required int kgToMeter,
-      required int average,
-      required int shortage,
+      required String width,
+      required String gsm,
+      required int unitId,
+      required String kgToMeter,
+      required String average,
+      required String averageUnit,
+      required String shortage,
       required int quantity,
       required String notes,
       int? folderId,
       int? itemId,
+      required List listOfColors,
       required String sku}) async {
     final formData = FormData.fromMap({
       "name": itemName,
+      "party_name": partyName,
+      "images[]": listOfFiles,
       "fabric_number": fabricNumber,
       "shop_name": shopName,
       "width": width,
@@ -52,65 +60,78 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "average": average,
       "shortage": shortage,
       "quantity": quantity,
-      "unit_id": 1,
-      "accessories_notes": notes,
-      "folder_id": folderId,
-      "sku": " ",
-    });
-    var request = _client.put(endPoint: Request.createUrl('api/items/$itemId'), body: {
-      "name": itemName,
-      "fabric_number": fabricNumber,
-      "shop_name": shopName,
-      "width": width,
-      "gsm": 0,
-      "kg_to_meter_ratio": kgToMeter,
-      "average": average,
-      "shortage": shortage,
-      "quantity": quantity,
-      "unit_id": 1,
-      "accessories_notes": notes,
-      "folder_id": folderId,
-      "sku": "dsfs ",
-    });
-    return await _client.handleNetworkCall(request);
-  }
-
-  @override
-  EitherResponse postItems(
-      {required String itemName,
-      required String fabricNumber,
-      required String shopName,
-      required int width,
-      required int gsm,
-      required int kgToMeter,
-      required int average,
-      required int shortage,
-      required int quantity,
-      required String notes,
-      int? folderId,
-      required String sku}) async {
-    final formData = FormData.fromMap({
-      "name": itemName,
-      "fabric_number": fabricNumber,
-      "shop_name": shopName,
-      "width": width,
-      "gsm": 0,
-      "kg_to_meter_ratio": kgToMeter,
-      "average": average,
-      "shortage": shortage,
-      "quantity": quantity,
+      "order_quantity": orderQuantity,
+      "minimum_quantity": int.parse(minimumQuantity),
+      "avg_unit": averageUnit,
       "unit_id": 1,
       "accessories_notes": notes,
       "folder_id": folderId,
       "sku": "string",
-      "colors": [
-        {
-          "color_id": 0,
-          "quantitys": 0,
-          "rolls": 0
-        }
-      ]
+      "colors": listOfColors
     });
+    // var request = _client.put(endPoint: Request.createUrl('api/items/$itemId'), body: {
+    //   "name": itemName,
+    //   "fabric_number": fabricNumber,
+    //   "shop_name": shopName,
+    //   "width": width,
+    //   "gsm": 0,
+    //   "kg_to_meter_ratio": kgToMeter,
+    //   "average": average,
+    //   "shortage": shortage,
+    //   "quantity": quantity,
+    //   "unit_id": 1,
+    //   "accessories_notes": notes,
+    //   "folder_id": folderId,
+    //   "sku": "dsfs ",
+    // });
+    var request = _client.editFiles(endPoint: Request.createUrl('api/items/$itemId'), formData: formData);
+    return await _client.handleNetworkCall(request);
+  }
+
+  @override
+  EitherResponse postItems(List<MultipartFile> listOfFiles,
+      {required String itemName,
+      required String fabricNumber,
+      required String partyName,
+      required String orderQuantity,
+      required String minimumQuantity,
+      required String averageUnit,
+      required String shopName,
+      required String width,
+      required String gsm,
+      required int unitId,
+      required String kgToMeter,
+      required String average,
+      required String shortage,
+      required int quantity,
+      required String notes,
+      int? folderId,
+      required List listOfColors,
+      required String sku}) async {
+    final formData = FormData.fromMap({
+      "name": itemName,
+      "party_name": partyName,
+      "images[]": listOfFiles,
+      "fabric_number": fabricNumber,
+      "shop_name": shopName,
+      "width": width,
+      "gsm": 0,
+      "kg_to_meter_ratio": kgToMeter,
+      "average": average,
+      "shortage": shortage,
+      "quantity": quantity,
+      "order_quantity": orderQuantity,
+      "minimum_quantity": int.parse(minimumQuantity),
+      "avg_unit": averageUnit,
+      "unit_id": 1,
+      "accessories_notes": notes,
+      "folder_id": folderId,
+      "sku": "string",
+      "colors": listOfColors
+    });
+    /*[
+        {"color_id": 0, "quantitys": 0, "rolls": 0}
+      ]*/
     /*final formData = FormData.fromMap({
       "name": itemName,
       "fabric_number": fabricNumber,

@@ -23,7 +23,7 @@ mixin _$AddItemState {
   List<Item> get listOfItemsFromSelectedFolder =>
       throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  List<ColorModel> get colorList => throw _privateConstructorUsedError;
+  List<ColorModelF> get colorList => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AddItemStateCopyWith<AddItemState> get copyWith =>
@@ -42,7 +42,7 @@ abstract class $AddItemStateCopyWith<$Res> {
       List<Item> listOfItems,
       List<Item> listOfItemsFromSelectedFolder,
       String title,
-      List<ColorModel> colorList});
+      List<ColorModelF> colorList});
 
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
   $ApiRequestStateCopyWith<dynamic, $Res>? get uploadStatus;
@@ -92,7 +92,7 @@ class _$AddItemStateCopyWithImpl<$Res, $Val extends AddItemState>
       colorList: null == colorList
           ? _value.colorList
           : colorList // ignore: cast_nullable_to_non_nullable
-              as List<ColorModel>,
+              as List<ColorModelF>,
     ) as $Val);
   }
 
@@ -136,7 +136,7 @@ abstract class _$$AddItemStateImplCopyWith<$Res>
       List<Item> listOfItems,
       List<Item> listOfItemsFromSelectedFolder,
       String title,
-      List<ColorModel> colorList});
+      List<ColorModelF> colorList});
 
   @override
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
@@ -186,7 +186,7 @@ class __$$AddItemStateImplCopyWithImpl<$Res>
       colorList: null == colorList
           ? _value._colorList
           : colorList // ignore: cast_nullable_to_non_nullable
-              as List<ColorModel>,
+              as List<ColorModelF>,
     ));
   }
 }
@@ -200,7 +200,7 @@ class _$AddItemStateImpl implements _AddItemState {
       final List<Item> listOfItems = const [],
       final List<Item> listOfItemsFromSelectedFolder = const [],
       this.title = '',
-      final List<ColorModel> colorList = const []})
+      final List<ColorModelF> colorList = const []})
       : _listOfItems = listOfItems,
         _listOfItemsFromSelectedFolder = listOfItemsFromSelectedFolder,
         _colorList = colorList;
@@ -233,10 +233,10 @@ class _$AddItemStateImpl implements _AddItemState {
   @override
   @JsonKey()
   final String title;
-  final List<ColorModel> _colorList;
+  final List<ColorModelF> _colorList;
   @override
   @JsonKey()
-  List<ColorModel> get colorList {
+  List<ColorModelF> get colorList {
     if (_colorList is EqualUnmodifiableListView) return _colorList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_colorList);
@@ -289,7 +289,7 @@ abstract class _AddItemState implements AddItemState {
       final List<Item> listOfItems,
       final List<Item> listOfItemsFromSelectedFolder,
       final String title,
-      final List<ColorModel> colorList}) = _$AddItemStateImpl;
+      final List<ColorModelF> colorList}) = _$AddItemStateImpl;
 
   @override
   ApiRequestState<dynamic>? get status;
@@ -302,7 +302,7 @@ abstract class _AddItemState implements AddItemState {
   @override
   String get title;
   @override
-  List<ColorModel> get colorList;
+  List<ColorModelF> get colorList;
   @override
   @JsonKey(ignore: true)
   _$$AddItemStateImplCopyWith<_$AddItemStateImpl> get copyWith =>

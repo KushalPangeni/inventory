@@ -4,7 +4,7 @@ part of 'color_cubit.dart';
 class ColorState with _$ColorState {
   const factory ColorState({
     @Default(InitialState()) ApiRequestState? status,
-    @Default([]) List<Color> listOfUnits,
-    @Default([]) List<Color> listOfSelectedUnits,
+    @Default([]) List<ColorModel> listOfUnits,
+    @Default([]) List<ColorModel> listOfSelectedUnits,
 }) = _ColorState;
 }

@@ -27,26 +27,30 @@ class AppButton extends StatelessWidget {
     return MaterialButton(
       minWidth: double.infinity,
       disabledColor: Colors.grey[700],
-      color: color,
+      color:isDisabled ? Colors.grey[400]: color,
       shape: RoundedRectangleBorder(
         side: BorderSide(color: borderColor ?? Colors.transparent, width: 1.5),
         borderRadius: BorderRadius.circular(12),
       ),
       elevation: 0,
       height: height,
-      onPressed: onPressed,
+      onPressed: () {
+        if (!isDisabled) {
+          onPressed();
+        }
+      },
       child: isLoading
-          ? SizedBox(
+          ? const SizedBox(
               height: 35,
               child: Center(
-                child: const CircularProgressIndicator(
+                child: CircularProgressIndicator(
                   color: Colors.white,
                 ),
               ))
           : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (icon != null) ...[icon!, SizedBox(width: 4)],
+                if (icon != null) ...[icon!, const SizedBox(width: 4)],
                 AppText(
                   title,
                   style: const TextStyle().defaultTextStyle(

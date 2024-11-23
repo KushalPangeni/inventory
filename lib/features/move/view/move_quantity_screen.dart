@@ -2,14 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:inventory/core/keyboard_utils.dart';
-import 'package:inventory/features/add_items/widgets/add_colors_list_widget.dart';
+import 'package:inventory/features/add_folders/model/folder_model.dart' as folder_model;
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
 import 'move_reason_screen.dart';
 
 class MoveQuantityScreen extends StatefulWidget {
-  const MoveQuantityScreen({super.key});
+  final folder_model.Folder selectedFolder;
+  final folder_model.Folder destinationFolder;
+
+  const MoveQuantityScreen({super.key, required this.selectedFolder, required this.destinationFolder});
 
   @override
   State<MoveQuantityScreen> createState() => _MoveQuantityScreenState();
@@ -29,35 +32,33 @@ class _MoveQuantityScreenState extends State<MoveQuantityScreen> {
         child: Column(
           children: [
             Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: Colors.orangeAccent[100]),
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: [
                   const SizedBox(width: 8),
-                  Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8), color: Colors.orange),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 2),
-                        child: Icon(Icons.file_open_outlined, size: 50),
-                      )),
-                  const SizedBox(width: 8),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppText('Items 1',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                      SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Icon(Icons.folder_outlined),
-                          SizedBox(width: 4),
-                          AppText('Folder 1', style: TextStyle(fontSize: 14))
-                        ],
-                      )
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
+                    child: Image.asset(
+                      'assets/folder.png',
+                      height: 40,
+                      width: 40,
+                    ),
                   ),
+                  const SizedBox(width: 8),
+                  AppText(widget.selectedFolder.name,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  AppText('  --->  '),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
+                    child: Image.asset(
+                      'assets/folder.png',
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  AppText(widget.destinationFolder.name,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
@@ -108,7 +109,10 @@ class _MoveQuantityScreenState extends State<MoveQuantityScreen> {
             onPressed: () {
               KeyboardUtils().hideKeyBoard();
               Navigator.push(
-                  context, CupertinoPageRoute(builder: (context) => const MoveReasonScreen()));
+                  context,
+                  CupertinoPageRoute(
+                      builder: (context) => MoveReasonScreen(
+                          selectedFolder: widget.selectedFolder, destinationFolder: widget.destinationFolder)));
             }),
       ),
     );

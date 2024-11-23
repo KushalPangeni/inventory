@@ -10,7 +10,7 @@ _$ColorResponseModelImpl _$$ColorResponseModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ColorResponseModelImpl(
       result: (json['result'] as List<dynamic>)
-          .map((e) => Color.fromJson(e as Map<String, dynamic>))
+          .map((e) => ColorModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       count: (json['count'] as num).toInt(),
       message: json['message'] as String,
@@ -26,13 +26,14 @@ Map<String, dynamic> _$$ColorResponseModelImplToJson(
       'status': instance.status,
     };
 
-_$ColorImpl _$$ColorImplFromJson(Map<String, dynamic> json) => _$ColorImpl(
+_$ColorModelImpl _$$ColorModelImplFromJson(Map<String, dynamic> json) =>
+    _$ColorModelImpl(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       slug: json['slug'] as String,
     );
 
-Map<String, dynamic> _$$ColorImplToJson(_$ColorImpl instance) =>
+Map<String, dynamic> _$$ColorModelImplToJson(_$ColorModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

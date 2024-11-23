@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:inventory/features/add_folders/view/add_folder_screen.dart';
 import 'package:inventory/features/add_items/view/add_item_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
-import 'package:page_transition/page_transition.dart';
 
 class AddNewItemsBottomModalSheet {
   final int? folderId;
@@ -30,11 +29,13 @@ class AddNewItemsBottomModalSheet {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     Flexible(
+                    Flexible(
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: AppText('Add Items and Folders',
-                            maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle().defaultTextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -64,7 +65,8 @@ class AddNewItemsBottomModalSheet {
                   GestureDetector(
                       onTap: () async {
                         Navigator.of(context).pop();
-                        Navigator.push(context, CupertinoPageRoute(builder: (context) => const AddFolderScreen()));
+                        Navigator.push(
+                            context, CupertinoPageRoute(builder: (context) => AddFolderScreen(folderId: folderId)));
                       },
                       child: listTileAddFileFolder(Image.asset('assets/folder.png', height: 40), 'Add Folders')),
               ],
@@ -103,7 +105,11 @@ Widget listTileAddFileFolder(Widget icon, String title) {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          children: [icon, const SizedBox(width: 20), AppText(title,style: TextStyle().defaultTextStyle(fontSize: 16,fontWeight: FontWeight.w600))],
+          children: [
+            icon,
+            const SizedBox(width: 20),
+            AppText(title, style: TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+          ],
         ),
       ),
     ),

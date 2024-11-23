@@ -20,7 +20,7 @@ ColorResponseModel _$ColorResponseModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ColorResponseModel {
-  List<Color> get result => throw _privateConstructorUsedError;
+  List<ColorModel> get result => throw _privateConstructorUsedError;
   int get count => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   int get status => throw _privateConstructorUsedError;
@@ -37,7 +37,7 @@ abstract class $ColorResponseModelCopyWith<$Res> {
           ColorResponseModel value, $Res Function(ColorResponseModel) then) =
       _$ColorResponseModelCopyWithImpl<$Res, ColorResponseModel>;
   @useResult
-  $Res call({List<Color> result, int count, String message, int status});
+  $Res call({List<ColorModel> result, int count, String message, int status});
 }
 
 /// @nodoc
@@ -62,7 +62,7 @@ class _$ColorResponseModelCopyWithImpl<$Res, $Val extends ColorResponseModel>
       result: null == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
-              as List<Color>,
+              as List<ColorModel>,
       count: null == count
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
@@ -87,7 +87,7 @@ abstract class _$$ColorResponseModelImplCopyWith<$Res>
       __$$ColorResponseModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Color> result, int count, String message, int status});
+  $Res call({List<ColorModel> result, int count, String message, int status});
 }
 
 /// @nodoc
@@ -110,7 +110,7 @@ class __$$ColorResponseModelImplCopyWithImpl<$Res>
       result: null == result
           ? _value._result
           : result // ignore: cast_nullable_to_non_nullable
-              as List<Color>,
+              as List<ColorModel>,
       count: null == count
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
@@ -131,7 +131,7 @@ class __$$ColorResponseModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ColorResponseModelImpl implements _ColorResponseModel {
   const _$ColorResponseModelImpl(
-      {required final List<Color> result,
+      {required final List<ColorModel> result,
       required this.count,
       required this.message,
       required this.status})
@@ -140,9 +140,9 @@ class _$ColorResponseModelImpl implements _ColorResponseModel {
   factory _$ColorResponseModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ColorResponseModelImplFromJson(json);
 
-  final List<Color> _result;
+  final List<ColorModel> _result;
   @override
-  List<Color> get result {
+  List<ColorModel> get result {
     if (_result is EqualUnmodifiableListView) return _result;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_result);
@@ -193,7 +193,7 @@ class _$ColorResponseModelImpl implements _ColorResponseModel {
 
 abstract class _ColorResponseModel implements ColorResponseModel {
   const factory _ColorResponseModel(
-      {required final List<Color> result,
+      {required final List<ColorModel> result,
       required final int count,
       required final String message,
       required final int status}) = _$ColorResponseModelImpl;
@@ -202,7 +202,7 @@ abstract class _ColorResponseModel implements ColorResponseModel {
       _$ColorResponseModelImpl.fromJson;
 
   @override
-  List<Color> get result;
+  List<ColorModel> get result;
   @override
   int get count;
   @override
@@ -215,33 +215,35 @@ abstract class _ColorResponseModel implements ColorResponseModel {
       throw _privateConstructorUsedError;
 }
 
-Color _$ColorFromJson(Map<String, dynamic> json) {
-  return _Color.fromJson(json);
+ColorModel _$ColorModelFromJson(Map<String, dynamic> json) {
+  return _ColorModel.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Color {
+mixin _$ColorModel {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get slug => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ColorCopyWith<Color> get copyWith => throw _privateConstructorUsedError;
+  $ColorModelCopyWith<ColorModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ColorCopyWith<$Res> {
-  factory $ColorCopyWith(Color value, $Res Function(Color) then) =
-      _$ColorCopyWithImpl<$Res, Color>;
+abstract class $ColorModelCopyWith<$Res> {
+  factory $ColorModelCopyWith(
+          ColorModel value, $Res Function(ColorModel) then) =
+      _$ColorModelCopyWithImpl<$Res, ColorModel>;
   @useResult
   $Res call({int id, String name, String slug});
 }
 
 /// @nodoc
-class _$ColorCopyWithImpl<$Res, $Val extends Color>
-    implements $ColorCopyWith<$Res> {
-  _$ColorCopyWithImpl(this._value, this._then);
+class _$ColorModelCopyWithImpl<$Res, $Val extends ColorModel>
+    implements $ColorModelCopyWith<$Res> {
+  _$ColorModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -273,21 +275,22 @@ class _$ColorCopyWithImpl<$Res, $Val extends Color>
 }
 
 /// @nodoc
-abstract class _$$ColorImplCopyWith<$Res> implements $ColorCopyWith<$Res> {
-  factory _$$ColorImplCopyWith(
-          _$ColorImpl value, $Res Function(_$ColorImpl) then) =
-      __$$ColorImplCopyWithImpl<$Res>;
+abstract class _$$ColorModelImplCopyWith<$Res>
+    implements $ColorModelCopyWith<$Res> {
+  factory _$$ColorModelImplCopyWith(
+          _$ColorModelImpl value, $Res Function(_$ColorModelImpl) then) =
+      __$$ColorModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String name, String slug});
 }
 
 /// @nodoc
-class __$$ColorImplCopyWithImpl<$Res>
-    extends _$ColorCopyWithImpl<$Res, _$ColorImpl>
-    implements _$$ColorImplCopyWith<$Res> {
-  __$$ColorImplCopyWithImpl(
-      _$ColorImpl _value, $Res Function(_$ColorImpl) _then)
+class __$$ColorModelImplCopyWithImpl<$Res>
+    extends _$ColorModelCopyWithImpl<$Res, _$ColorModelImpl>
+    implements _$$ColorModelImplCopyWith<$Res> {
+  __$$ColorModelImplCopyWithImpl(
+      _$ColorModelImpl _value, $Res Function(_$ColorModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -297,7 +300,7 @@ class __$$ColorImplCopyWithImpl<$Res>
     Object? name = null,
     Object? slug = null,
   }) {
-    return _then(_$ColorImpl(
+    return _then(_$ColorModelImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -316,11 +319,12 @@ class __$$ColorImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ColorImpl implements _Color {
-  const _$ColorImpl({required this.id, required this.name, required this.slug});
+class _$ColorModelImpl implements _ColorModel {
+  const _$ColorModelImpl(
+      {required this.id, required this.name, required this.slug});
 
-  factory _$ColorImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ColorImplFromJson(json);
+  factory _$ColorModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ColorModelImplFromJson(json);
 
   @override
   final int id;
@@ -331,14 +335,14 @@ class _$ColorImpl implements _Color {
 
   @override
   String toString() {
-    return 'Color(id: $id, name: $name, slug: $slug)';
+    return 'ColorModel(id: $id, name: $name, slug: $slug)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ColorImpl &&
+            other is _$ColorModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.slug, slug) || other.slug == slug));
@@ -351,24 +355,25 @@ class _$ColorImpl implements _Color {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ColorImplCopyWith<_$ColorImpl> get copyWith =>
-      __$$ColorImplCopyWithImpl<_$ColorImpl>(this, _$identity);
+  _$$ColorModelImplCopyWith<_$ColorModelImpl> get copyWith =>
+      __$$ColorModelImplCopyWithImpl<_$ColorModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ColorImplToJson(
+    return _$$ColorModelImplToJson(
       this,
     );
   }
 }
 
-abstract class _Color implements Color {
-  const factory _Color(
+abstract class _ColorModel implements ColorModel {
+  const factory _ColorModel(
       {required final int id,
       required final String name,
-      required final String slug}) = _$ColorImpl;
+      required final String slug}) = _$ColorModelImpl;
 
-  factory _Color.fromJson(Map<String, dynamic> json) = _$ColorImpl.fromJson;
+  factory _ColorModel.fromJson(Map<String, dynamic> json) =
+      _$ColorModelImpl.fromJson;
 
   @override
   int get id;
@@ -378,6 +383,6 @@ abstract class _Color implements Color {
   String get slug;
   @override
   @JsonKey(ignore: true)
-  _$$ColorImplCopyWith<_$ColorImpl> get copyWith =>
+  _$$ColorModelImplCopyWith<_$ColorModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

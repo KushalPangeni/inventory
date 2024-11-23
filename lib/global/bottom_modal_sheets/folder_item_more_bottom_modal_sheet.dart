@@ -56,7 +56,8 @@ class FolderItemMoreBottomModalSheet {
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.push(context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
+                      Navigator.push(
+                          context, CupertinoPageRoute(builder: (context) => MoveScreen(selectedFolder: folder)));
                     },
                     child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
                 listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History'),
@@ -67,8 +68,8 @@ class FolderItemMoreBottomModalSheet {
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                              builder: (context) =>
-                                  AddFolderScreen(isEditScreen: true, folder: folder, folderId: folderId)));
+                              builder: (context) => AddFolderScreen(
+                                  isEditScreen: true, folder: folder, folderId: folderId == 0 ? null : folderId)));
                     },
                     child: listTileAddFileFolder(Image.asset('assets/edit.png', height: 28), 'Edit')),
                 GestureDetector(

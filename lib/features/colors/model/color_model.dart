@@ -6,7 +6,7 @@ part 'color_model.g.dart';
 @freezed
 class ColorResponseModel with _$ColorResponseModel {
   const factory ColorResponseModel({
-    required List<Color> result,
+    required List<ColorModel> result,
     required int count,
     required String message,
     required int status,
@@ -16,12 +16,12 @@ class ColorResponseModel with _$ColorResponseModel {
 }
 
 @freezed
-class Color with _$Color {
-  const factory Color({
+class ColorModel with _$ColorModel {
+  const factory ColorModel({
     required int id,
     required String name,
     required String slug
-  }) = _Color;
+  }) = _ColorModel;
 
-  factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
+  factory ColorModel.fromJson(Map<String, dynamic> json) => _$ColorModelFromJson(json);
 }

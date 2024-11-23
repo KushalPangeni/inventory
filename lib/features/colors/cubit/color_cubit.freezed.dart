@@ -17,8 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ColorState {
   ApiRequestState<dynamic>? get status => throw _privateConstructorUsedError;
-  List<Color> get listOfUnits => throw _privateConstructorUsedError;
-  List<Color> get listOfSelectedUnits => throw _privateConstructorUsedError;
+  List<ColorModel> get listOfUnits => throw _privateConstructorUsedError;
+  List<ColorModel> get listOfSelectedUnits =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ColorStateCopyWith<ColorState> get copyWith =>
@@ -33,8 +34,8 @@ abstract class $ColorStateCopyWith<$Res> {
   @useResult
   $Res call(
       {ApiRequestState<dynamic>? status,
-      List<Color> listOfUnits,
-      List<Color> listOfSelectedUnits});
+      List<ColorModel> listOfUnits,
+      List<ColorModel> listOfSelectedUnits});
 
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
 }
@@ -64,11 +65,11 @@ class _$ColorStateCopyWithImpl<$Res, $Val extends ColorState>
       listOfUnits: null == listOfUnits
           ? _value.listOfUnits
           : listOfUnits // ignore: cast_nullable_to_non_nullable
-              as List<Color>,
+              as List<ColorModel>,
       listOfSelectedUnits: null == listOfSelectedUnits
           ? _value.listOfSelectedUnits
           : listOfSelectedUnits // ignore: cast_nullable_to_non_nullable
-              as List<Color>,
+              as List<ColorModel>,
     ) as $Val);
   }
 
@@ -95,8 +96,8 @@ abstract class _$$ColorStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {ApiRequestState<dynamic>? status,
-      List<Color> listOfUnits,
-      List<Color> listOfSelectedUnits});
+      List<ColorModel> listOfUnits,
+      List<ColorModel> listOfSelectedUnits});
 
   @override
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
@@ -125,11 +126,11 @@ class __$$ColorStateImplCopyWithImpl<$Res>
       listOfUnits: null == listOfUnits
           ? _value._listOfUnits
           : listOfUnits // ignore: cast_nullable_to_non_nullable
-              as List<Color>,
+              as List<ColorModel>,
       listOfSelectedUnits: null == listOfSelectedUnits
           ? _value._listOfSelectedUnits
           : listOfSelectedUnits // ignore: cast_nullable_to_non_nullable
-              as List<Color>,
+              as List<ColorModel>,
     ));
   }
 }
@@ -139,27 +140,27 @@ class __$$ColorStateImplCopyWithImpl<$Res>
 class _$ColorStateImpl implements _ColorState {
   const _$ColorStateImpl(
       {this.status = const InitialState(),
-      final List<Color> listOfUnits = const [],
-      final List<Color> listOfSelectedUnits = const []})
+      final List<ColorModel> listOfUnits = const [],
+      final List<ColorModel> listOfSelectedUnits = const []})
       : _listOfUnits = listOfUnits,
         _listOfSelectedUnits = listOfSelectedUnits;
 
   @override
   @JsonKey()
   final ApiRequestState<dynamic>? status;
-  final List<Color> _listOfUnits;
+  final List<ColorModel> _listOfUnits;
   @override
   @JsonKey()
-  List<Color> get listOfUnits {
+  List<ColorModel> get listOfUnits {
     if (_listOfUnits is EqualUnmodifiableListView) return _listOfUnits;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_listOfUnits);
   }
 
-  final List<Color> _listOfSelectedUnits;
+  final List<ColorModel> _listOfSelectedUnits;
   @override
   @JsonKey()
-  List<Color> get listOfSelectedUnits {
+  List<ColorModel> get listOfSelectedUnits {
     if (_listOfSelectedUnits is EqualUnmodifiableListView)
       return _listOfSelectedUnits;
     // ignore: implicit_dynamic_type
@@ -200,15 +201,15 @@ class _$ColorStateImpl implements _ColorState {
 abstract class _ColorState implements ColorState {
   const factory _ColorState(
       {final ApiRequestState<dynamic>? status,
-      final List<Color> listOfUnits,
-      final List<Color> listOfSelectedUnits}) = _$ColorStateImpl;
+      final List<ColorModel> listOfUnits,
+      final List<ColorModel> listOfSelectedUnits}) = _$ColorStateImpl;
 
   @override
   ApiRequestState<dynamic>? get status;
   @override
-  List<Color> get listOfUnits;
+  List<ColorModel> get listOfUnits;
   @override
-  List<Color> get listOfSelectedUnits;
+  List<ColorModel> get listOfSelectedUnits;
   @override
   @JsonKey(ignore: true)
   _$$ColorStateImplCopyWith<_$ColorStateImpl> get copyWith =>

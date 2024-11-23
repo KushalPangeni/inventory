@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +17,7 @@ class ItemMoreBottomModalSheet {
   ItemMoreBottomModalSheet(this.context, this.folderId, this.item);
 
   showBottomSheet({String title = 'Folder/Item Name ;'}) {
+    log('Party Name is ==> ${item.partyName}');
     showModalBottomSheet(
         backgroundColor: Colors.white,
         context: context,
@@ -54,7 +57,7 @@ class ItemMoreBottomModalSheet {
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.push(context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
+                      // Navigator.push(context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
                     },
                     child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
                 listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History'),
@@ -81,7 +84,7 @@ class ItemMoreBottomModalSheet {
         });
   }
 
-  /*showDialogModal() {
+/*showDialogModal() {
     showDialog(
         context: context,
         builder: (context) {

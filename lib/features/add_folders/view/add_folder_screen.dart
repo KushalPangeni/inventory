@@ -7,10 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
-import 'package:inventory/features/add_folders/model/folder_model.dart';
+import 'package:inventory/features/add_folders/model/folder_model.dart' as folder_model;
 import 'package:inventory/features/add_items/widgets/add_colors_list_widget.dart';
 import 'package:inventory/features/add_items/widgets/image_upload_button.dart';
-import 'package:inventory/features/tags/cubit/tags_cubit.dart';
 import 'package:inventory/features/tags/view/add_tags_screen.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
@@ -19,10 +18,10 @@ import 'package:inventory/network/api_request_state/api_request_state.dart';
 
 class AddFolderScreen extends StatefulWidget {
   final bool isEditScreen;
-  final Folder? folder;
-  final int folderId;
+  final folder_model.Folder? folder;
+  final int? folderId;
 
-  const AddFolderScreen({super.key, this.isEditScreen = false, this.folder, this.folderId = 0});
+  const AddFolderScreen({super.key, this.isEditScreen = false, this.folder, this.folderId});
 
   @override
   State<AddFolderScreen> createState() => _AddFolderScreenState();
@@ -30,6 +29,7 @@ class AddFolderScreen extends StatefulWidget {
 
 class _AddFolderScreenState extends State<AddFolderScreen> {
   ValueNotifier<List<File>> listOfImages = ValueNotifier([]);
+  ValueNotifier<List<folder_model.Image>> listOfUrlImages = ValueNotifier([]);
 
   updateListOfImages(List<File> pickedImages) {
     listOfImages.value = [...listOfImages.value, ...pickedImages];
@@ -43,6 +43,8 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
   void initState() {
     super.initState();
     if (widget.isEditScreen && widget.folder != null) {
+      listOfUrlImages.value = widget.folder!.images ?? listOfUrlImages.value;
+
       BlocProvider.of<FolderCubit>(context)
         ..folderDescriptionController.text = widget.folder!.description
         ..folderNameController.text = widget.folder!.name
@@ -53,6 +55,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log('Add folder ==> Id is ${widget.folderId}');
     var bloc = BlocProvider.of<FolderCubit>(context);
     return PopScope(
       canPop: true,
@@ -67,7 +70,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
             backgroundColor: Colors.white,
             title: AppText(
               '${widget.isEditScreen ? 'Edit' : 'Add'} Folder',
-              style:  const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             )),
         body: BlocBuilder<FolderCubit, FolderState>(
           builder: (context, state) {
@@ -87,11 +90,13 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                               isEditScreen: false,
                               onDelete: (a) {},
                               isFromDraftScreen: false,
-                              listOfImages: listOfImages.value);
+                              listOfImages: listOfImages.value,
+                              listOfUrlImages: listOfUrlImages.value);
                         }),
                     const SizedBox(height: 16),
                     //Name
-                     AppText('Folder Name',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    AppText('Folder Name',
+                        style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                     customTextField(
                         hintText: 'Enter Folder Name',
                         inputType: TextInputType.text,
@@ -101,7 +106,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                         }),
 
                     //Tags
-                     AppText('Tags',
+                    AppText('Tags',
                         style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                     GestureDetector(
                       onTap: () {
@@ -118,11 +123,13 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                             border: Border.all(color: const Color(0xFFE4E4E7), width: 1.0),
                           ),
                           child: state.foldersTag.isEmpty
-                              ?  Align(
+                              ? Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
                                     padding: EdgeInsets.all(16.0),
-                                    child: AppText('Select Tag',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                                    child: AppText('Select Tag',
+                                        style: const TextStyle()
+                                            .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                                   ),
                                 )
                               : Align(
@@ -150,7 +157,8 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                     ),
 
                     //Description
-                     AppText('Description',style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    AppText('Description',
+                        style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                     customTextField(
                         hintText: 'Enter Description',
                         inputType: TextInputType.text,
@@ -194,11 +202,11 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                               if (state.uploadStatus is! LoadingState) {
                                 if (widget.isEditScreen) {
                                   log('Is Edit Screen');
-
                                   BlocProvider.of<FolderCubit>(context)
-                                      .editFolders(context, images: listOfImages.value, folderId: widget.folderId);
+                                      .editFolders(context, images: listOfImages.value, folderId: widget.folderId!);
                                 } else {
-                                  BlocProvider.of<FolderCubit>(context).addFolders(context, images: listOfImages.value);
+                                  BlocProvider.of<FolderCubit>(context).addFolders(context,
+                                      listOfFiles: listOfImages.value, parentFolderId: widget.folderId);
                                 }
                               }
                             } else {

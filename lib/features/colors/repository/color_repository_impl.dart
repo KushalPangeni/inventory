@@ -32,7 +32,7 @@ class ColorRepositoryImpl implements ColorRepository {
   }
 
   @override
-  EitherResponse postColors(Color color) async {
+  EitherResponse postColors(ColorModel color) async {
     var request =
         _client.post(endPoint: Request.createUrl('api/colors'), data: {'name': color.name, 'slug': color.slug});
     return await _client.handleNetworkCall(request);

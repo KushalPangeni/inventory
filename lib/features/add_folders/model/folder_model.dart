@@ -1,7 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inventory/features/add_items/model/color_model.dart';
 import 'package:inventory/features/tags/model/tag_model.dart';
 
 part 'folder_model.freezed.dart';
+
 part 'folder_model.g.dart';
 
 @freezed
@@ -66,25 +68,42 @@ class Image with _$Image {
   factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
 }
 
-
 @freezed
 class Item with _$Item {
-  const factory Item({
-    required int id,
-    required String name,
-    @JsonKey(name: 'fabric_number') @Default('') String? fabricNumber,
-    @JsonKey(name: 'shop_name') @Default('') String? shopName,
-    @Default(0) int? width, // made nullable
-    @Default('') String? gsm, // made nullable
-    @JsonKey(name: 'kg_to_meter_ratio') double? kgToMeterRatio,
-    @Default(0) double? average, // made nullable
-    @Default(0) double? shortage, // made nullable
-    @Default(0) int? quantity, // made nullable
-    @JsonKey(name: 'unit_id') @Default(1) int? unitId,
-    @JsonKey(name: 'accessories_notes') @Default('') String? accessoriesNotes,
-    @Default(0) int? folder_id,
-    @Default('') String? sku// made nullable
-  }) = _Item;
+  const factory Item(
+      {required int id,
+      required String name,
+      @JsonKey(name: 'fabric_number') @Default('') String? fabricNumber,
+      @JsonKey(name: 'shop_name') @Default('') String? shopName,
+      @JsonKey(name: 'party_name') @Default('') String? partyName,
+      @Default('') String? width, // made nullable
+      @Default('') String? gsm, // made nullable
+      @JsonKey(name: 'kg_to_meter_ratio') String? kgToMeterRatio,
+      @Default('') String? average, // made nullable
+      @Default('') String? shortage, // made nullable
+      @Default(0) int? quantity, // made nullable
+      @JsonKey(name: 'unit_id') @Default(0) int? unitId,
+      @JsonKey(name: 'avg_unit') @Default('') String? averageUnit,
+      @JsonKey(name: 'order_quantity') @Default('0') String? orderQuantity,
+      @JsonKey(name: 'minimum_quantity') @Default(0) int? minimumQuantity,
+      @JsonKey(name: 'accessories_notes') @Default('') String? accessoriesNotes,
+      @Default([]) List<Image>? images,
+      @Default([]) List<ColorModel>? colors,
+      @JsonKey(name: 'folder_id') @Default(0) int? folderId,
+      @Default('') String? sku // made nullable
+      }) = _Item;
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
+}
+
+@freezed
+class ColorModel with _$ColorModel {
+  const factory ColorModel({
+    @JsonKey(name: 'color_id') int? colorId,
+    required int quantitys,
+    required int rolls,
+    required int number,
+  }) = _ColorModel;
+
+  factory ColorModel.fromJson(Map<String, dynamic> json) => _$ColorModelFromJson(json);
 }

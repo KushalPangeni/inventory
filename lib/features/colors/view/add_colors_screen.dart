@@ -23,7 +23,7 @@ class _AddColorsScreenState extends State<AddColorsScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ColorCubit>(context).getUnits();
+    BlocProvider.of<ColorCubit>(context).getColors();
   }
 
   @override
@@ -106,7 +106,7 @@ class _AddColorsScreenState extends State<AddColorsScreen> {
                                                 )
                                               ],
                                             ),
-                                            PopupMenuButton<String>(
+                                            /*PopupMenuButton<String>(
                                               initialValue: '',
                                               onSelected: (String item) {
                                                 BlocProvider.of<UnitCubit>(context)
@@ -119,7 +119,7 @@ class _AddColorsScreenState extends State<AddColorsScreen> {
                                                 ),
                                               ],
                                               child: const Icon(Icons.more_vert_rounded),
-                                            ),
+                                            ),*/
                                           ],
                                         ),
                                       ),
@@ -201,7 +201,8 @@ addColors(BuildContext context) {
                           color: Colors.orangeAccent,
                           onPressed: () {
                             BlocProvider.of<ColorCubit>(context).addColors(
-                                Color(id: 0, name: unitNameController.text, slug: unitSlugController.text), context);
+                                ColorModel(id: 0, name: unitNameController.text, slug: unitSlugController.text),
+                                context);
                             Navigator.of(context).pop();
                           },
                         ),

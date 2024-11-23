@@ -4,7 +4,9 @@ abstract class Request {
   static const _authentication = 'Authorization';
 
   static Map<String, String> createHeader({isFormData = false}) {
-    final authHeader = <String, String>{};
+    final authHeader = <String, String>{
+      "ngrok-skip-browser-warning": "69420",
+    };
     authHeader['Accept'] = 'application/json';
     authHeader['Content-Type'] = 'application/json';
     return authHeader;

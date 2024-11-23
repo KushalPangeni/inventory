@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart';
 import 'package:inventory/features/add_items/view/item_list_screen.dart';
@@ -12,6 +14,8 @@ class ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('Party Name is ==> onPressed ${item.partyName}');
+
     return Container(
       height: 90,
       padding: const EdgeInsets.only(top: 5, left: 16),
