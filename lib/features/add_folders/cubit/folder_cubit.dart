@@ -102,12 +102,11 @@ class FolderCubit extends Cubit<FolderState> {
         folderDescription: folderDescriptionController.text,
         listOfTagsId: listOfTagsId);
     response.fold((l) {
-      emit(state.copyWith(status: const ErrorState()));
+      emit(state.copyWith(uploadStatus: const ErrorState()));
       log('Edit Folders === > $l');
     }, (r) {
       getFolders(showLoading: false);
       log('Edit Folders === > ${r.data}');
-      // FolderModel folderModel = r.data;
       emit(state.copyWith(uploadStatus: const LoadedState()));
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -122,9 +121,9 @@ class FolderCubit extends Cubit<FolderState> {
     });
   }
 
-  moveFolder({required int folderId, required int destinationFolderId, required String reasonToMove}) async {
+  moveFolder({required int folderId, required int destinationFolderId, required String reasonToMove,required String note}) async {
     var response = await repository.moveFolder(
-        folderId: folderId, destinationFolderId: destinationFolderId, reasonToMove: reasonToMove);
+        folderId: folderId, destinationFolderId: destinationFolderId, reasonToMove: reasonToMove,note:note);
 
     response.fold((l) {
       emit(state.copyWith(status: const ErrorState()));

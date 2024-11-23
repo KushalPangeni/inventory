@@ -1,5 +1,6 @@
 import 'package:inventory/features/colors/model/color_model.dart';
 import 'package:inventory/features/colors/repository/color_repository.dart';
+import 'package:inventory/features/history/model/history_model.dart';
 import 'package:inventory/network/api_service.dart';
 import 'package:inventory/network/request.dart';
 import 'package:inventory/network/response_type_def.dart';
@@ -36,5 +37,22 @@ class ColorRepositoryImpl implements ColorRepository {
     var request =
         _client.post(endPoint: Request.createUrl('api/colors'), data: {'name': color.name, 'slug': color.slug});
     return await _client.handleNetworkCall(request);
+  }
+
+  @override
+  EitherResponse fetchHistory() async {
+    var request = _client.get(endPoint: Request.createUrl('api/histories/get/10'));
+    return await _client.handleNetworkCall(request, HistoryResponse.fromJson);
+  }
+
+  @override
+  EitherResponse fetchHistoryById(int folderItemId, {bool isFolder = true}) async {
+    if (isFolder) {
+      var request = _client.get(endPoint: Request.createUrl('api/histories/folder/$folderItemId'));
+      return await _client.handleNetworkCall(request, HistoryResponse.fromJson);
+    } else {
+      var request = _client.get(endPoint: Request.createUrl('api/histories/$folderItemId'));
+      return await _client.handleNetworkCall(request, HistoryResponse.fromJson);
+    }
   }
 }

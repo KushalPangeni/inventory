@@ -17,6 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ColorState {
   ApiRequestState<dynamic>? get status => throw _privateConstructorUsedError;
+  ApiRequestState<dynamic>? get historyStatus =>
+      throw _privateConstructorUsedError;
+  List<HistoryModel?> get historyModel => throw _privateConstructorUsedError;
   List<ColorModel> get listOfUnits => throw _privateConstructorUsedError;
   List<ColorModel> get listOfSelectedUnits =>
       throw _privateConstructorUsedError;
@@ -34,10 +37,13 @@ abstract class $ColorStateCopyWith<$Res> {
   @useResult
   $Res call(
       {ApiRequestState<dynamic>? status,
+      ApiRequestState<dynamic>? historyStatus,
+      List<HistoryModel?> historyModel,
       List<ColorModel> listOfUnits,
       List<ColorModel> listOfSelectedUnits});
 
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
+  $ApiRequestStateCopyWith<dynamic, $Res>? get historyStatus;
 }
 
 /// @nodoc
@@ -54,6 +60,8 @@ class _$ColorStateCopyWithImpl<$Res, $Val extends ColorState>
   @override
   $Res call({
     Object? status = freezed,
+    Object? historyStatus = freezed,
+    Object? historyModel = null,
     Object? listOfUnits = null,
     Object? listOfSelectedUnits = null,
   }) {
@@ -62,6 +70,14 @@ class _$ColorStateCopyWithImpl<$Res, $Val extends ColorState>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ApiRequestState<dynamic>?,
+      historyStatus: freezed == historyStatus
+          ? _value.historyStatus
+          : historyStatus // ignore: cast_nullable_to_non_nullable
+              as ApiRequestState<dynamic>?,
+      historyModel: null == historyModel
+          ? _value.historyModel
+          : historyModel // ignore: cast_nullable_to_non_nullable
+              as List<HistoryModel?>,
       listOfUnits: null == listOfUnits
           ? _value.listOfUnits
           : listOfUnits // ignore: cast_nullable_to_non_nullable
@@ -84,6 +100,19 @@ class _$ColorStateCopyWithImpl<$Res, $Val extends ColorState>
       return _then(_value.copyWith(status: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ApiRequestStateCopyWith<dynamic, $Res>? get historyStatus {
+    if (_value.historyStatus == null) {
+      return null;
+    }
+
+    return $ApiRequestStateCopyWith<dynamic, $Res>(_value.historyStatus!,
+        (value) {
+      return _then(_value.copyWith(historyStatus: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -96,11 +125,15 @@ abstract class _$$ColorStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {ApiRequestState<dynamic>? status,
+      ApiRequestState<dynamic>? historyStatus,
+      List<HistoryModel?> historyModel,
       List<ColorModel> listOfUnits,
       List<ColorModel> listOfSelectedUnits});
 
   @override
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
+  @override
+  $ApiRequestStateCopyWith<dynamic, $Res>? get historyStatus;
 }
 
 /// @nodoc
@@ -115,6 +148,8 @@ class __$$ColorStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
+    Object? historyStatus = freezed,
+    Object? historyModel = null,
     Object? listOfUnits = null,
     Object? listOfSelectedUnits = null,
   }) {
@@ -123,6 +158,14 @@ class __$$ColorStateImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ApiRequestState<dynamic>?,
+      historyStatus: freezed == historyStatus
+          ? _value.historyStatus
+          : historyStatus // ignore: cast_nullable_to_non_nullable
+              as ApiRequestState<dynamic>?,
+      historyModel: null == historyModel
+          ? _value._historyModel
+          : historyModel // ignore: cast_nullable_to_non_nullable
+              as List<HistoryModel?>,
       listOfUnits: null == listOfUnits
           ? _value._listOfUnits
           : listOfUnits // ignore: cast_nullable_to_non_nullable
@@ -140,14 +183,29 @@ class __$$ColorStateImplCopyWithImpl<$Res>
 class _$ColorStateImpl implements _ColorState {
   const _$ColorStateImpl(
       {this.status = const InitialState(),
+      this.historyStatus = const InitialState(),
+      final List<HistoryModel?> historyModel = const [],
       final List<ColorModel> listOfUnits = const [],
       final List<ColorModel> listOfSelectedUnits = const []})
-      : _listOfUnits = listOfUnits,
+      : _historyModel = historyModel,
+        _listOfUnits = listOfUnits,
         _listOfSelectedUnits = listOfSelectedUnits;
 
   @override
   @JsonKey()
   final ApiRequestState<dynamic>? status;
+  @override
+  @JsonKey()
+  final ApiRequestState<dynamic>? historyStatus;
+  final List<HistoryModel?> _historyModel;
+  @override
+  @JsonKey()
+  List<HistoryModel?> get historyModel {
+    if (_historyModel is EqualUnmodifiableListView) return _historyModel;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_historyModel);
+  }
+
   final List<ColorModel> _listOfUnits;
   @override
   @JsonKey()
@@ -169,7 +227,7 @@ class _$ColorStateImpl implements _ColorState {
 
   @override
   String toString() {
-    return 'ColorState(status: $status, listOfUnits: $listOfUnits, listOfSelectedUnits: $listOfSelectedUnits)';
+    return 'ColorState(status: $status, historyStatus: $historyStatus, historyModel: $historyModel, listOfUnits: $listOfUnits, listOfSelectedUnits: $listOfSelectedUnits)';
   }
 
   @override
@@ -178,6 +236,10 @@ class _$ColorStateImpl implements _ColorState {
         (other.runtimeType == runtimeType &&
             other is _$ColorStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.historyStatus, historyStatus) ||
+                other.historyStatus == historyStatus) &&
+            const DeepCollectionEquality()
+                .equals(other._historyModel, _historyModel) &&
             const DeepCollectionEquality()
                 .equals(other._listOfUnits, _listOfUnits) &&
             const DeepCollectionEquality()
@@ -188,6 +250,8 @@ class _$ColorStateImpl implements _ColorState {
   int get hashCode => Object.hash(
       runtimeType,
       status,
+      historyStatus,
+      const DeepCollectionEquality().hash(_historyModel),
       const DeepCollectionEquality().hash(_listOfUnits),
       const DeepCollectionEquality().hash(_listOfSelectedUnits));
 
@@ -201,11 +265,17 @@ class _$ColorStateImpl implements _ColorState {
 abstract class _ColorState implements ColorState {
   const factory _ColorState(
       {final ApiRequestState<dynamic>? status,
+      final ApiRequestState<dynamic>? historyStatus,
+      final List<HistoryModel?> historyModel,
       final List<ColorModel> listOfUnits,
       final List<ColorModel> listOfSelectedUnits}) = _$ColorStateImpl;
 
   @override
   ApiRequestState<dynamic>? get status;
+  @override
+  ApiRequestState<dynamic>? get historyStatus;
+  @override
+  List<HistoryModel?> get historyModel;
   @override
   List<ColorModel> get listOfUnits;
   @override

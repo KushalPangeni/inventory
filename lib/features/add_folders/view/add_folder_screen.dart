@@ -101,9 +101,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                         hintText: 'Enter Folder Name',
                         inputType: TextInputType.text,
                         controller: bloc.folderNameController,
-                        onTyped: (s) {
-                          // bloc.setFolderDetails(folderName: s);
-                        }),
+                        onTyped: (s) {}),
 
                     //Tags
                     AppText('Tags',

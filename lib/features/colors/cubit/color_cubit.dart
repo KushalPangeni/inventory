@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inventory/features/colors/model/color_model.dart';
 import 'package:inventory/features/colors/repository/color_repository.dart';
+import 'package:inventory/features/history/model/history_model.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
 
@@ -63,6 +64,28 @@ class ColorCubit extends Cubit<ColorState> {
           content: AppText('${color.name} already exists.')));
     }
     emit(state.copyWith(listOfUnits: listOfUnit));
+  }
+
+  Future<void> fetchHistory() async {
+    emit(state.copyWith(historyStatus: const LoadingState(), historyModel: []));
+    var response = await repository.fetchHistory();
+    response.fold((l) {
+      emit(state.copyWith(historyStatus: const ErrorState()));
+    }, (r) {
+      HistoryResponse historyResponse = r.data;
+      emit(state.copyWith(historyStatus: const LoadedState(), historyModel: historyResponse.result));
+    });
+  }
+
+  Future<void> fetchHistoryById(int folderItemId, {bool isFolder = true}) async {
+    emit(state.copyWith(historyStatus: const LoadingState(), historyModel: []));
+    var response = await repository.fetchHistoryById(folderItemId, isFolder: isFolder);
+    response.fold((l) {
+      emit(state.copyWith(historyStatus: const ErrorState()));
+    }, (r) {
+      HistoryResponse historyResponse = r.data;
+      emit(state.copyWith(historyStatus: const LoadedState(), historyModel: historyResponse.result));
+    });
   }
 
 /*  addRemove(Unit unit) {

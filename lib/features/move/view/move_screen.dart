@@ -5,16 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart' as folder_model;
+import 'package:inventory/features/move/view/move_reason_screen.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
 import 'move_quantity_screen.dart';
 
 class MoveScreen extends StatefulWidget {
+/*
   final int folderId;
+*/
   final folder_model.Folder selectedFolder;
 
-  const MoveScreen({super.key, this.folderId = 0, required this.selectedFolder});
+  const MoveScreen({super.key /*, this.folderId = 0*/, required this.selectedFolder});
 
   @override
   State<MoveScreen> createState() => _MoveScreenState();
@@ -25,14 +28,15 @@ class _MoveScreenState extends State<MoveScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log('Move Screen ==> ${widget.folderId}');
+    log('Move Screen ==> ${widget.selectedFolder.id}');
     return BlocBuilder<FolderCubit, FolderState>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.white,
-            title: const AppText('Select Folder', style: TextStyle(fontSize: 20)),
+            title: AppText('Select Folder',
+                style: TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -53,13 +57,13 @@ class _MoveScreenState extends State<MoveScreen> {
                         AppText(widget.selectedFolder.name,
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 2),
-                        const Row(
+                        /*const Row(
                           children: [
                             Icon(Icons.folder_outlined),
                             SizedBox(width: 4),
                             AppText('Folder 1', style: TextStyle(fontSize: 14))
                           ],
-                        )
+                        )*/
                       ],
                     ),
                   ],
@@ -78,8 +82,10 @@ class _MoveScreenState extends State<MoveScreen> {
                   state.listOfFolders.length,
                   (index) => GestureDetector(
                     onTap: () {
-                      log('${state.listOfFolders[index]}');
-                      destinationFolder.value = state.listOfFolders[index];
+                      if (state.listOfFolders[index].id == widget.selectedFolder.id) {
+                      } else {
+                        destinationFolder.value = state.listOfFolders[index];
+                      }
                     },
                     child: ValueListenableBuilder<folder_model.Folder?>(
                       valueListenable: destinationFolder,
@@ -88,7 +94,11 @@ class _MoveScreenState extends State<MoveScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: state.listOfFolders[index] == folder ? Colors.orangeAccent[100] : Colors.white,
+                            color: state.listOfFolders[index].id == widget.selectedFolder.id
+                                ? Colors.grey[100]
+                                : state.listOfFolders[index] == folder
+                                    ? Colors.orangeAccent[100]
+                                    : Colors.white,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 16, top: 6, bottom: 6, right: 2),
@@ -126,7 +136,7 @@ class _MoveScreenState extends State<MoveScreen> {
                     Navigator.push(
                         context,
                         CupertinoPageRoute(
-                            builder: (context) => MoveQuantityScreen(
+                            builder: (context) => MoveReasonScreen(
                                   destinationFolder: destinationFolder.value!,
                                   selectedFolder: widget.selectedFolder,
                                 )));

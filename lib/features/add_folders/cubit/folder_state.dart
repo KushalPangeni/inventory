@@ -5,6 +5,7 @@ class FolderState with _$FolderState {
   const factory FolderState({
     @Default(InitialState()) ApiRequestState? status,
     @Default(InitialState()) ApiRequestState? uploadStatus,
+    @Default(InitialState()) ApiRequestState? moveStatus,
     @Default([]) List<Folder> listOfFolders,
     @Default('') String folderName,
     @Default([]) List<Tag> foldersTag,

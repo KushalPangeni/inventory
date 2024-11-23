@@ -120,6 +120,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   inputType: TextInputType.text,
                   controller: bloc.shopNameController,
                   onTyped: (s) {}),
+              // Order Quantity
+              AppText('Order Quantity',
+                  style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+              customTextField(
+                  hintText: 'Eg. 1000',
+                  inputType: TextInputType.number,
+                  controller: bloc.orderQuantityController,
+                  onTyped: (s) {}),
               Row(
                 children: [
                   Expanded(

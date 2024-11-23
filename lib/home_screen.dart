@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventory/features/history/history_screen.dart';
 import 'package:inventory/folders_list_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
@@ -14,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<int> _selectedIndex = ValueNotifier(0);
-  List screens = const [FoldersListScreen(), SearchScreen(), MoreDetailsScreen()];
+  List screens = const [FoldersListScreen(), HistoryScreen() /*SearchScreen()*/, MoreDetailsScreen()];
 
   @override
   Widget build(BuildContext context) {

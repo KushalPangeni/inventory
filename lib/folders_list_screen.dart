@@ -5,15 +5,12 @@ import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
 import 'package:inventory/features/tags/cubit/tags_cubit.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
-import 'package:toastification/toastification.dart';
 
 import 'features/add_items/cubits/add_item_cubit.dart';
 import 'features/add_items/view/item_list_screen.dart';
 import 'global/bottom_modal_sheets/add_new_items_bottom_modal_sheet.dart';
 import 'global/widgets/folder_summary_top_bar.dart';
 import 'global/widgets/folder_widget.dart';
-import 'main.dart';
-import 'network/exception.dart';
 
 class FoldersListScreen extends StatefulWidget {
   const FoldersListScreen({super.key});

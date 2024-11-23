@@ -58,7 +58,6 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
           child: ValueListenableBuilder<Folder>(
             valueListenable: folderNotifier,
             builder: (context, folder, _) {
-              log('Party Name is ==> onPressed ${folder.items[1].partyName}');
 
               return BlocBuilder<AddItemCubit, AddItemState>(
                 builder: (context, state) {

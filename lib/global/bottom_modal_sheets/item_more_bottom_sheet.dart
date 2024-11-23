@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart' as import_item;
 import 'package:inventory/features/add_items/cubits/add_item_cubit.dart';
 import 'package:inventory/features/add_items/view/add_item_screen.dart';
+import 'package:inventory/features/history/history_screen.dart';
 import 'package:inventory/features/move/view/move_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
@@ -60,7 +61,15 @@ class ItemMoreBottomModalSheet {
                       // Navigator.push(context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
                     },
                     child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
-                listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History'),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => HistoryScreen(folderItemId: item.id, isFolder: false)));
+                    },
+                    child: listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History')),
                 listTileAddFileFolder(Image.asset('assets/export.png', height: 28), 'Export'),
                 GestureDetector(
                     onTap: () {
