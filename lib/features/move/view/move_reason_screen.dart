@@ -140,7 +140,7 @@ class _MoveReasonScreenState extends State<MoveReasonScreen> {
                     if (reason == null || reason.trim().isEmpty) {
                       showToast(context, 'Invalid', 'Please Select Reason to Move', ToastificationType.warning);
                     } else {
-                      BlocProvider.of<FolderCubit>(context).moveFolder(
+                      BlocProvider.of<FolderCubit>(context).moveFolder(context,
                           reasonToMove: reason,
                           destinationFolderId: widget.destinationFolder.id,
                           folderId: widget.selectedFolder.id,

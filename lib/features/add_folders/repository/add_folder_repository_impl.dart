@@ -46,7 +46,7 @@ class AddFolderRepositoryImpl implements AddFolderRepository {
       var request = _client.get(
         endPoint: Request.createUrl('api/folders/$folderId'),
       );
-      return await _client.handleNetworkCall(request, Folder.fromJson);
+      return await _client.handleNetworkCall(request, FolderOnlyModel.fromJson);
     } else {
       var request = _client.get(
         endPoint: Request.createUrl('api/folders/0'),

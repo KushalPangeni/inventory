@@ -10,6 +10,7 @@ import 'package:inventory/features/add_folders/model/folder_model.dart' as folde
 import 'package:inventory/features/add_items/cubits/add_item_cubit.dart';
 import 'package:inventory/features/add_items/widgets/add_colors_list_widget.dart';
 import 'package:inventory/features/add_items/widgets/image_upload_button.dart';
+import 'package:inventory/features/colors/cubit/color_cubit.dart';
 import 'package:inventory/features/units/cubit/unit_cubit.dart';
 import 'package:inventory/features/units/model/unit_model.dart';
 import 'package:inventory/global/widgets/app_button.dart';
@@ -266,9 +267,26 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 ],
               ),
 
-              /*...[
-                AppText('Selected Colors',
-                    style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+              ...[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: AppText('Selected Colors',
+                      style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                ),
+                Table(
+                  children:  [
+                    TableRow(children: [
+                      AppText('Color',
+                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      AppText('Number',
+                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      AppText('Quantity',
+                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      AppText('Rolls',
+                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    ]),
+                  ],
+                ),
                 BlocBuilder<ColorCubit, ColorState>(
                   builder: (context, colorState) {
                     return BlocBuilder<AddItemCubit, AddItemState>(
@@ -276,11 +294,40 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             itemCount: state.colorList.length,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) => AppText(
-                                colorState.listOfUnits.firstWhere((color) => color.id == state.colorList[index].colorId).name)));
+                            itemBuilder: (context, index) {
+                              if (state.colorList[index].colorId != null) {
+                                log("ColorList ==> ${state.colorList[index].colorId} '${colorState.listOfUnits.firstWhere((color) => color.id == state.colorList[index].colorId).name}'");
+                                return Table(
+                                  children: [
+                                    TableRow(children: [
+                                      AppText(colorState.listOfUnits
+                                          .firstWhere((color) => color.id == state.colorList[index].colorId)
+                                          .name),
+                                      AppText(state.colorList
+                                          .firstWhere((color) => color.colorId == state.colorList[index].colorId)
+                                          .number
+                                          .toString()),
+                                      AppText(state.colorList
+                                          .firstWhere((color) => color.colorId == state.colorList[index].colorId)
+                                          .quantity
+                                          .toString()),
+                                      AppText(state.colorList
+                                          .firstWhere((color) => color.colorId == state.colorList[index].colorId)
+                                          .roll
+                                          .toString()),
+                                    ])
+                                  ],
+                                  /*child: AppText(colorState.listOfUnits
+                                      .firstWhere((color) => color.id == state.colorList[index].colorId)
+                                      .name),*/
+                                );
+                              } else {
+                                return const SizedBox();
+                              }
+                            }));
                   },
                 ),
-              ],*/
+              ],
               TextButton(
                   onPressed: () {
                     Navigator.push(context, CupertinoPageRoute(builder: (context) => const AddColorsListWidget()));

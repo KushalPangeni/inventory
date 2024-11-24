@@ -99,8 +99,12 @@ class AddItemCubit extends Cubit<AddItemState> {
       ));
     }
     List listOfColors = state.colorList
-        .map((colorModelF) =>
-            {"color_id": colorModelF.colorId, "quantitys": colorModelF.quantity, "rolls": colorModelF.roll})
+        .map((colorModelF) => {
+              "color_id": colorModelF.colorId,
+              "quantitys": colorModelF.quantity,
+              "rolls": colorModelF.roll,
+              "number": colorModelF.number
+            })
         .toList();
 
     var response = await repository.postItems(listOfMultipartFiles,
@@ -147,8 +151,12 @@ class AddItemCubit extends Cubit<AddItemState> {
       ));
     }
     List listOfColors = state.colorList
-        .map((colorModelF) =>
-            {"color_id": colorModelF.colorId, "quantitys": colorModelF.quantity, "rolls": colorModelF.roll})
+        .map((colorModelF) => {
+              "color_id": colorModelF.colorId,
+              "quantitys": colorModelF.quantity,
+              "rolls": colorModelF.roll,
+              "number": colorModelF.number
+            })
         .toList();
 
     var response = await repository.editItems(listOfMultipartFiles,
@@ -187,7 +195,7 @@ class AddItemCubit extends Cubit<AddItemState> {
 
   addColorInColorList(ColorModelF color) {
     List<ColorModelF> listOfColorModel = List.from(state.colorList);
-    listOfColorModel.add(ColorModelF(quantity: 0, roll: 0));
+    listOfColorModel.add(const ColorModelF(quantity: 0, roll: 0));
     emit(state.copyWith(colorList: listOfColorModel));
   }
 
@@ -199,10 +207,15 @@ class AddItemCubit extends Cubit<AddItemState> {
 
   editColorItem(int index, {int? colorId, int? number, int? quantity, int? roll}) {
     List<ColorModelF> listOfColorModel = List.from(state.colorList);
-    listOfColorModel[index].colorId = colorId ?? listOfColorModel[index].colorId;
-    listOfColorModel[index].number = number ?? listOfColorModel[index].number;
-    listOfColorModel[index].quantity = quantity ?? listOfColorModel[index].quantity;
-    listOfColorModel[index].roll = roll ?? listOfColorModel[index].roll;
+
+    listOfColorModel[index] = listOfColorModel[index].copyWith(
+      colorId: colorId ?? listOfColorModel[index].colorId,
+      number: number ?? listOfColorModel[index].number,
+      quantity: quantity ?? listOfColorModel[index].quantity,
+      roll: roll ?? listOfColorModel[index].roll,
+    );
+
+    // state.copyWith(colorList: )
     emit(state.copyWith(colorList: listOfColorModel));
   }
 

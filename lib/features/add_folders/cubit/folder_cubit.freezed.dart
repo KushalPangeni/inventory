@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$FolderState {
   ApiRequestState<dynamic>? get status => throw _privateConstructorUsedError;
+  ApiRequestState<dynamic>? get folderIdStatus =>
+      throw _privateConstructorUsedError;
   ApiRequestState<dynamic>? get uploadStatus =>
       throw _privateConstructorUsedError;
   ApiRequestState<dynamic>? get moveStatus =>
@@ -40,6 +42,7 @@ abstract class $FolderStateCopyWith<$Res> {
   @useResult
   $Res call(
       {ApiRequestState<dynamic>? status,
+      ApiRequestState<dynamic>? folderIdStatus,
       ApiRequestState<dynamic>? uploadStatus,
       ApiRequestState<dynamic>? moveStatus,
       List<Folder> listOfFolders,
@@ -49,6 +52,7 @@ abstract class $FolderStateCopyWith<$Res> {
       String folderImage});
 
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
+  $ApiRequestStateCopyWith<dynamic, $Res>? get folderIdStatus;
   $ApiRequestStateCopyWith<dynamic, $Res>? get uploadStatus;
   $ApiRequestStateCopyWith<dynamic, $Res>? get moveStatus;
 }
@@ -67,6 +71,7 @@ class _$FolderStateCopyWithImpl<$Res, $Val extends FolderState>
   @override
   $Res call({
     Object? status = freezed,
+    Object? folderIdStatus = freezed,
     Object? uploadStatus = freezed,
     Object? moveStatus = freezed,
     Object? listOfFolders = null,
@@ -79,6 +84,10 @@ class _$FolderStateCopyWithImpl<$Res, $Val extends FolderState>
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
+              as ApiRequestState<dynamic>?,
+      folderIdStatus: freezed == folderIdStatus
+          ? _value.folderIdStatus
+          : folderIdStatus // ignore: cast_nullable_to_non_nullable
               as ApiRequestState<dynamic>?,
       uploadStatus: freezed == uploadStatus
           ? _value.uploadStatus
@@ -125,6 +134,19 @@ class _$FolderStateCopyWithImpl<$Res, $Val extends FolderState>
 
   @override
   @pragma('vm:prefer-inline')
+  $ApiRequestStateCopyWith<dynamic, $Res>? get folderIdStatus {
+    if (_value.folderIdStatus == null) {
+      return null;
+    }
+
+    return $ApiRequestStateCopyWith<dynamic, $Res>(_value.folderIdStatus!,
+        (value) {
+      return _then(_value.copyWith(folderIdStatus: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
   $ApiRequestStateCopyWith<dynamic, $Res>? get uploadStatus {
     if (_value.uploadStatus == null) {
       return null;
@@ -159,6 +181,7 @@ abstract class _$$FolderStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {ApiRequestState<dynamic>? status,
+      ApiRequestState<dynamic>? folderIdStatus,
       ApiRequestState<dynamic>? uploadStatus,
       ApiRequestState<dynamic>? moveStatus,
       List<Folder> listOfFolders,
@@ -169,6 +192,8 @@ abstract class _$$FolderStateImplCopyWith<$Res>
 
   @override
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
+  @override
+  $ApiRequestStateCopyWith<dynamic, $Res>? get folderIdStatus;
   @override
   $ApiRequestStateCopyWith<dynamic, $Res>? get uploadStatus;
   @override
@@ -187,6 +212,7 @@ class __$$FolderStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
+    Object? folderIdStatus = freezed,
     Object? uploadStatus = freezed,
     Object? moveStatus = freezed,
     Object? listOfFolders = null,
@@ -199,6 +225,10 @@ class __$$FolderStateImplCopyWithImpl<$Res>
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
+              as ApiRequestState<dynamic>?,
+      folderIdStatus: freezed == folderIdStatus
+          ? _value.folderIdStatus
+          : folderIdStatus // ignore: cast_nullable_to_non_nullable
               as ApiRequestState<dynamic>?,
       uploadStatus: freezed == uploadStatus
           ? _value.uploadStatus
@@ -237,6 +267,7 @@ class __$$FolderStateImplCopyWithImpl<$Res>
 class _$FolderStateImpl implements _FolderState {
   const _$FolderStateImpl(
       {this.status = const InitialState(),
+      this.folderIdStatus = const InitialState(),
       this.uploadStatus = const InitialState(),
       this.moveStatus = const InitialState(),
       final List<Folder> listOfFolders = const [],
@@ -250,6 +281,9 @@ class _$FolderStateImpl implements _FolderState {
   @override
   @JsonKey()
   final ApiRequestState<dynamic>? status;
+  @override
+  @JsonKey()
+  final ApiRequestState<dynamic>? folderIdStatus;
   @override
   @JsonKey()
   final ApiRequestState<dynamic>? uploadStatus;
@@ -286,7 +320,7 @@ class _$FolderStateImpl implements _FolderState {
 
   @override
   String toString() {
-    return 'FolderState(status: $status, uploadStatus: $uploadStatus, moveStatus: $moveStatus, listOfFolders: $listOfFolders, folderName: $folderName, foldersTag: $foldersTag, folderDescription: $folderDescription, folderImage: $folderImage)';
+    return 'FolderState(status: $status, folderIdStatus: $folderIdStatus, uploadStatus: $uploadStatus, moveStatus: $moveStatus, listOfFolders: $listOfFolders, folderName: $folderName, foldersTag: $foldersTag, folderDescription: $folderDescription, folderImage: $folderImage)';
   }
 
   @override
@@ -295,6 +329,8 @@ class _$FolderStateImpl implements _FolderState {
         (other.runtimeType == runtimeType &&
             other is _$FolderStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.folderIdStatus, folderIdStatus) ||
+                other.folderIdStatus == folderIdStatus) &&
             (identical(other.uploadStatus, uploadStatus) ||
                 other.uploadStatus == uploadStatus) &&
             (identical(other.moveStatus, moveStatus) ||
@@ -315,6 +351,7 @@ class _$FolderStateImpl implements _FolderState {
   int get hashCode => Object.hash(
       runtimeType,
       status,
+      folderIdStatus,
       uploadStatus,
       moveStatus,
       const DeepCollectionEquality().hash(_listOfFolders),
@@ -333,6 +370,7 @@ class _$FolderStateImpl implements _FolderState {
 abstract class _FolderState implements FolderState {
   const factory _FolderState(
       {final ApiRequestState<dynamic>? status,
+      final ApiRequestState<dynamic>? folderIdStatus,
       final ApiRequestState<dynamic>? uploadStatus,
       final ApiRequestState<dynamic>? moveStatus,
       final List<Folder> listOfFolders,
@@ -343,6 +381,8 @@ abstract class _FolderState implements FolderState {
 
   @override
   ApiRequestState<dynamic>? get status;
+  @override
+  ApiRequestState<dynamic>? get folderIdStatus;
   @override
   ApiRequestState<dynamic>? get uploadStatus;
   @override

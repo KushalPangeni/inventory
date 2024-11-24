@@ -55,7 +55,7 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "fabric_number": fabricNumber,
       "shop_name": shopName,
       "width": width,
-      "gsm": 0,
+      "gsm": gsm,
       "kg_to_meter_ratio": kgToMeter,
       "average": average,
       "shortage": shortage,
@@ -63,28 +63,15 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "order_quantity": orderQuantity,
       "minimum_quantity": int.parse(minimumQuantity),
       "avg_unit": averageUnit,
-      "unit_id": 1,
+      "unit_id": unitId,
       "accessories_notes": notes,
       "folder_id": folderId,
       "sku": "string",
-      "colors": listOfColors
+      "colors": listOfColors,
+      "_method": "PUT"
     });
-    // var request = _client.put(endPoint: Request.createUrl('api/items/$itemId'), body: {
-    //   "name": itemName,
-    //   "fabric_number": fabricNumber,
-    //   "shop_name": shopName,
-    //   "width": width,
-    //   "gsm": 0,
-    //   "kg_to_meter_ratio": kgToMeter,
-    //   "average": average,
-    //   "shortage": shortage,
-    //   "quantity": quantity,
-    //   "unit_id": 1,
-    //   "accessories_notes": notes,
-    //   "folder_id": folderId,
-    //   "sku": "dsfs ",
-    // });
-    var request = _client.editFiles(endPoint: Request.createUrl('api/items/$itemId'), formData: formData);
+
+    var request = _client.uploadFiles(endPoint: Request.createUrl('api/items/$itemId'), formData: formData);
     return await _client.handleNetworkCall(request);
   }
 
@@ -115,7 +102,7 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "fabric_number": fabricNumber,
       "shop_name": shopName,
       "width": width,
-      "gsm": 0,
+      "gsm": gsm,
       "kg_to_meter_ratio": kgToMeter,
       "average": average,
       "shortage": shortage,
@@ -123,7 +110,7 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "order_quantity": orderQuantity,
       "minimum_quantity": int.parse(minimumQuantity),
       "avg_unit": averageUnit,
-      "unit_id": 1,
+      "unit_id": unitId,
       "accessories_notes": notes,
       "folder_id": folderId,
       "sku": "string",

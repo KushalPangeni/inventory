@@ -18,7 +18,7 @@ class ItemMoreBottomModalSheet {
   ItemMoreBottomModalSheet(this.context, this.folderId, this.item);
 
   showBottomSheet({String title = 'Folder/Item Name ;'}) {
-    log('Party Name is ==> ${item.partyName}');
+    log('Party Name is ==> ${item.colors}');
     showModalBottomSheet(
         backgroundColor: Colors.white,
         context: context,

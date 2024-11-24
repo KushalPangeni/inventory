@@ -19,6 +19,17 @@ class ItemModelResponse with _$ItemModelResponse {
 }
 
 @freezed
+class FolderOnlyModel with _$FolderOnlyModel {
+  const factory FolderOnlyModel({
+    required Folder result,
+    required String message,
+    required int status,
+  }) = _FolderOnlyModel;
+
+  factory FolderOnlyModel.fromJson(Map<String, dynamic> json) => _$FolderOnlyModelFromJson(json);
+}
+
+@freezed
 class FolderModel with _$FolderModel {
   const factory FolderModel({
     required List<Folder> result,
@@ -102,7 +113,7 @@ class ColorModel with _$ColorModel {
     @JsonKey(name: 'color_id') int? colorId,
     required int quantitys,
     required int rolls,
-    required int number,
+    @Default(0) int? number,
   }) = _ColorModel;
 
   factory ColorModel.fromJson(Map<String, dynamic> json) => _$ColorModelFromJson(json);

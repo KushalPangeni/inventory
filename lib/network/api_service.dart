@@ -126,7 +126,7 @@ class DioClient {
   }) async {
     Response response = await _client.put(endPoint,
         options: Options(
-          headers: Request.createHeader(/*isFormData: true*/),
+          headers: Request.createHeader(isFormData: true),
         ),
         data: formData);
     return request(endPoint: endPoint, response: response);

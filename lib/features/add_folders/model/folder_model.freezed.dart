@@ -215,6 +215,192 @@ abstract class _ItemModelResponse implements ItemModelResponse {
       throw _privateConstructorUsedError;
 }
 
+FolderOnlyModel _$FolderOnlyModelFromJson(Map<String, dynamic> json) {
+  return _FolderOnlyModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$FolderOnlyModel {
+  Folder get result => throw _privateConstructorUsedError;
+  String get message => throw _privateConstructorUsedError;
+  int get status => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $FolderOnlyModelCopyWith<FolderOnlyModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FolderOnlyModelCopyWith<$Res> {
+  factory $FolderOnlyModelCopyWith(
+          FolderOnlyModel value, $Res Function(FolderOnlyModel) then) =
+      _$FolderOnlyModelCopyWithImpl<$Res, FolderOnlyModel>;
+  @useResult
+  $Res call({Folder result, String message, int status});
+
+  $FolderCopyWith<$Res> get result;
+}
+
+/// @nodoc
+class _$FolderOnlyModelCopyWithImpl<$Res, $Val extends FolderOnlyModel>
+    implements $FolderOnlyModelCopyWith<$Res> {
+  _$FolderOnlyModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? result = null,
+    Object? message = null,
+    Object? status = null,
+  }) {
+    return _then(_value.copyWith(
+      result: null == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Folder,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $FolderCopyWith<$Res> get result {
+    return $FolderCopyWith<$Res>(_value.result, (value) {
+      return _then(_value.copyWith(result: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$FolderOnlyModelImplCopyWith<$Res>
+    implements $FolderOnlyModelCopyWith<$Res> {
+  factory _$$FolderOnlyModelImplCopyWith(_$FolderOnlyModelImpl value,
+          $Res Function(_$FolderOnlyModelImpl) then) =
+      __$$FolderOnlyModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({Folder result, String message, int status});
+
+  @override
+  $FolderCopyWith<$Res> get result;
+}
+
+/// @nodoc
+class __$$FolderOnlyModelImplCopyWithImpl<$Res>
+    extends _$FolderOnlyModelCopyWithImpl<$Res, _$FolderOnlyModelImpl>
+    implements _$$FolderOnlyModelImplCopyWith<$Res> {
+  __$$FolderOnlyModelImplCopyWithImpl(
+      _$FolderOnlyModelImpl _value, $Res Function(_$FolderOnlyModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? result = null,
+    Object? message = null,
+    Object? status = null,
+  }) {
+    return _then(_$FolderOnlyModelImpl(
+      result: null == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Folder,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$FolderOnlyModelImpl implements _FolderOnlyModel {
+  const _$FolderOnlyModelImpl(
+      {required this.result, required this.message, required this.status});
+
+  factory _$FolderOnlyModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$FolderOnlyModelImplFromJson(json);
+
+  @override
+  final Folder result;
+  @override
+  final String message;
+  @override
+  final int status;
+
+  @override
+  String toString() {
+    return 'FolderOnlyModel(result: $result, message: $message, status: $status)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FolderOnlyModelImpl &&
+            (identical(other.result, result) || other.result == result) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.status, status) || other.status == status));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, result, message, status);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FolderOnlyModelImplCopyWith<_$FolderOnlyModelImpl> get copyWith =>
+      __$$FolderOnlyModelImplCopyWithImpl<_$FolderOnlyModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$FolderOnlyModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _FolderOnlyModel implements FolderOnlyModel {
+  const factory _FolderOnlyModel(
+      {required final Folder result,
+      required final String message,
+      required final int status}) = _$FolderOnlyModelImpl;
+
+  factory _FolderOnlyModel.fromJson(Map<String, dynamic> json) =
+      _$FolderOnlyModelImpl.fromJson;
+
+  @override
+  Folder get result;
+  @override
+  String get message;
+  @override
+  int get status;
+  @override
+  @JsonKey(ignore: true)
+  _$$FolderOnlyModelImplCopyWith<_$FolderOnlyModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 FolderModel _$FolderModelFromJson(Map<String, dynamic> json) {
   return _FolderModel.fromJson(json);
 }
@@ -1797,7 +1983,7 @@ mixin _$ColorModel {
   int? get colorId => throw _privateConstructorUsedError;
   int get quantitys => throw _privateConstructorUsedError;
   int get rolls => throw _privateConstructorUsedError;
-  int get number => throw _privateConstructorUsedError;
+  int? get number => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1815,7 +2001,7 @@ abstract class $ColorModelCopyWith<$Res> {
       {@JsonKey(name: 'color_id') int? colorId,
       int quantitys,
       int rolls,
-      int number});
+      int? number});
 }
 
 /// @nodoc
@@ -1834,7 +2020,7 @@ class _$ColorModelCopyWithImpl<$Res, $Val extends ColorModel>
     Object? colorId = freezed,
     Object? quantitys = null,
     Object? rolls = null,
-    Object? number = null,
+    Object? number = freezed,
   }) {
     return _then(_value.copyWith(
       colorId: freezed == colorId
@@ -1849,10 +2035,10 @@ class _$ColorModelCopyWithImpl<$Res, $Val extends ColorModel>
           ? _value.rolls
           : rolls // ignore: cast_nullable_to_non_nullable
               as int,
-      number: null == number
+      number: freezed == number
           ? _value.number
           : number // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -1869,7 +2055,7 @@ abstract class _$$ColorModelImplCopyWith<$Res>
       {@JsonKey(name: 'color_id') int? colorId,
       int quantitys,
       int rolls,
-      int number});
+      int? number});
 }
 
 /// @nodoc
@@ -1886,7 +2072,7 @@ class __$$ColorModelImplCopyWithImpl<$Res>
     Object? colorId = freezed,
     Object? quantitys = null,
     Object? rolls = null,
-    Object? number = null,
+    Object? number = freezed,
   }) {
     return _then(_$ColorModelImpl(
       colorId: freezed == colorId
@@ -1901,10 +2087,10 @@ class __$$ColorModelImplCopyWithImpl<$Res>
           ? _value.rolls
           : rolls // ignore: cast_nullable_to_non_nullable
               as int,
-      number: null == number
+      number: freezed == number
           ? _value.number
           : number // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -1916,7 +2102,7 @@ class _$ColorModelImpl implements _ColorModel {
       {@JsonKey(name: 'color_id') this.colorId,
       required this.quantitys,
       required this.rolls,
-      required this.number});
+      this.number = 0});
 
   factory _$ColorModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ColorModelImplFromJson(json);
@@ -1929,7 +2115,8 @@ class _$ColorModelImpl implements _ColorModel {
   @override
   final int rolls;
   @override
-  final int number;
+  @JsonKey()
+  final int? number;
 
   @override
   String toString() {
@@ -1972,7 +2159,7 @@ abstract class _ColorModel implements ColorModel {
       {@JsonKey(name: 'color_id') final int? colorId,
       required final int quantitys,
       required final int rolls,
-      required final int number}) = _$ColorModelImpl;
+      final int? number}) = _$ColorModelImpl;
 
   factory _ColorModel.fromJson(Map<String, dynamic> json) =
       _$ColorModelImpl.fromJson;
@@ -1985,7 +2172,7 @@ abstract class _ColorModel implements ColorModel {
   @override
   int get rolls;
   @override
-  int get number;
+  int? get number;
   @override
   @JsonKey(ignore: true)
   _$$ColorModelImplCopyWith<_$ColorModelImpl> get copyWith =>

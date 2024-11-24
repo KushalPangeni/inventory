@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:inventory/core/keyboard_utils.dart';
 import 'package:inventory/features/add_items/cubits/add_item_cubit.dart';
 import 'package:inventory/features/add_items/model/color_model.dart';
 import 'package:inventory/features/add_items/view/add_item_screen.dart';
@@ -125,6 +126,7 @@ Widget colorWidget(BuildContext context, int index, ColorModelF colorModel) {
                       ? Padding(
                           padding: const EdgeInsets.only(top: 8, bottom: 0, right: 4),
                           child: Container(
+                            width: 80,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: const Color(0xFFE4E4E7))),
@@ -145,7 +147,10 @@ Widget colorWidget(BuildContext context, int index, ColorModelF colorModel) {
                                 items: state.listOfUnits.map<DropdownMenuItem<int>>((ColorModel value) {
                                   return DropdownMenuItem<int>(
                                     value: value.id,
-                                    child: Text(value.name),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 4.0),
+                                      child: Text(value.name),
+                                    ),
                                   );
                                 }).toList(),
                               ),
@@ -245,6 +250,9 @@ Widget customTextField(
       minLines: 1,
       maxLines: maxLines,
       controller: controller,
+      onTapOutside: (a){
+        KeyboardUtils().hideKeyBoard();
+      },
       inputFormatters: inputType == TextInputType.number
           ? [
               FilteringTextInputFormatter.singleLineFormatter, // Only allows digits

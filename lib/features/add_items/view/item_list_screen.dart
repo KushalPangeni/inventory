@@ -23,19 +23,50 @@ class ItemsListScreen extends StatefulWidget {
 }
 
 class _ItemsListScreenState extends State<ItemsListScreen> {
-  late ValueNotifier<Folder> folderNotifier;
+  ValueNotifier<Folder?> folderNotifier = ValueNotifier(null);
 
   @override
   void initState() {
     super.initState();
-    folderNotifier = ValueNotifier(widget.folder);
-    folderNotifier.value = widget.folder;
+    // folderNotifier = ValueNotifier(widget.folder);
+    // folderNotifier.value = widget.folder;
     getFoldersUsingId();
+    // callApi();
+  }
+
+  callApi() {
+    final jsonResponse = {
+      "result": {
+        "id": 2,
+        "name": "folder 2",
+        "description": "folder 2",
+        "parent_folder_id": 0,
+        "total_price": 0,
+        "total_units": 0,
+        "images": [],
+        "subFolders": [
+          {"id": 1, "name": "abcda 1", "description": "folder 1", "total_price": 0, "total_units": 0}
+        ],
+        "tags": [
+          {"id": 1, "name": "add"},
+          {"id": 2, "name": "tag"}
+        ],
+        "items": []
+      },
+      "message": "Success",
+      "status": 1
+    };
+    try {
+      final historyResponse = FolderOnlyModel.fromJson(jsonResponse);
+      log('FOlder response ==> $historyResponse');
+    } catch (e) {
+      log("Json Parsing Error: $e");
+    }
   }
 
   getFoldersUsingId() async {
-    // List<Folder> listOfFolders = await BlocProvider.of<FolderCubit>(context).getFolders(folderId: widget.folder.id);
-    // folderNotifier.value = listOfFolders.isNotEmpty ? listOfFolders[widget.index] : widget.folder;
+    Folder? folder = await BlocProvider.of<FolderCubit>(context).getFolders(folderId: widget.folder.id);
+    folderNotifier.value = folder;
   }
 
   @override
@@ -55,47 +86,51 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-          child: ValueListenableBuilder<Folder>(
+          child: ValueListenableBuilder<Folder?>(
             valueListenable: folderNotifier,
             builder: (context, folder, _) {
-
               return BlocBuilder<AddItemCubit, AddItemState>(
                 builder: (context, state) {
-                  return folder.items.isEmpty && folder.subFolders.isEmpty
-                      ? const SizedBox(height: 500, child: Center(child: AppText('No Folders/Items here.')))
-                      : Column(
-                          children: [
-                            ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: folder.subFolders.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) => GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) =>
-                                            ItemsListScreen(folder: folder.subFolders[index], index: index)),
-                                  );
-                                },
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: FolderWidget(
-                                    folder: folder.subFolders[index],
+                  return folder == null
+                      ? const SizedBox(height: 500, child: Center(child: CircularProgressIndicator(strokeWidth: 1)))
+                      : folder.items.isEmpty && folder.subFolders.isEmpty
+                          ? const SizedBox(height: 500, child: Center(child: AppText('No Folders/Items here.')))
+                          : ConstrainedBox(
+                              constraints: const BoxConstraints(minHeight: 500),
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: folder.subFolders.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) => GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              builder: (context) =>
+                                                  ItemsListScreen(folder: folder.subFolders[index], index: index)),
+                                        );
+                                      },
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        child: FolderWidget(
+                                          folder: folder.subFolders[index],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  ListView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: folder.items.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) => ItemWidget(
+                                      item: folder.items[index],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: folder.items.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) => ItemWidget(
-                                item: folder.items[index],
-                              ),
-                            ),
-                          ],
-                        );
+                            );
                 },
               );
             },

@@ -26,6 +26,22 @@ Map<String, dynamic> _$$ItemModelResponseImplToJson(
       'status': instance.status,
     };
 
+_$FolderOnlyModelImpl _$$FolderOnlyModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$FolderOnlyModelImpl(
+      result: Folder.fromJson(json['result'] as Map<String, dynamic>),
+      message: json['message'] as String,
+      status: (json['status'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$FolderOnlyModelImplToJson(
+        _$FolderOnlyModelImpl instance) =>
+    <String, dynamic>{
+      'result': instance.result,
+      'message': instance.message,
+      'status': instance.status,
+    };
+
 _$FolderModelImpl _$$FolderModelImplFromJson(Map<String, dynamic> json) =>
     _$FolderModelImpl(
       result: (json['result'] as List<dynamic>)
@@ -172,7 +188,7 @@ _$ColorModelImpl _$$ColorModelImplFromJson(Map<String, dynamic> json) =>
       colorId: (json['color_id'] as num?)?.toInt(),
       quantitys: (json['quantitys'] as num).toInt(),
       rolls: (json['rolls'] as num).toInt(),
-      number: (json['number'] as num).toInt(),
+      number: (json['number'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$ColorModelImplToJson(_$ColorModelImpl instance) =>

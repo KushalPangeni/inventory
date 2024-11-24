@@ -25,9 +25,14 @@ class _FoldersListScreenState extends State<FoldersListScreen> {
   @override
   void initState() {
     super.initState();
+    callOnScreenInitRefresh();
+  }
+
+  callOnScreenInitRefresh() {
     BlocProvider.of<FolderCubit>(context).getFolders();
     BlocProvider.of<AddItemCubit>(context).getItems();
     BlocProvider.of<TagsCubit>(context).getTags();
+    //          BlocProvider.of<AddItemCubit>(context).deleteItem(5);
   }
 
   @override
@@ -35,42 +40,43 @@ class _FoldersListScreenState extends State<FoldersListScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(scrolledUnderElevation: 0.0, backgroundColor: Colors.white, title: const FolderSummaryTopBar()),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          BlocProvider.of<FolderCubit>(context).getFolders();
-          BlocProvider.of<TagsCubit>(context).getTags();
-          // BlocProvider.of<AddItemCubit>(context).getItems();
-          //          BlocProvider.of<AddItemCubit>(context).deleteItem(5);
-        },
-        child: BlocBuilder<AddItemCubit, AddItemState>(
-          builder: (context, itemState) {
-            return BlocBuilder<FolderCubit, FolderState>(
-              builder: (context, state) {
-                return itemState.status is LoadingState || state.status is LoadingState
-                    ? const Center(child: CircularProgressIndicator(strokeWidth: 1))
-                    : itemState.listOfItems.isEmpty && state.listOfFolders.isEmpty
-                        ? SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            child: Container(
-                                height: 500,
-                                color: Colors.white,
-                                child: const Center(child: AppText('No folders or Items Found'))),
-                          )
-                        : ListView.builder(
-                            itemCount: state.listOfFolders.length,
-                            itemBuilder: (context, index) => InkWell(
-                                onTap: () {
-                                  // folderId.value = state.listOfFolders[index].id;
-                                  Navigator.push(
-                                      context,
-                                      CupertinoPageRoute(
-                                          builder: (context) =>
-                                              ItemsListScreen(folder: state.listOfFolders[index], index: index)));
-                                },
-                                child: FolderWidget(folder: state.listOfFolders[index])));
-              },
-            );
+      body: Center(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            callOnScreenInitRefresh();
           },
+          child: BlocBuilder<AddItemCubit, AddItemState>(
+            builder: (context, itemState) {
+              return BlocBuilder<FolderCubit, FolderState>(
+                builder: (context, state) {
+                  return itemState.status is LoadingState || state.status is LoadingState
+                      ? const SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          child: SizedBox(height: 500, child: Center(child: CircularProgressIndicator(strokeWidth: 1))))
+                      : itemState.listOfItems.isEmpty && state.listOfFolders.isEmpty
+                          ? SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: Container(
+                                  height: 500,
+                                  color: Colors.white,
+                                  child: const Center(child: AppText('No folders or Items Found'))),
+                            )
+                          : ListView.builder(
+                              itemCount: state.listOfFolders.length,
+                              itemBuilder: (context, index) => InkWell(
+                                  onTap: () {
+                                    // folderId.value = state.listOfFolders[index].id;
+                                    Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                            builder: (context) =>
+                                                ItemsListScreen(folder: state.listOfFolders[index], index: index)));
+                                  },
+                                  child: FolderWidget(folder: state.listOfFolders[index])));
+                },
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: GestureDetector(

@@ -1,12 +1,14 @@
-class ColorModelF {
-  int? colorId = 0;
-  int quantity = 0;
-  int roll = 0;
-  int number = 0;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  ColorModelF({this.colorId, this.roll = 0, this.quantity = 0, this.number = 0});
+part 'color_model.freezed.dart';
+
+@freezed
+class ColorModelF with _$ColorModelF {
+  const factory ColorModelF({
+     int? colorId,
+    @Default(0) int? number,
+    @Default(0) int quantity,
+    @Default(0) int roll,
+  }) = _ColorModelF;
 }
-// "color_id": 0,
-// "quantitys": 0,
-// "rolls": 0,
-// "number": "string"
+

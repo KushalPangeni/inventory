@@ -9,8 +9,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart';
 import 'package:inventory/features/add_folders/repository/add_folder_repository.dart';
 import 'package:inventory/features/tags/model/tag_model.dart';
+import 'package:inventory/folders_list_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
+import 'package:inventory/home_screen.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
+import 'package:inventory/network/exception.dart';
+import 'package:toastification/toastification.dart';
 
 part 'folder_state.dart';
 
@@ -23,37 +27,39 @@ class FolderCubit extends Cubit<FolderState> {
   TextEditingController folderNameController = TextEditingController();
   TextEditingController folderDescriptionController = TextEditingController();
 
-  Future<List<Folder>> getFolders({bool showLoading = true, int? folderId}) async {
-    List<Folder> listOfFolders = [];
-    emit(state.copyWith(status: showLoading ? const LoadingState() : const InitialState()));
+  Future<Folder?> getFolders({bool showLoading = true, int? folderId}) async {
+    Folder? folder;
+    if (folderId == null) {
+      emit(state.copyWith(status: showLoading ? const LoadingState() : const InitialState()));
+    } else {
+      emit(state.copyWith(folderIdStatus: showLoading ? const LoadingState() : const InitialState()));
+    }
     var response = await repository.getFolders(folderId: folderId);
     if (folderId == null) {
       response.fold((l) {
         emit(state.copyWith(status: const ErrorState()));
         log('Get Folders === > $l');
-        listOfFolders = [];
       }, (r) {
         log('Get Folders === > ${r.data}');
         FolderModel folderModel = r.data;
         emit(state.copyWith(status: const LoadedState(), listOfFolders: folderModel.result));
-        listOfFolders = folderModel.result;
       });
     } else {
       response.fold((l) {
-        emit(state.copyWith(status: const ErrorState()));
+        emit(state.copyWith(folderIdStatus: const ErrorState()));
         log('Get Folders === > $l');
-        listOfFolders = [];
       }, (r) {
+        emit(state.copyWith(folderIdStatus: const LoadedState()));
         log('Get Folders === > ${r.data}');
-        FolderModel folderModel = r.data;
-        listOfFolders.add(folderModel.result as Folder);
+        folder = r.data.result;
       });
     }
 
-    return listOfFolders;
+    return folder;
   }
 
-  addFolders(BuildContext context, {bool showLoading = true, required List<File> listOfFiles, int? parentFolderId}) async {
+  addFolders(BuildContext context,
+      {bool showLoading = true, required List<File> listOfFiles, int? parentFolderId}) async {
     emit(state.copyWith(uploadStatus: showLoading ? const LoadingState() : const InitialState()));
     List<Tag> listOfTags = List.from(state.foldersTag);
     List<int> listOfTagsId = listOfTags.map((t) => t.id).toList();
@@ -121,16 +127,25 @@ class FolderCubit extends Cubit<FolderState> {
     });
   }
 
-  moveFolder({required int folderId, required int destinationFolderId, required String reasonToMove,required String note}) async {
+  moveFolder(BuildContext context,
+      {required int folderId,
+      required int destinationFolderId,
+      required String reasonToMove,
+      required String note}) async {
     var response = await repository.moveFolder(
-        folderId: folderId, destinationFolderId: destinationFolderId, reasonToMove: reasonToMove,note:note);
+        folderId: folderId, destinationFolderId: destinationFolderId, reasonToMove: reasonToMove, note: note);
 
     response.fold((l) {
       emit(state.copyWith(status: const ErrorState()));
+
       log('Move Folders === > $l');
     }, (r) {
       log('Move Folders === > ${r.data}');
       emit(state.copyWith(status: const LoadedState()));
+      showToast(context, 'Success', 'Folder moved successfully.', ToastificationType.success);
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
     });
   }
 

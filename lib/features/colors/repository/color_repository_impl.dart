@@ -41,7 +41,7 @@ class ColorRepositoryImpl implements ColorRepository {
 
   @override
   EitherResponse fetchHistory() async {
-    var request = _client.get(endPoint: Request.createUrl('api/histories/get/10'));
+    var request = _client.get(endPoint: Request.createUrl('api/histories'));
     return await _client.handleNetworkCall(request, HistoryResponse.fromJson);
   }
 

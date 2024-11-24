@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<int> _selectedIndex = ValueNotifier(0);
-  List screens = const [FoldersListScreen(), HistoryScreen() /*SearchScreen()*/, MoreDetailsScreen()];
+  List screens = const [FoldersListScreen(), HistoryScreen(), SearchScreen(), MoreDetailsScreen()];
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 2),
           Expanded(child: bottomNavBarWidget(0, Image.asset('assets/folder.png', height: 24), 'Folders')),
           const SizedBox(width: 2),
-          Expanded(child: bottomNavBarWidget(1, Image.asset('assets/search.png', height: 24), 'Search')),
+          Expanded(child: bottomNavBarWidget(1, Image.asset('assets/history.png', height: 24), 'History')),
           const SizedBox(width: 2),
-          Expanded(child: bottomNavBarWidget(2, Image.asset('assets/menu.png', height: 24), 'Menu')),
+          Expanded(child: bottomNavBarWidget(2, Image.asset('assets/search.png', height: 24), 'Search')),
+          const SizedBox(width: 2),
+          Expanded(child: bottomNavBarWidget(3, Image.asset('assets/menu.png', height: 24), 'Menu')),
           const SizedBox(width: 2),
         ],
       ),

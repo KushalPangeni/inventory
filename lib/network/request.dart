@@ -4,11 +4,9 @@ abstract class Request {
   static const _authentication = 'Authorization';
 
   static Map<String, String> createHeader({isFormData = false}) {
-    final authHeader = <String, String>{
-      "ngrok-skip-browser-warning": "69420",
-    };
+    final authHeader = <String, String>{};
     authHeader['Accept'] = 'application/json';
-    authHeader['Content-Type'] = 'application/json';
+   if(!isFormData) authHeader['Content-Type'] = 'application/json';
     return authHeader;
   }
 
@@ -33,30 +31,26 @@ abstract class Request {
     return ret.toString();
   }
 
-  static String createGetUrlWithId(
-      String path, String id, Map<String, dynamic> parameters) {
+  static String createGetUrlWithId(String path, String id, Map<String, dynamic> parameters) {
     final uri = Uri.parse(createUrlWithId(path, id));
     final ret = uri.replace(queryParameters: parameters);
     return ret.toString();
   }
 
-  static Map<String, String> createAuthHeader(String token,
-      {bool isFormData = false}) {
+  static Map<String, String> createAuthHeader(String token, {bool isFormData = false}) {
     final authHeader = <String, String>{};
 
     if (token.isNotEmpty) {
       authHeader[_authentication] = 'Basic $token';
       authHeader['Accept'] = 'application/json';
-      authHeader['Content-Type'] =
-          isFormData ? 'multipart/form-data' : 'application/json';
+      authHeader['Content-Type'] = isFormData ? 'multipart/form-data' : 'application/json';
     }
     return authHeader;
   }
 
   static String encodeQueryParameters(Map<String, dynamic> params) {
     return params.entries
-        .map((e) =>
-            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value.toString())}')
+        .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value.toString())}')
         .join('&');
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:inventory/features/colors/cubit/color_cubit.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
@@ -8,7 +9,7 @@ class HistoryScreen extends StatefulWidget {
   final int? folderItemId;
   final bool isFolder;
 
-  const HistoryScreen({super.key, this.folderItemId,  this.isFolder = true});
+  const HistoryScreen({super.key, this.folderItemId, this.isFolder = true});
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
@@ -21,7 +22,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void initState() {
     super.initState();
     if (widget.folderItemId != null) {
-      BlocProvider.of<ColorCubit>(context).fetchHistoryById(widget.folderItemId!,isFolder: widget.isFolder);
+      BlocProvider.of<ColorCubit>(context).fetchHistoryById(widget.folderItemId!, isFolder: widget.isFolder);
     } else {
       BlocProvider.of<ColorCubit>(context).fetchHistory();
     }
@@ -30,7 +31,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        backgroundColor: Colors.white,
         title: AppText('History', style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
       ),
       body: BlocBuilder<ColorCubit, ColorState>(
@@ -44,7 +48,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
+                                  color: Colors.grey.withOpacity(0.05), borderRadius: BorderRadius.circular(4)),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
@@ -53,7 +57,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: AppText(
-                                        state.historyModel[index]!.date.toString().split(' ').first,
+                                        formatDate(state.historyModel[index]!.date.toString().split(' ').first),
                                         maxLines: 10,
                                         style: const TextStyle()
                                             .defaultTextStyle(fontWeight: FontWeight.w600, fontSize: 12),
@@ -81,120 +85,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 }
 
+String formatDate(String date) {
+  DateTime parsedDate = DateTime.parse(date); // Parse the input string
+  return DateFormat("MMM d, yyyy").format(parsedDate); // Format the date
+}
+
 /*
   callApi() {
-    final jsonResponse = {
-      "result": [
-        {
-          "item_id": 1,
-          "item_type": "folder",
-          "quantity": 1,
-          "date": "2024-11-23 16:24:16",
-          "user": null,
-          "source_folder": {
-            "name": null,
-            "id": null
-          },
-          "destination_folder": {
-            "name": null,
-            "id": null
-          },
-          "message": "Folder abcda updated successfully",
-          "reason": "no reason provided",
-          "action": "",
-          "note": null
-        },
-        {
-          "item_id": 1,
-          "item_type": "folder",
-          "quantity": 1,
-          "date": "2024-11-23 16:24:08",
-          "user": {
-            "name": "SuperAdmin",
-            "email": "admin@admin.com"
-          },
-          "source_folder": {
-            "name": null,
-            "id": null
-          },
-          "destination_folder": {
-            "name": null,
-            "id": null
-          },
-          "message": "Folder abcda updated successfully",
-          "reason": "no reason provided",
-          "action": "",
-          "note": null
-        },
-
-
-
-        {
-          "item_id": 1,
-          "item_type": "folder",
-          "quantity": 1,
-          "date": "2024-11-23 16:23:39",
-          "user": {
-            "name": "SuperAdmin",
-            "email": "admin@admin.com"
-          },
-          "source_folder": {
-            "name": null,
-            "id": null
-          },
-          "destination_folder": {
-            "name": null,
-            "id": null
-          },
-          "message": "Folder abcda updated successfully",
-          "reason": "no reason provided",
-          "action": "",
-          "note": null
-        },
-        {
-          "item_id": 1,
-          "item_type": "folder",
-          "quantity": 1,
-          "date": "2024-11-23 16:22:55",
-          "user": null,
-          "source_folder": {
-            "name": null,
-            "id": null
-          },
-          "destination_folder": {
-            "name": null,
-            "id": null
-          },
-          "message": "Folder abcda updated successfully",
-          "reason": "no reason provided",
-          "action": "",
-          "note": null
-        },
-        {
-          "item_id": 1,
-          "item_type": "folder",
-          "quantity": 1,
-          "date": "2024-11-23 16:22:42",
-          "user": null,
-          "source_folder": {
-            "name": null,
-            "id": null
-          },
-          "destination_folder": {
-            "name": null,
-            "id": null
-          },
-          "message": "Folder abcd updated successfully",
-          "reason": "no reason provided",
-          "action": "",
-          "note": null
-        }
-
-      ],
-      "count": 10,
-      "message": "Success",
-      "status": 1
-    };
+    final jsonResponse =  {"result":{"id":2,"name":"folder 2","description":"folder 2","parent_folder_id":null,"total_price":0,"total_units":0,"images":[],"subFolders":[{"id":1,"name":"abcda 1","description":"folder 1","total_price":0,"total_units":0}],"tags":[{"id":1,"name":"add"},{"id":2,"name":"tag"}],"items":[]},"message":"Success","status":1}
     try {
       final historyResponse = HistoryResponse.fromJson(jsonResponse);
       log('History response ==> $historyResponse');

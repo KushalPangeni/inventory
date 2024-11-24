@@ -150,6 +150,7 @@ addTags(BuildContext context) {
       builder: (context) {
         return Dialog(
           child: Container(
+            constraints: const BoxConstraints(maxWidth: 400),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
