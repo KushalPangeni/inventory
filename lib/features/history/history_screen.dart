@@ -67,7 +67,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: AppText(
-                                        state.historyModel[index]!.message.toString(),
+                                        '${state.historyModel[index]!.message} ${state.historyModel[index]!.user != null ? 'by ${state.historyModel[index]!.user!.name}.' : ''}',
                                         maxLines: 10,
                                         style: const TextStyle()
                                             .defaultTextStyle(fontWeight: FontWeight.w500, fontSize: 14),

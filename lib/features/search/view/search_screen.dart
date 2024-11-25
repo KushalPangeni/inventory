@@ -40,7 +40,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       BlocProvider.of<SearchCubit>(context).searchByText(s);
                     }),
               ),
-              Flexible(child: ListView.builder(
+              Flexible(child:state.searchResponse == null ?
+              const SizedBox()
+              :ListView.builder(
                   itemCount: state.searchResponse!.result.folders!.length,
                   physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   itemBuilder: (context, index) {

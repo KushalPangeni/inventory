@@ -105,13 +105,13 @@ class _SignInScreenState extends State<SignInScreen> {
                                     onPressed: () async {
                                       if (bloc.userNameController.text.trim().isNotEmpty &&
                                           bloc.passwordController.text.trim().isNotEmpty) {
-                                        BlocProvider.of<AuthCubit>(context).signIn();
+                                        BlocProvider.of<AuthCubit>(context).signIn(context);
 
-                                        Navigator.pushAndRemoveUntil(
+                                        /*Navigator.pushAndRemoveUntil(
                                           context,
                                           CupertinoPageRoute(builder: (context) => const HomeScreen()),
                                           (route) => false,
-                                        );
+                                        );*/
                                       } else {
                                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                             elevation: 10,

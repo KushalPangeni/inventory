@@ -134,8 +134,7 @@ class _MoreDetailsScreenState extends State<MoreDetailsScreen> {
             const Spacer(),
             GestureDetector(
                 onTap: () {
-                  preferences.setString('username', '');
-                  preferences.setString('password', '');
+                  preferences.setString('token', '');
                   BlocProvider.of<AuthCubit>(context).clearTextController();
                   Navigator.pushAndRemoveUntil(
                       context, CupertinoPageRoute(builder: (context) => const WelcomeScreen()), (s) => false);

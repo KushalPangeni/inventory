@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory/network/request.dart';
 import 'package:inventory/network/response_type_def.dart';
-import 'package:toastification/toastification.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'data_response.dart';
 import 'exception.dart';
 
@@ -44,6 +44,10 @@ class DioClient {
     _client.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
+          final accessToken = await fetchAccessToken(); // Fetch token dynamically
+          if (accessToken.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $accessToken';
+          }
           handler.next(options);
         },
         onResponse: (r, handler) {
@@ -74,6 +78,12 @@ class DioClient {
         },
       ),
     );
+  }
+
+  Future<String> fetchAccessToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String accessToken = pref.getString('token') ?? '';
+    return accessToken;
   }
 
   Future<Response?> get({

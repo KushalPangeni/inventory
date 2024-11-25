@@ -21,9 +21,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   goToLogin() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String username = preferences.getString('username') ?? '';
-    String password = preferences.getString('password') ?? '';
-    if (username.trim().isNotEmpty && password.trim().isNotEmpty) {
+    String token = preferences.getString('token') ?? '';
+    if (token.trim().isNotEmpty) {
       await Future.delayed(const Duration(seconds: 3), () {
         Navigator.pushAndRemoveUntil(
           context,
