@@ -2,15 +2,19 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart';
 import 'package:inventory/features/add_folders/repository/add_folder_repository.dart';
-import 'package:inventory/features/tags/cubit/tags_cubit.dart';
 import 'package:inventory/features/tags/model/tag_model.dart';
+import 'package:inventory/folders_list_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
+import 'package:inventory/home_screen.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
+import 'package:inventory/network/exception.dart';
+import 'package:toastification/toastification.dart';
 
 part 'folder_state.dart';
 
@@ -23,26 +27,54 @@ class FolderCubit extends Cubit<FolderState> {
   TextEditingController folderNameController = TextEditingController();
   TextEditingController folderDescriptionController = TextEditingController();
 
-  getFolders({bool showLoading = true}) async {
-    emit(state.copyWith(status: showLoading ? const LoadingState() : const InitialState()));
-    var response = await repository.getFolders();
-    response.fold((l) {
-      emit(state.copyWith(status: const ErrorState()));
-      log('Get Folders === > $l');
-    }, (r) {
-      log('Get Folders === > ${r.data}');
-      FolderModel folderModel = r.data;
-      emit(state.copyWith(status: const LoadedState(), listOfFolders: folderModel.result));
-    });
+  Future<Folder?> getFolders({bool showLoading = true, int? folderId}) async {
+    Folder? folder;
+    if (folderId == null) {
+      emit(state.copyWith(status: showLoading ? const LoadingState() : const InitialState()));
+    } else {
+      emit(state.copyWith(folderIdStatus: showLoading ? const LoadingState() : const InitialState()));
+    }
+    var response = await repository.getFolders(folderId: folderId);
+    if (folderId == null) {
+      response.fold((l) {
+        emit(state.copyWith(status: const ErrorState()));
+        log('Get Folders === > $l');
+      }, (r) {
+        log('Get Folders === > ${r.data}');
+        FolderModel folderModel = r.data;
+        emit(state.copyWith(status: const LoadedState(), listOfFolders: folderModel.result));
+      });
+    } else {
+      response.fold((l) {
+        emit(state.copyWith(folderIdStatus: const ErrorState()));
+        log('Get Folders === > $l');
+      }, (r) {
+        emit(state.copyWith(folderIdStatus: const LoadedState()));
+        log('Get Folders === > ${r.data}');
+        folder = r.data.result;
+      });
+    }
+
+    return folder;
   }
 
-  addFolders(BuildContext context, {bool showLoading = true, required List<File> images}) async {
+  addFolders(BuildContext context,
+      {bool showLoading = true, required List<File> listOfFiles, int? parentFolderId}) async {
     emit(state.copyWith(uploadStatus: showLoading ? const LoadingState() : const InitialState()));
     List<Tag> listOfTags = List.from(state.foldersTag);
     List<int> listOfTagsId = listOfTags.map((t) => t.id).toList();
-    var response = await repository.postFolders('', images,
+
+    List<MultipartFile> listOfMultipartFiles = [];
+    for (int i = 0; i < listOfFiles.length; i++) {
+      listOfMultipartFiles.add(await MultipartFile.fromFile(
+        listOfFiles[i].path,
+        filename: listOfFiles[i].path.split('/').last, // Specify the file name explicitly
+      ));
+    }
+    var response = await repository.postFolders('', listOfMultipartFiles,
         folderName: folderNameController.text,
         folderDescription: folderDescriptionController.text,
+        parentFolderId: parentFolderId,
         listOfTagsId: listOfTagsId);
     response.fold((l) {
       emit(state.copyWith(status: const ErrorState()));
@@ -76,12 +108,11 @@ class FolderCubit extends Cubit<FolderState> {
         folderDescription: folderDescriptionController.text,
         listOfTagsId: listOfTagsId);
     response.fold((l) {
-      emit(state.copyWith(status: const ErrorState()));
+      emit(state.copyWith(uploadStatus: const ErrorState()));
       log('Edit Folders === > $l');
     }, (r) {
       getFolders(showLoading: false);
       log('Edit Folders === > ${r.data}');
-      // FolderModel folderModel = r.data;
       emit(state.copyWith(uploadStatus: const LoadedState()));
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -93,6 +124,28 @@ class FolderCubit extends Cubit<FolderState> {
             style: const TextStyle().defaultTextStyle(),
           )));
       clearAll();
+    });
+  }
+
+  moveFolder(BuildContext context,
+      {required int folderId,
+      required int destinationFolderId,
+      required String reasonToMove,
+      required String note}) async {
+    var response = await repository.moveFolder(
+        folderId: folderId, destinationFolderId: destinationFolderId, reasonToMove: reasonToMove, note: note);
+
+    response.fold((l) {
+      emit(state.copyWith(status: const ErrorState()));
+
+      log('Move Folders === > $l');
+    }, (r) {
+      log('Move Folders === > ${r.data}');
+      emit(state.copyWith(status: const LoadedState()));
+      showToast(context, 'Success', 'Folder moved successfully.', ToastificationType.success);
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
     });
   }
 

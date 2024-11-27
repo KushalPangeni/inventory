@@ -65,7 +65,7 @@ class UnitCubit extends Cubit<UnitState> {
     emit(state.copyWith(listOfUnits: listOfUnit));
   }
 
-  addRemove(Unit unit) {
+/*  addRemove(Unit unit) {
     List<Unit> listOfUnit = List.from(state.listOfSelectedUnits);
     if (listOfUnit.contains(unit)) {
       listOfUnit.remove(unit);
@@ -73,7 +73,7 @@ class UnitCubit extends Cubit<UnitState> {
       listOfUnit.add(unit);
     }
     emit(state.copyWith(listOfSelectedUnits: listOfUnit));
-  }
+  }*/
 
   deleteUnit(BuildContext context, int unitId) async {
     final response = await repository.deleteUnits(unitId);

@@ -4,6 +4,10 @@ import 'package:inventory/features/add_items/repository/add_item_repository.dart
 import 'package:inventory/features/add_items/repository/add_item_repository_impl.dart';
 import 'package:inventory/features/auth/repository/auth_repository.dart';
 import 'package:inventory/features/auth/repository/auth_repository_impl.dart';
+import 'package:inventory/features/colors/repository/color_repository.dart';
+import 'package:inventory/features/colors/repository/color_repository_impl.dart';
+import 'package:inventory/features/search/repository/search_repository.dart';
+import 'package:inventory/features/search/repository/search_repository_impl.dart';
 import 'package:inventory/features/tags/repository/tag_repository.dart';
 import 'package:inventory/features/tags/repository/tag_repository_impl.dart';
 import 'package:inventory/features/units/repository/unit_repository.dart';
@@ -32,4 +36,11 @@ void setupRepositoryLocator() {
     () => UnitRepositoryImpl(di()),
   );
 
+  di.registerLazySingleton<ColorRepository>(
+    () => ColorRepositoryImpl(di()),
+  );
+
+  di.registerLazySingleton<SearchRepository>(
+    () => SearchRepositoryImpl(di()),
+  );
 }

@@ -1,3 +1,4 @@
+import 'package:inventory/features/auth/model/auth_model.dart';
 import 'package:inventory/features/auth/repository/auth_repository.dart';
 import 'package:inventory/network/api_service.dart';
 import 'package:inventory/network/request.dart';
@@ -10,10 +11,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   EitherResponse signIn(String username, String password) async {
-    var request = _client.post(
-      endPoint: Request.createUrl('login'),
-      data: {'user_name':'employee@employee.com','password':'password'}
-    );
-    return await _client.handleNetworkCall(request);
+    var request =
+        _client.post(endPoint: Request.createUrl('api/login'), data: {'email': username, 'password': password});
+    return await _client.handleNetworkCall(request, AuthResponse.fromJson);
   }
 }

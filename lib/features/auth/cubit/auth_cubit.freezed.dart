@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AuthState {
   ApiRequestState<dynamic>? get status => throw _privateConstructorUsedError;
+  AuthResponse? get authResponse => throw _privateConstructorUsedError;
   String get userName => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
 
@@ -31,9 +32,13 @@ abstract class $AuthStateCopyWith<$Res> {
       _$AuthStateCopyWithImpl<$Res, AuthState>;
   @useResult
   $Res call(
-      {ApiRequestState<dynamic>? status, String userName, String password});
+      {ApiRequestState<dynamic>? status,
+      AuthResponse? authResponse,
+      String userName,
+      String password});
 
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
+  $AuthResponseCopyWith<$Res>? get authResponse;
 }
 
 /// @nodoc
@@ -50,6 +55,7 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
   @override
   $Res call({
     Object? status = freezed,
+    Object? authResponse = freezed,
     Object? userName = null,
     Object? password = null,
   }) {
@@ -58,6 +64,10 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ApiRequestState<dynamic>?,
+      authResponse: freezed == authResponse
+          ? _value.authResponse
+          : authResponse // ignore: cast_nullable_to_non_nullable
+              as AuthResponse?,
       userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
@@ -80,6 +90,18 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
       return _then(_value.copyWith(status: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AuthResponseCopyWith<$Res>? get authResponse {
+    if (_value.authResponse == null) {
+      return null;
+    }
+
+    return $AuthResponseCopyWith<$Res>(_value.authResponse!, (value) {
+      return _then(_value.copyWith(authResponse: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -91,10 +113,15 @@ abstract class _$$AuthStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {ApiRequestState<dynamic>? status, String userName, String password});
+      {ApiRequestState<dynamic>? status,
+      AuthResponse? authResponse,
+      String userName,
+      String password});
 
   @override
   $ApiRequestStateCopyWith<dynamic, $Res>? get status;
+  @override
+  $AuthResponseCopyWith<$Res>? get authResponse;
 }
 
 /// @nodoc
@@ -109,6 +136,7 @@ class __$$AuthStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
+    Object? authResponse = freezed,
     Object? userName = null,
     Object? password = null,
   }) {
@@ -117,6 +145,10 @@ class __$$AuthStateImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ApiRequestState<dynamic>?,
+      authResponse: freezed == authResponse
+          ? _value.authResponse
+          : authResponse // ignore: cast_nullable_to_non_nullable
+              as AuthResponse?,
       userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
@@ -134,12 +166,15 @@ class __$$AuthStateImplCopyWithImpl<$Res>
 class _$AuthStateImpl implements _AuthState {
   const _$AuthStateImpl(
       {this.status = const InitialState(),
+      this.authResponse,
       this.userName = '',
       this.password = ''});
 
   @override
   @JsonKey()
   final ApiRequestState<dynamic>? status;
+  @override
+  final AuthResponse? authResponse;
   @override
   @JsonKey()
   final String userName;
@@ -149,7 +184,7 @@ class _$AuthStateImpl implements _AuthState {
 
   @override
   String toString() {
-    return 'AuthState(status: $status, userName: $userName, password: $password)';
+    return 'AuthState(status: $status, authResponse: $authResponse, userName: $userName, password: $password)';
   }
 
   @override
@@ -158,6 +193,8 @@ class _$AuthStateImpl implements _AuthState {
         (other.runtimeType == runtimeType &&
             other is _$AuthStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.authResponse, authResponse) ||
+                other.authResponse == authResponse) &&
             (identical(other.userName, userName) ||
                 other.userName == userName) &&
             (identical(other.password, password) ||
@@ -165,7 +202,8 @@ class _$AuthStateImpl implements _AuthState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, userName, password);
+  int get hashCode =>
+      Object.hash(runtimeType, status, authResponse, userName, password);
 
   @JsonKey(ignore: true)
   @override
@@ -177,11 +215,14 @@ class _$AuthStateImpl implements _AuthState {
 abstract class _AuthState implements AuthState {
   const factory _AuthState(
       {final ApiRequestState<dynamic>? status,
+      final AuthResponse? authResponse,
       final String userName,
       final String password}) = _$AuthStateImpl;
 
   @override
   ApiRequestState<dynamic>? get status;
+  @override
+  AuthResponse? get authResponse;
   @override
   String get userName;
   @override

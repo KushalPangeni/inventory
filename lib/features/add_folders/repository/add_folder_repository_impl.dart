@@ -26,71 +26,79 @@ class AddFolderRepositoryImpl implements AddFolderRepository {
       {required int folderId,
       String folderName = '',
       String folderDescription = '',
-      int parentFolderName = 0,
       required List<int> listOfTagsId}) async {
-    log('Images ==> $images');
-    /*var image = await MultipartFile.fromFile(
-      images[0].path,
-      contentType: MediaType('image', 'jpg'),
-      filename: images[0].path.split('/').last,
-    );*/
-    // final File file = File(images[0].path);
-
-    // Read the file as bytes
-    // final bytes = await images[0].readAsBytes();
-    //
-    // // Convert bytes to Base64 string
-    // final base64String = base64Encode(bytes);
     FormData formData = FormData.fromMap({
       "name": folderName,
-      // "image":image,
+      "images[]": images,
       "description": folderDescription,
-      // "parent_folder_id": 2, // Uncomment if you want to include this
       "total_price": 0,
-      "total_units": "50",
-      "tag_ids[]": listOfTagsId, // Directly included; FormData handles lists automatically
+      "total_units": "0",
+      "tag_ids[]": listOfTagsId,
+      "_method": "PUT"
     });
-    var request = _client.editFiles(endPoint: Request.createUrl('api/folders/$folderId'), formData: formData);
+    var request = _client.uploadFiles(endPoint: Request.createUrl('api/folders/$folderId'), formData: formData);
     return await _client.handleNetworkCall(request);
   }
 
   @override
-  EitherResponse getFolders() async {
-    var request = _client.get(
-      endPoint: Request.createUrl('api/folders'),
-    );
-    return await _client.handleNetworkCall(request, FolderModel.fromJson);
+  EitherResponse getFolders({int? folderId}) async {
+    if (folderId != null) {
+      var request = _client.get(
+        endPoint: Request.createUrl('api/folders/$folderId'),
+      );
+      return await _client.handleNetworkCall(request, FolderOnlyModel.fromJson);
+    } else {
+      var request = _client.get(
+        endPoint: Request.createUrl('api/folders/0'),
+      );
+      return await _client.handleNetworkCall(request, FolderModel.fromJson);
+    }
   }
 
   @override
-  EitherResponse postFolders(String tag, List<File> images,
+  EitherResponse postFolders(String tag, List<MultipartFile> images,
       {String folderName = '',
       String folderDescription = '',
-      int parentFolderName = 0,
+      int? parentFolderId,
       required List<int> listOfTagsId}) async {
-    log('Images ==> $images');
-    /*var image = await MultipartFile.fromFile(
-      images[0].path,
-      contentType: MediaType('image', 'jpg'),
-      filename: images[0].path.split('/').last,
-    );*/
-    // final File file = File(images[0].path);
-
-    // Read the file as bytes
-    // final bytes = await images[0].readAsBytes();
-    //
-    // // Convert bytes to Base64 string
-    // final base64String = base64Encode(bytes);
-    FormData formData = FormData.fromMap({
-      "name": folderName,
-      // "image":image,
-      "description": folderDescription,
-      // "parent_folder_id": 2, // Uncomment if you want to include this
-      "total_price": 0,
-      "total_units": "0",
-      "tag_ids[]": listOfTagsId, // Directly included; FormData handles lists automatically
-    });
+    FormData formData;
+    if (parentFolderId == null) {
+      formData = FormData.fromMap({
+        "name": folderName,
+        "images[]": images,
+        "description": folderDescription,
+        "total_price": 0,
+        "total_units": "0",
+        "tag_ids[]": listOfTagsId, // Directly included; FormData handles lists automatically
+      });
+    } else {
+      formData = FormData.fromMap({
+        "name": folderName,
+        "image[]": images,
+        "description": folderDescription,
+        "parent_folder_id": parentFolderId,
+        "total_price": 0,
+        "total_units": "0",
+        "tag_ids[]": listOfTagsId, // Directly included; FormData handles lists automatically
+      });
+    }
     var request = _client.uploadFiles(endPoint: Request.createUrl('api/folders'), formData: formData);
     return await _client.handleNetworkCall(request);
   }
+
+  @override
+  EitherResponse moveFolder(
+      {required int folderId,
+      required int destinationFolderId,
+      required String reasonToMove,
+      required String note}) async {
+    var request = _client.post(endPoint: Request.createUrl('api/folder/move'), data: {
+      "folder_id": folderId,
+      "destination_folder_id": destinationFolderId,
+      "reason": reasonToMove,
+      "note": note
+    });
+    return await _client.handleNetworkCall(request);
+  }
+
 }

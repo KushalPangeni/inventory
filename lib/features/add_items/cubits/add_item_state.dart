@@ -8,6 +8,6 @@ class AddItemState with _$AddItemState {
     @Default([]) List<Item> listOfItems,
     @Default([]) List<Item> listOfItemsFromSelectedFolder,
     @Default('') String title,
-    @Default([]) List<ColorModel> colorList,
+    @Default([]) List<ColorModelF> colorList,
   }) = _AddItemState;
 }

@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart' as import_item;
 import 'package:inventory/features/add_items/cubits/add_item_cubit.dart';
 import 'package:inventory/features/add_items/view/add_item_screen.dart';
+import 'package:inventory/features/history/history_screen.dart';
 import 'package:inventory/features/move/view/move_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
@@ -15,6 +18,7 @@ class ItemMoreBottomModalSheet {
   ItemMoreBottomModalSheet(this.context, this.folderId, this.item);
 
   showBottomSheet({String title = 'Folder/Item Name ;'}) {
+    log('Party Name is ==> ${item.colors}');
     showModalBottomSheet(
         backgroundColor: Colors.white,
         context: context,
@@ -54,10 +58,18 @@ class ItemMoreBottomModalSheet {
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.push(context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
+                      // Navigator.push(context, CupertinoPageRoute(builder: (context) => const MoveScreen()));
                     },
                     child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
-                listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History'),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => HistoryScreen(folderItemId: item.id, isFolder: false)));
+                    },
+                    child: listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History')),
                 listTileAddFileFolder(Image.asset('assets/export.png', height: 28), 'Export'),
                 GestureDetector(
                     onTap: () {
@@ -81,7 +93,7 @@ class ItemMoreBottomModalSheet {
         });
   }
 
-  /*showDialogModal() {
+/*showDialogModal() {
     showDialog(
         context: context,
         builder: (context) {

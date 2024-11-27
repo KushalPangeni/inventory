@@ -215,6 +215,192 @@ abstract class _ItemModelResponse implements ItemModelResponse {
       throw _privateConstructorUsedError;
 }
 
+FolderOnlyModel _$FolderOnlyModelFromJson(Map<String, dynamic> json) {
+  return _FolderOnlyModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$FolderOnlyModel {
+  Folder get result => throw _privateConstructorUsedError;
+  String get message => throw _privateConstructorUsedError;
+  int get status => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $FolderOnlyModelCopyWith<FolderOnlyModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FolderOnlyModelCopyWith<$Res> {
+  factory $FolderOnlyModelCopyWith(
+          FolderOnlyModel value, $Res Function(FolderOnlyModel) then) =
+      _$FolderOnlyModelCopyWithImpl<$Res, FolderOnlyModel>;
+  @useResult
+  $Res call({Folder result, String message, int status});
+
+  $FolderCopyWith<$Res> get result;
+}
+
+/// @nodoc
+class _$FolderOnlyModelCopyWithImpl<$Res, $Val extends FolderOnlyModel>
+    implements $FolderOnlyModelCopyWith<$Res> {
+  _$FolderOnlyModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? result = null,
+    Object? message = null,
+    Object? status = null,
+  }) {
+    return _then(_value.copyWith(
+      result: null == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Folder,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $FolderCopyWith<$Res> get result {
+    return $FolderCopyWith<$Res>(_value.result, (value) {
+      return _then(_value.copyWith(result: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$FolderOnlyModelImplCopyWith<$Res>
+    implements $FolderOnlyModelCopyWith<$Res> {
+  factory _$$FolderOnlyModelImplCopyWith(_$FolderOnlyModelImpl value,
+          $Res Function(_$FolderOnlyModelImpl) then) =
+      __$$FolderOnlyModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({Folder result, String message, int status});
+
+  @override
+  $FolderCopyWith<$Res> get result;
+}
+
+/// @nodoc
+class __$$FolderOnlyModelImplCopyWithImpl<$Res>
+    extends _$FolderOnlyModelCopyWithImpl<$Res, _$FolderOnlyModelImpl>
+    implements _$$FolderOnlyModelImplCopyWith<$Res> {
+  __$$FolderOnlyModelImplCopyWithImpl(
+      _$FolderOnlyModelImpl _value, $Res Function(_$FolderOnlyModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? result = null,
+    Object? message = null,
+    Object? status = null,
+  }) {
+    return _then(_$FolderOnlyModelImpl(
+      result: null == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Folder,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$FolderOnlyModelImpl implements _FolderOnlyModel {
+  const _$FolderOnlyModelImpl(
+      {required this.result, required this.message, required this.status});
+
+  factory _$FolderOnlyModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$FolderOnlyModelImplFromJson(json);
+
+  @override
+  final Folder result;
+  @override
+  final String message;
+  @override
+  final int status;
+
+  @override
+  String toString() {
+    return 'FolderOnlyModel(result: $result, message: $message, status: $status)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FolderOnlyModelImpl &&
+            (identical(other.result, result) || other.result == result) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.status, status) || other.status == status));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, result, message, status);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FolderOnlyModelImplCopyWith<_$FolderOnlyModelImpl> get copyWith =>
+      __$$FolderOnlyModelImplCopyWithImpl<_$FolderOnlyModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$FolderOnlyModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _FolderOnlyModel implements FolderOnlyModel {
+  const factory _FolderOnlyModel(
+      {required final Folder result,
+      required final String message,
+      required final int status}) = _$FolderOnlyModelImpl;
+
+  factory _FolderOnlyModel.fromJson(Map<String, dynamic> json) =
+      _$FolderOnlyModelImpl.fromJson;
+
+  @override
+  Folder get result;
+  @override
+  String get message;
+  @override
+  int get status;
+  @override
+  @JsonKey(ignore: true)
+  _$$FolderOnlyModelImplCopyWith<_$FolderOnlyModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 FolderModel _$FolderModelFromJson(Map<String, dynamic> json) {
   return _FolderModel.fromJson(json);
 }
@@ -1190,18 +1376,29 @@ mixin _$Item {
   String? get fabricNumber => throw _privateConstructorUsedError;
   @JsonKey(name: 'shop_name')
   String? get shopName => throw _privateConstructorUsedError;
-  int? get width => throw _privateConstructorUsedError; // made nullable
+  @JsonKey(name: 'party_name')
+  String? get partyName => throw _privateConstructorUsedError;
+  String? get width => throw _privateConstructorUsedError; // made nullable
   String? get gsm => throw _privateConstructorUsedError; // made nullable
   @JsonKey(name: 'kg_to_meter_ratio')
-  double? get kgToMeterRatio => throw _privateConstructorUsedError;
-  double? get average => throw _privateConstructorUsedError; // made nullable
-  double? get shortage => throw _privateConstructorUsedError; // made nullable
+  String? get kgToMeterRatio => throw _privateConstructorUsedError;
+  String? get average => throw _privateConstructorUsedError; // made nullable
+  String? get shortage => throw _privateConstructorUsedError; // made nullable
   int? get quantity => throw _privateConstructorUsedError; // made nullable
   @JsonKey(name: 'unit_id')
   int? get unitId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'avg_unit')
+  String? get averageUnit => throw _privateConstructorUsedError;
+  @JsonKey(name: 'order_quantity')
+  String? get orderQuantity => throw _privateConstructorUsedError;
+  @JsonKey(name: 'minimum_quantity')
+  int? get minimumQuantity => throw _privateConstructorUsedError;
   @JsonKey(name: 'accessories_notes')
   String? get accessoriesNotes => throw _privateConstructorUsedError;
-  int? get folder_id => throw _privateConstructorUsedError;
+  List<Image>? get images => throw _privateConstructorUsedError;
+  List<ColorModel>? get colors => throw _privateConstructorUsedError;
+  @JsonKey(name: 'folder_id')
+  int? get folderId => throw _privateConstructorUsedError;
   String? get sku => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1219,15 +1416,21 @@ abstract class $ItemCopyWith<$Res> {
       String name,
       @JsonKey(name: 'fabric_number') String? fabricNumber,
       @JsonKey(name: 'shop_name') String? shopName,
-      int? width,
+      @JsonKey(name: 'party_name') String? partyName,
+      String? width,
       String? gsm,
-      @JsonKey(name: 'kg_to_meter_ratio') double? kgToMeterRatio,
-      double? average,
-      double? shortage,
+      @JsonKey(name: 'kg_to_meter_ratio') String? kgToMeterRatio,
+      String? average,
+      String? shortage,
       int? quantity,
       @JsonKey(name: 'unit_id') int? unitId,
+      @JsonKey(name: 'avg_unit') String? averageUnit,
+      @JsonKey(name: 'order_quantity') String? orderQuantity,
+      @JsonKey(name: 'minimum_quantity') int? minimumQuantity,
       @JsonKey(name: 'accessories_notes') String? accessoriesNotes,
-      int? folder_id,
+      List<Image>? images,
+      List<ColorModel>? colors,
+      @JsonKey(name: 'folder_id') int? folderId,
       String? sku});
 }
 
@@ -1248,6 +1451,7 @@ class _$ItemCopyWithImpl<$Res, $Val extends Item>
     Object? name = null,
     Object? fabricNumber = freezed,
     Object? shopName = freezed,
+    Object? partyName = freezed,
     Object? width = freezed,
     Object? gsm = freezed,
     Object? kgToMeterRatio = freezed,
@@ -1255,8 +1459,13 @@ class _$ItemCopyWithImpl<$Res, $Val extends Item>
     Object? shortage = freezed,
     Object? quantity = freezed,
     Object? unitId = freezed,
+    Object? averageUnit = freezed,
+    Object? orderQuantity = freezed,
+    Object? minimumQuantity = freezed,
     Object? accessoriesNotes = freezed,
-    Object? folder_id = freezed,
+    Object? images = freezed,
+    Object? colors = freezed,
+    Object? folderId = freezed,
     Object? sku = freezed,
   }) {
     return _then(_value.copyWith(
@@ -1276,10 +1485,14 @@ class _$ItemCopyWithImpl<$Res, $Val extends Item>
           ? _value.shopName
           : shopName // ignore: cast_nullable_to_non_nullable
               as String?,
+      partyName: freezed == partyName
+          ? _value.partyName
+          : partyName // ignore: cast_nullable_to_non_nullable
+              as String?,
       width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       gsm: freezed == gsm
           ? _value.gsm
           : gsm // ignore: cast_nullable_to_non_nullable
@@ -1287,15 +1500,15 @@ class _$ItemCopyWithImpl<$Res, $Val extends Item>
       kgToMeterRatio: freezed == kgToMeterRatio
           ? _value.kgToMeterRatio
           : kgToMeterRatio // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as String?,
       average: freezed == average
           ? _value.average
           : average // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as String?,
       shortage: freezed == shortage
           ? _value.shortage
           : shortage // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as String?,
       quantity: freezed == quantity
           ? _value.quantity
           : quantity // ignore: cast_nullable_to_non_nullable
@@ -1304,13 +1517,33 @@ class _$ItemCopyWithImpl<$Res, $Val extends Item>
           ? _value.unitId
           : unitId // ignore: cast_nullable_to_non_nullable
               as int?,
+      averageUnit: freezed == averageUnit
+          ? _value.averageUnit
+          : averageUnit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      orderQuantity: freezed == orderQuantity
+          ? _value.orderQuantity
+          : orderQuantity // ignore: cast_nullable_to_non_nullable
+              as String?,
+      minimumQuantity: freezed == minimumQuantity
+          ? _value.minimumQuantity
+          : minimumQuantity // ignore: cast_nullable_to_non_nullable
+              as int?,
       accessoriesNotes: freezed == accessoriesNotes
           ? _value.accessoriesNotes
           : accessoriesNotes // ignore: cast_nullable_to_non_nullable
               as String?,
-      folder_id: freezed == folder_id
-          ? _value.folder_id
-          : folder_id // ignore: cast_nullable_to_non_nullable
+      images: freezed == images
+          ? _value.images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<Image>?,
+      colors: freezed == colors
+          ? _value.colors
+          : colors // ignore: cast_nullable_to_non_nullable
+              as List<ColorModel>?,
+      folderId: freezed == folderId
+          ? _value.folderId
+          : folderId // ignore: cast_nullable_to_non_nullable
               as int?,
       sku: freezed == sku
           ? _value.sku
@@ -1332,15 +1565,21 @@ abstract class _$$ItemImplCopyWith<$Res> implements $ItemCopyWith<$Res> {
       String name,
       @JsonKey(name: 'fabric_number') String? fabricNumber,
       @JsonKey(name: 'shop_name') String? shopName,
-      int? width,
+      @JsonKey(name: 'party_name') String? partyName,
+      String? width,
       String? gsm,
-      @JsonKey(name: 'kg_to_meter_ratio') double? kgToMeterRatio,
-      double? average,
-      double? shortage,
+      @JsonKey(name: 'kg_to_meter_ratio') String? kgToMeterRatio,
+      String? average,
+      String? shortage,
       int? quantity,
       @JsonKey(name: 'unit_id') int? unitId,
+      @JsonKey(name: 'avg_unit') String? averageUnit,
+      @JsonKey(name: 'order_quantity') String? orderQuantity,
+      @JsonKey(name: 'minimum_quantity') int? minimumQuantity,
       @JsonKey(name: 'accessories_notes') String? accessoriesNotes,
-      int? folder_id,
+      List<Image>? images,
+      List<ColorModel>? colors,
+      @JsonKey(name: 'folder_id') int? folderId,
       String? sku});
 }
 
@@ -1358,6 +1597,7 @@ class __$$ItemImplCopyWithImpl<$Res>
     Object? name = null,
     Object? fabricNumber = freezed,
     Object? shopName = freezed,
+    Object? partyName = freezed,
     Object? width = freezed,
     Object? gsm = freezed,
     Object? kgToMeterRatio = freezed,
@@ -1365,8 +1605,13 @@ class __$$ItemImplCopyWithImpl<$Res>
     Object? shortage = freezed,
     Object? quantity = freezed,
     Object? unitId = freezed,
+    Object? averageUnit = freezed,
+    Object? orderQuantity = freezed,
+    Object? minimumQuantity = freezed,
     Object? accessoriesNotes = freezed,
-    Object? folder_id = freezed,
+    Object? images = freezed,
+    Object? colors = freezed,
+    Object? folderId = freezed,
     Object? sku = freezed,
   }) {
     return _then(_$ItemImpl(
@@ -1386,10 +1631,14 @@ class __$$ItemImplCopyWithImpl<$Res>
           ? _value.shopName
           : shopName // ignore: cast_nullable_to_non_nullable
               as String?,
+      partyName: freezed == partyName
+          ? _value.partyName
+          : partyName // ignore: cast_nullable_to_non_nullable
+              as String?,
       width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       gsm: freezed == gsm
           ? _value.gsm
           : gsm // ignore: cast_nullable_to_non_nullable
@@ -1397,15 +1646,15 @@ class __$$ItemImplCopyWithImpl<$Res>
       kgToMeterRatio: freezed == kgToMeterRatio
           ? _value.kgToMeterRatio
           : kgToMeterRatio // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as String?,
       average: freezed == average
           ? _value.average
           : average // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as String?,
       shortage: freezed == shortage
           ? _value.shortage
           : shortage // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as String?,
       quantity: freezed == quantity
           ? _value.quantity
           : quantity // ignore: cast_nullable_to_non_nullable
@@ -1414,13 +1663,33 @@ class __$$ItemImplCopyWithImpl<$Res>
           ? _value.unitId
           : unitId // ignore: cast_nullable_to_non_nullable
               as int?,
+      averageUnit: freezed == averageUnit
+          ? _value.averageUnit
+          : averageUnit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      orderQuantity: freezed == orderQuantity
+          ? _value.orderQuantity
+          : orderQuantity // ignore: cast_nullable_to_non_nullable
+              as String?,
+      minimumQuantity: freezed == minimumQuantity
+          ? _value.minimumQuantity
+          : minimumQuantity // ignore: cast_nullable_to_non_nullable
+              as int?,
       accessoriesNotes: freezed == accessoriesNotes
           ? _value.accessoriesNotes
           : accessoriesNotes // ignore: cast_nullable_to_non_nullable
               as String?,
-      folder_id: freezed == folder_id
-          ? _value.folder_id
-          : folder_id // ignore: cast_nullable_to_non_nullable
+      images: freezed == images
+          ? _value._images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<Image>?,
+      colors: freezed == colors
+          ? _value._colors
+          : colors // ignore: cast_nullable_to_non_nullable
+              as List<ColorModel>?,
+      folderId: freezed == folderId
+          ? _value.folderId
+          : folderId // ignore: cast_nullable_to_non_nullable
               as int?,
       sku: freezed == sku
           ? _value.sku
@@ -1438,16 +1707,24 @@ class _$ItemImpl implements _Item {
       required this.name,
       @JsonKey(name: 'fabric_number') this.fabricNumber = '',
       @JsonKey(name: 'shop_name') this.shopName = '',
-      this.width = 0,
+      @JsonKey(name: 'party_name') this.partyName = '',
+      this.width = '',
       this.gsm = '',
       @JsonKey(name: 'kg_to_meter_ratio') this.kgToMeterRatio,
-      this.average = 0,
-      this.shortage = 0,
+      this.average = '',
+      this.shortage = '',
       this.quantity = 0,
-      @JsonKey(name: 'unit_id') this.unitId = 1,
+      @JsonKey(name: 'unit_id') this.unitId = 0,
+      @JsonKey(name: 'avg_unit') this.averageUnit = '',
+      @JsonKey(name: 'order_quantity') this.orderQuantity = '0',
+      @JsonKey(name: 'minimum_quantity') this.minimumQuantity = 0,
       @JsonKey(name: 'accessories_notes') this.accessoriesNotes = '',
-      this.folder_id = 0,
-      this.sku = ''});
+      final List<Image>? images = const [],
+      final List<ColorModel>? colors = const [],
+      @JsonKey(name: 'folder_id') this.folderId = 0,
+      this.sku = ''})
+      : _images = images,
+        _colors = colors;
 
   factory _$ItemImpl.fromJson(Map<String, dynamic> json) =>
       _$$ItemImplFromJson(json);
@@ -1463,8 +1740,11 @@ class _$ItemImpl implements _Item {
   @JsonKey(name: 'shop_name')
   final String? shopName;
   @override
+  @JsonKey(name: 'party_name')
+  final String? partyName;
+  @override
   @JsonKey()
-  final int? width;
+  final String? width;
 // made nullable
   @override
   @JsonKey()
@@ -1472,14 +1752,14 @@ class _$ItemImpl implements _Item {
 // made nullable
   @override
   @JsonKey(name: 'kg_to_meter_ratio')
-  final double? kgToMeterRatio;
+  final String? kgToMeterRatio;
   @override
   @JsonKey()
-  final double? average;
+  final String? average;
 // made nullable
   @override
   @JsonKey()
-  final double? shortage;
+  final String? shortage;
 // made nullable
   @override
   @JsonKey()
@@ -1489,18 +1769,49 @@ class _$ItemImpl implements _Item {
   @JsonKey(name: 'unit_id')
   final int? unitId;
   @override
+  @JsonKey(name: 'avg_unit')
+  final String? averageUnit;
+  @override
+  @JsonKey(name: 'order_quantity')
+  final String? orderQuantity;
+  @override
+  @JsonKey(name: 'minimum_quantity')
+  final int? minimumQuantity;
+  @override
   @JsonKey(name: 'accessories_notes')
   final String? accessoriesNotes;
+  final List<Image>? _images;
   @override
   @JsonKey()
-  final int? folder_id;
+  List<Image>? get images {
+    final value = _images;
+    if (value == null) return null;
+    if (_images is EqualUnmodifiableListView) return _images;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<ColorModel>? _colors;
+  @override
+  @JsonKey()
+  List<ColorModel>? get colors {
+    final value = _colors;
+    if (value == null) return null;
+    if (_colors is EqualUnmodifiableListView) return _colors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  @JsonKey(name: 'folder_id')
+  final int? folderId;
   @override
   @JsonKey()
   final String? sku;
 
   @override
   String toString() {
-    return 'Item(id: $id, name: $name, fabricNumber: $fabricNumber, shopName: $shopName, width: $width, gsm: $gsm, kgToMeterRatio: $kgToMeterRatio, average: $average, shortage: $shortage, quantity: $quantity, unitId: $unitId, accessoriesNotes: $accessoriesNotes, folder_id: $folder_id, sku: $sku)';
+    return 'Item(id: $id, name: $name, fabricNumber: $fabricNumber, shopName: $shopName, partyName: $partyName, width: $width, gsm: $gsm, kgToMeterRatio: $kgToMeterRatio, average: $average, shortage: $shortage, quantity: $quantity, unitId: $unitId, averageUnit: $averageUnit, orderQuantity: $orderQuantity, minimumQuantity: $minimumQuantity, accessoriesNotes: $accessoriesNotes, images: $images, colors: $colors, folderId: $folderId, sku: $sku)';
   }
 
   @override
@@ -1514,6 +1825,8 @@ class _$ItemImpl implements _Item {
                 other.fabricNumber == fabricNumber) &&
             (identical(other.shopName, shopName) ||
                 other.shopName == shopName) &&
+            (identical(other.partyName, partyName) ||
+                other.partyName == partyName) &&
             (identical(other.width, width) || other.width == width) &&
             (identical(other.gsm, gsm) || other.gsm == gsm) &&
             (identical(other.kgToMeterRatio, kgToMeterRatio) ||
@@ -1524,31 +1837,46 @@ class _$ItemImpl implements _Item {
             (identical(other.quantity, quantity) ||
                 other.quantity == quantity) &&
             (identical(other.unitId, unitId) || other.unitId == unitId) &&
+            (identical(other.averageUnit, averageUnit) ||
+                other.averageUnit == averageUnit) &&
+            (identical(other.orderQuantity, orderQuantity) ||
+                other.orderQuantity == orderQuantity) &&
+            (identical(other.minimumQuantity, minimumQuantity) ||
+                other.minimumQuantity == minimumQuantity) &&
             (identical(other.accessoriesNotes, accessoriesNotes) ||
                 other.accessoriesNotes == accessoriesNotes) &&
-            (identical(other.folder_id, folder_id) ||
-                other.folder_id == folder_id) &&
+            const DeepCollectionEquality().equals(other._images, _images) &&
+            const DeepCollectionEquality().equals(other._colors, _colors) &&
+            (identical(other.folderId, folderId) ||
+                other.folderId == folderId) &&
             (identical(other.sku, sku) || other.sku == sku));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      fabricNumber,
-      shopName,
-      width,
-      gsm,
-      kgToMeterRatio,
-      average,
-      shortage,
-      quantity,
-      unitId,
-      accessoriesNotes,
-      folder_id,
-      sku);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        name,
+        fabricNumber,
+        shopName,
+        partyName,
+        width,
+        gsm,
+        kgToMeterRatio,
+        average,
+        shortage,
+        quantity,
+        unitId,
+        averageUnit,
+        orderQuantity,
+        minimumQuantity,
+        accessoriesNotes,
+        const DeepCollectionEquality().hash(_images),
+        const DeepCollectionEquality().hash(_colors),
+        folderId,
+        sku
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -1570,15 +1898,21 @@ abstract class _Item implements Item {
       required final String name,
       @JsonKey(name: 'fabric_number') final String? fabricNumber,
       @JsonKey(name: 'shop_name') final String? shopName,
-      final int? width,
+      @JsonKey(name: 'party_name') final String? partyName,
+      final String? width,
       final String? gsm,
-      @JsonKey(name: 'kg_to_meter_ratio') final double? kgToMeterRatio,
-      final double? average,
-      final double? shortage,
+      @JsonKey(name: 'kg_to_meter_ratio') final String? kgToMeterRatio,
+      final String? average,
+      final String? shortage,
       final int? quantity,
       @JsonKey(name: 'unit_id') final int? unitId,
+      @JsonKey(name: 'avg_unit') final String? averageUnit,
+      @JsonKey(name: 'order_quantity') final String? orderQuantity,
+      @JsonKey(name: 'minimum_quantity') final int? minimumQuantity,
       @JsonKey(name: 'accessories_notes') final String? accessoriesNotes,
-      final int? folder_id,
+      final List<Image>? images,
+      final List<ColorModel>? colors,
+      @JsonKey(name: 'folder_id') final int? folderId,
       final String? sku}) = _$ItemImpl;
 
   factory _Item.fromJson(Map<String, dynamic> json) = _$ItemImpl.fromJson;
@@ -1594,30 +1928,253 @@ abstract class _Item implements Item {
   @JsonKey(name: 'shop_name')
   String? get shopName;
   @override
-  int? get width;
+  @JsonKey(name: 'party_name')
+  String? get partyName;
+  @override
+  String? get width;
   @override // made nullable
   String? get gsm;
   @override // made nullable
   @JsonKey(name: 'kg_to_meter_ratio')
-  double? get kgToMeterRatio;
+  String? get kgToMeterRatio;
   @override
-  double? get average;
+  String? get average;
   @override // made nullable
-  double? get shortage;
+  String? get shortage;
   @override // made nullable
   int? get quantity;
   @override // made nullable
   @JsonKey(name: 'unit_id')
   int? get unitId;
   @override
+  @JsonKey(name: 'avg_unit')
+  String? get averageUnit;
+  @override
+  @JsonKey(name: 'order_quantity')
+  String? get orderQuantity;
+  @override
+  @JsonKey(name: 'minimum_quantity')
+  int? get minimumQuantity;
+  @override
   @JsonKey(name: 'accessories_notes')
   String? get accessoriesNotes;
   @override
-  int? get folder_id;
+  List<Image>? get images;
+  @override
+  List<ColorModel>? get colors;
+  @override
+  @JsonKey(name: 'folder_id')
+  int? get folderId;
   @override
   String? get sku;
   @override
   @JsonKey(ignore: true)
   _$$ItemImplCopyWith<_$ItemImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ColorModel _$ColorModelFromJson(Map<String, dynamic> json) {
+  return _ColorModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ColorModel {
+  @JsonKey(name: 'color_id')
+  int? get colorId => throw _privateConstructorUsedError;
+  int get quantitys => throw _privateConstructorUsedError;
+  int get rolls => throw _privateConstructorUsedError;
+  int? get number => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ColorModelCopyWith<ColorModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ColorModelCopyWith<$Res> {
+  factory $ColorModelCopyWith(
+          ColorModel value, $Res Function(ColorModel) then) =
+      _$ColorModelCopyWithImpl<$Res, ColorModel>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'color_id') int? colorId,
+      int quantitys,
+      int rolls,
+      int? number});
+}
+
+/// @nodoc
+class _$ColorModelCopyWithImpl<$Res, $Val extends ColorModel>
+    implements $ColorModelCopyWith<$Res> {
+  _$ColorModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? colorId = freezed,
+    Object? quantitys = null,
+    Object? rolls = null,
+    Object? number = freezed,
+  }) {
+    return _then(_value.copyWith(
+      colorId: freezed == colorId
+          ? _value.colorId
+          : colorId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      quantitys: null == quantitys
+          ? _value.quantitys
+          : quantitys // ignore: cast_nullable_to_non_nullable
+              as int,
+      rolls: null == rolls
+          ? _value.rolls
+          : rolls // ignore: cast_nullable_to_non_nullable
+              as int,
+      number: freezed == number
+          ? _value.number
+          : number // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ColorModelImplCopyWith<$Res>
+    implements $ColorModelCopyWith<$Res> {
+  factory _$$ColorModelImplCopyWith(
+          _$ColorModelImpl value, $Res Function(_$ColorModelImpl) then) =
+      __$$ColorModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'color_id') int? colorId,
+      int quantitys,
+      int rolls,
+      int? number});
+}
+
+/// @nodoc
+class __$$ColorModelImplCopyWithImpl<$Res>
+    extends _$ColorModelCopyWithImpl<$Res, _$ColorModelImpl>
+    implements _$$ColorModelImplCopyWith<$Res> {
+  __$$ColorModelImplCopyWithImpl(
+      _$ColorModelImpl _value, $Res Function(_$ColorModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? colorId = freezed,
+    Object? quantitys = null,
+    Object? rolls = null,
+    Object? number = freezed,
+  }) {
+    return _then(_$ColorModelImpl(
+      colorId: freezed == colorId
+          ? _value.colorId
+          : colorId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      quantitys: null == quantitys
+          ? _value.quantitys
+          : quantitys // ignore: cast_nullable_to_non_nullable
+              as int,
+      rolls: null == rolls
+          ? _value.rolls
+          : rolls // ignore: cast_nullable_to_non_nullable
+              as int,
+      number: freezed == number
+          ? _value.number
+          : number // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ColorModelImpl implements _ColorModel {
+  const _$ColorModelImpl(
+      {@JsonKey(name: 'color_id') this.colorId,
+      required this.quantitys,
+      required this.rolls,
+      this.number = 0});
+
+  factory _$ColorModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ColorModelImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'color_id')
+  final int? colorId;
+  @override
+  final int quantitys;
+  @override
+  final int rolls;
+  @override
+  @JsonKey()
+  final int? number;
+
+  @override
+  String toString() {
+    return 'ColorModel(colorId: $colorId, quantitys: $quantitys, rolls: $rolls, number: $number)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ColorModelImpl &&
+            (identical(other.colorId, colorId) || other.colorId == colorId) &&
+            (identical(other.quantitys, quantitys) ||
+                other.quantitys == quantitys) &&
+            (identical(other.rolls, rolls) || other.rolls == rolls) &&
+            (identical(other.number, number) || other.number == number));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, colorId, quantitys, rolls, number);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ColorModelImplCopyWith<_$ColorModelImpl> get copyWith =>
+      __$$ColorModelImplCopyWithImpl<_$ColorModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ColorModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ColorModel implements ColorModel {
+  const factory _ColorModel(
+      {@JsonKey(name: 'color_id') final int? colorId,
+      required final int quantitys,
+      required final int rolls,
+      final int? number}) = _$ColorModelImpl;
+
+  factory _ColorModel.fromJson(Map<String, dynamic> json) =
+      _$ColorModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'color_id')
+  int? get colorId;
+  @override
+  int get quantitys;
+  @override
+  int get rolls;
+  @override
+  int? get number;
+  @override
+  @JsonKey(ignore: true)
+  _$$ColorModelImplCopyWith<_$ColorModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

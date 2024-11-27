@@ -84,7 +84,7 @@ class _AddUnitsScreenState extends State<AddUnitsScreen> {
                                                     child: Padding(
                                                       padding: const EdgeInsets.all(2.0),
                                                       child: Center(
-                                                        child: AppText('U',
+                                                        child: AppText(state.listOfUnits[index].name[0].toUpperCase(),
                                                             style: const TextStyle().defaultTextStyle(
                                                                 fontSize: 16, fontWeight: FontWeight.w600)),
                                                       ),
@@ -150,6 +150,7 @@ addTags(BuildContext context) {
       builder: (context) {
         return Dialog(
           child: Container(
+            constraints: const BoxConstraints(maxWidth: 400),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
