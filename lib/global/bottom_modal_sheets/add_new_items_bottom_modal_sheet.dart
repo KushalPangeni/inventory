@@ -12,6 +12,7 @@ class AddNewItemsBottomModalSheet {
   final bool canBuildItem;
   final bool canBuildFolder;
 
+
   AddNewItemsBottomModalSheet(this.context, this.folderId, {this.canBuildItem = true, this.canBuildFolder = true});
 
   showBottomSheet() {
@@ -31,11 +32,11 @@ class AddNewItemsBottomModalSheet {
                   children: [
                     Flexible(
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: AppText('Add Items and Folders',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                            style: const TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -108,7 +109,7 @@ Widget listTileAddFileFolder(Widget icon, String title) {
           children: [
             icon,
             const SizedBox(width: 20),
-            AppText(title, style: TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+            AppText(title, style: const TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600))
           ],
         ),
       ),

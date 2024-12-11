@@ -9,17 +9,17 @@ import 'package:inventory/network/api_request_state/api_request_state.dart';
 import 'package:inventory/network/exception.dart';
 import 'package:toastification/toastification.dart';
 
-class MoveReasonScreen extends StatefulWidget {
-  final folder_model.Folder selectedFolder;
+class ItemsMoveReasonScreen extends StatefulWidget {
+  final folder_model.Item selectedItem;
   final folder_model.Folder destinationFolder;
 
-  const MoveReasonScreen({super.key, required this.selectedFolder, required this.destinationFolder});
+  const ItemsMoveReasonScreen({super.key, required this.selectedItem, required this.destinationFolder});
 
   @override
-  State<MoveReasonScreen> createState() => _MoveReasonScreenState();
+  State<ItemsMoveReasonScreen> createState() => _ItemsMoveReasonScreenState();
 }
 
-class _MoveReasonScreenState extends State<MoveReasonScreen> {
+class _ItemsMoveReasonScreenState extends State<ItemsMoveReasonScreen> {
   ValueNotifier<String?> moveReason = ValueNotifier(null);
   TextEditingController noteController = TextEditingController(text: ' ');
 
@@ -63,7 +63,7 @@ class _MoveReasonScreenState extends State<MoveReasonScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  AppText(widget.selectedFolder.name,
+                  AppText(widget.selectedItem.name,
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   const AppText('  --->  '),
                   Padding(
@@ -144,11 +144,11 @@ class _MoveReasonScreenState extends State<MoveReasonScreen> {
                       if (reason == null || reason.trim().isEmpty) {
                         showToast(context, 'Invalid', 'Please Select Reason to Move', ToastificationType.warning);
                       } else {
-                        BlocProvider.of<FolderCubit>(context).moveFolder(context,
+                        /*BlocProvider.of<FolderCubit>(context).moveFolder(context,
                             reasonToMove: reason,
                             destinationFolderId: widget.destinationFolder.id,
-                            folderId: widget.selectedFolder.id,
-                            note: noteController.text);
+                            folderId: widget.selectedItem.id,
+                            note: noteController.text);*/
                       }
                     }),
               );

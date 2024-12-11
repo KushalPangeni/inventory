@@ -274,7 +274,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
                 ),
                 Table(
-                  children:  [
+                  children: [
                     TableRow(children: [
                       AppText('Color',
                           style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),

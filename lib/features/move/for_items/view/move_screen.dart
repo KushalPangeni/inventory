@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart' as folder_model;
-import 'package:inventory/features/move/view/move_reason_screen.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
-class MoveScreen extends StatefulWidget {
-  final folder_model.Folder selectedFolder;
+import 'move_quantity_screen.dart';
+
+class ItemsMoveScreen extends StatefulWidget {
+  final folder_model.Item selectedItem;
   final int? parentId;
 
-  const MoveScreen({super.key, required this.selectedFolder, this.parentId});
+  const ItemsMoveScreen({super.key, required this.selectedItem, this.parentId});
 
   @override
-  State<MoveScreen> createState() => _MoveScreenState();
+  State<ItemsMoveScreen> createState() => _ItemsMoveScreenState();
 }
 
-class _MoveScreenState extends State<MoveScreen> {
+class _ItemsMoveScreenState extends State<ItemsMoveScreen> {
   ValueNotifier<folder_model.Folder?> destinationFolder = ValueNotifier(null);
 
   @override
@@ -41,13 +42,13 @@ class _MoveScreenState extends State<MoveScreen> {
                     const SizedBox(width: 8),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
-                      child: Image.asset('assets/folder.png', height: 40, width: 40),
+                      child: Image.asset('assets/inventory.png', height: 40, width: 40),
                     ),
                     const SizedBox(width: 8),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        AppText(widget.selectedFolder.name,
+                        AppText(widget.selectedItem.name,
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 2),
                         /*const Row(
@@ -74,8 +75,7 @@ class _MoveScreenState extends State<MoveScreen> {
                   state.listOfFolders.length,
                   (index) => GestureDetector(
                     onTap: () {
-                      if (state.listOfFolders[index].id == widget.selectedFolder.id ||
-                          state.listOfFolders[index].id == widget.parentId) {
+                      if (state.listOfFolders[index].id == widget.parentId) {
                       } else {
                         destinationFolder.value = state.listOfFolders[index];
                       }
@@ -87,7 +87,7 @@ class _MoveScreenState extends State<MoveScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: state.listOfFolders[index].id == widget.selectedFolder.id ||
+                            color:
                                     state.listOfFolders[index].id == widget.parentId
                                 ? Colors.grey[100]
                                 : state.listOfFolders[index] == folder
@@ -130,9 +130,9 @@ class _MoveScreenState extends State<MoveScreen> {
                     Navigator.push(
                         context,
                         CupertinoPageRoute(
-                            builder: (context) => MoveReasonScreen(
+                            builder: (context) => ItemsMoveQuantityScreen(
                                   destinationFolder: destinationFolder.value!,
-                                  selectedFolder: widget.selectedFolder,
+                                  selectedItem: widget.selectedItem,
                                 )));
                   }),
             ),

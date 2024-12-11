@@ -14,8 +14,9 @@ class FolderItemMoreBottomModalSheet {
   final folder_model.Folder folder;
   final BuildContext context;
   final int folderId;
+  final int? parentFolderId;
 
-  FolderItemMoreBottomModalSheet(this.context, this.folder, this.folderId);
+  FolderItemMoreBottomModalSheet(this.context, this.folder, this.folderId, this.parentFolderId);
 
   showBottomSheet({String title = 'Folder/Item Name ;'}) {
     showModalBottomSheet(
@@ -58,14 +59,16 @@ class FolderItemMoreBottomModalSheet {
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.push(
-                          context, CupertinoPageRoute(builder: (context) => MoveScreen(selectedFolder: folder)));
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => MoveScreen(selectedFolder: folder, parentId: parentFolderId)));
                     },
                     child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.push(
-                          context, CupertinoPageRoute(builder: (context) =>  HistoryScreen(folderItemId: folderId)));
+                          context, CupertinoPageRoute(builder: (context) => HistoryScreen(folderItemId: folderId)));
                     },
                     child: listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History')),
                 listTileAddFileFolder(Image.asset('assets/export.png', height: 28), 'Export'),

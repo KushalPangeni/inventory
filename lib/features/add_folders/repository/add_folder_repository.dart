@@ -16,6 +16,8 @@ abstract class AddFolderRepository {
   EitherResponse getFolders({int? folderId});
 
   EitherResponse deleteFolders(int tagId);
+  EitherResponse getStats();
+
 
   EitherResponse moveFolder({required int folderId, required int destinationFolderId, required String reasonToMove,required String note});
 }

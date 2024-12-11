@@ -5,13 +5,13 @@ import 'package:inventory/global/widgets/app_text.dart';
 
 class FolderWidget extends StatelessWidget {
   final folder_model.Folder folder;
+  final int? parentFolderId;
 
-  const FolderWidget({super.key, required this.folder});
+  const FolderWidget({super.key, required this.folder, this.parentFolderId});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
       padding: const EdgeInsets.only(top: 5, left: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,6 +35,7 @@ class FolderWidget extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 AppText(
                   '000${folder.id}',
@@ -46,7 +47,6 @@ class FolderWidget extends StatelessWidget {
                     style: const TextStyle()
                         .defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 4),
-
                 AppText('${folder.totalUnits} / ${folder.totalPrice}',
                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500))
               ],
@@ -55,7 +55,7 @@ class FolderWidget extends StatelessWidget {
           //Menu
           IconButton(
               onPressed: () {
-                FolderItemMoreBottomModalSheet(context, folder, folder.id).showBottomSheet(title: folder.name);
+                FolderItemMoreBottomModalSheet(context, folder, folder.id,parentFolderId).showBottomSheet(title: folder.name);
               },
               icon: const Icon(Icons.more_vert_rounded))
         ],

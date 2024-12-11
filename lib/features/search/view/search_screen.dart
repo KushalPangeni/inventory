@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
 import 'package:inventory/features/add_items/widgets/add_colors_list_widget.dart';
 import 'package:inventory/features/search/cubit/search_cubit.dart';
 import 'package:inventory/global/bottom_modal_sheets/folder_item_more_bottom_modal_sheet.dart';
@@ -8,6 +9,7 @@ import 'package:inventory/global/widgets/folder_widget.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart' as folder_model;
 
 import '../model/search_response_model.dart';
+import 'more_bottom_sheet.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -106,8 +108,8 @@ class SearchFolderWidget extends StatelessWidget {
           //Menu
           IconButton(
               onPressed: () {
-                // FolderItemMoreBottomModalSheet(context, folder as folder_model.Folder, folder.id)
-                //     .showBottomSheet(title: folder.name ?? '');
+                BlocProvider.of<FolderCubit>(context).getFolders(folderId: folder.id);
+                SearchFolderItemMoreBottomModalSheet(context, folder.id).showBottomSheet(title: folder.name ?? '');
               },
               icon: const Icon(Icons.more_vert_rounded))
         ],

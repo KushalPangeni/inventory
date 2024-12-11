@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart';
-import 'package:inventory/features/add_items/view/item_list_screen.dart';
-import 'package:inventory/global/bottom_modal_sheets/folder_item_more_bottom_modal_sheet.dart';
 import 'package:inventory/global/bottom_modal_sheets/item_more_bottom_sheet.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 

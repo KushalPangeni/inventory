@@ -11,6 +11,7 @@ class FolderState with _$FolderState {
     @Default('') String folderName,
     @Default([]) List<Tag> foldersTag,
     @Default('') String folderDescription,
+    Stats? stats,
     @Default('') String folderImage,
   }) = _FolderState;
 }

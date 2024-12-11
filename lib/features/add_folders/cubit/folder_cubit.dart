@@ -7,11 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart';
+import 'package:inventory/features/add_folders/model/stats_response_model.dart';
 import 'package:inventory/features/add_folders/repository/add_folder_repository.dart';
 import 'package:inventory/features/tags/model/tag_model.dart';
-import 'package:inventory/folders_list_screen.dart';
 import 'package:inventory/global/widgets/app_text.dart';
-import 'package:inventory/home_screen.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
 import 'package:inventory/network/exception.dart';
 import 'package:toastification/toastification.dart';
@@ -56,6 +55,17 @@ class FolderCubit extends Cubit<FolderState> {
     }
 
     return folder;
+  }
+
+  getStats() async {
+    var response = await repository.getStats();
+    response.fold((l) {
+      emit(state.copyWith(status: const ErrorState()));
+      log('Get Folders === > $l');
+    }, (r) {
+      log('Stats === > ${r.data}');
+      emit(state.copyWith(stats: r.data.result));
+    });
   }
 
   addFolders(BuildContext context,

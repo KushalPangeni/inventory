@@ -58,9 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 icon,
+                const SizedBox(height: 8),
                 AppText(
                   label,
-                  style: TextStyle()
+                  style: const TextStyle()
                       .defaultTextStyle(fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.w400),
                 )
               ],

@@ -28,8 +28,6 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
   @override
   void initState() {
     super.initState();
-    // folderNotifier = ValueNotifier(widget.folder);
-    // folderNotifier.value = widget.folder;
     getFoldersUsingId();
     // callApi();
   }
@@ -116,6 +114,7 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
                                         color: Colors.transparent,
                                         child: FolderWidget(
                                           folder: folder.subFolders[index],
+                                          parentFolderId: widget.folder.id,
                                         ),
                                       ),
                                     ),

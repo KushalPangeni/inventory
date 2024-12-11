@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart';
+import 'package:inventory/features/add_folders/model/stats_response_model.dart';
 import 'package:inventory/features/add_folders/repository/add_folder_repository.dart';
 import 'package:inventory/network/api_service.dart';
 import 'package:inventory/network/request.dart';
@@ -101,4 +102,9 @@ class AddFolderRepositoryImpl implements AddFolderRepository {
     return await _client.handleNetworkCall(request);
   }
 
+  @override
+  EitherResponse getStats() async {
+    var request = _client.get(endPoint: Request.createUrl('api/stat'));
+    return await _client.handleNetworkCall(request, StatsResponseModel.fromJson);
+  }
 }
