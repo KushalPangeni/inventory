@@ -18,9 +18,8 @@ class _FolderSummaryTopBarState extends State<FolderSummaryTopBar> {
     fetchStatistics();
   }
 
-  fetchStatistics()async{
+  fetchStatistics() async {
     BlocProvider.of<FolderCubit>(context).getStats();
-
   }
 
   @override
@@ -32,8 +31,10 @@ class _FolderSummaryTopBarState extends State<FolderSummaryTopBar> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                nameQuantity('Folders', state.stats != null ? state.stats!.folder.toString() : '-'),
-                nameQuantity('Items', state.stats != null ? state.stats!.item.toString() : '-'),
+                nameQuantity('Folders',
+                    state.stats != null ? state.stats!.folder.toString() : '-'),
+                nameQuantity('Items',
+                    state.stats != null ? state.stats!.item.toString() : '-'),
                 nameQuantity('Total Qty', '- units'),
                 nameQuantity('Total value', '-'),
               ],
@@ -47,8 +48,14 @@ class _FolderSummaryTopBarState extends State<FolderSummaryTopBar> {
   Widget nameQuantity(String title, String quantity) {
     return Column(
       children: [
-        Text(title, style: const TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-        Text(quantity, style: const TextStyle().defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w700))
+        Text(title,
+            style: const TextStyle()
+                .defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 4),
+        Text(quantity,
+            style: const TextStyle()
+                .defaultTextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 4),
       ],
     );
   }

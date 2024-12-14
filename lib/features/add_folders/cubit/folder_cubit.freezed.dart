@@ -24,6 +24,7 @@ mixin _$FolderState {
   ApiRequestState<dynamic>? get moveStatus =>
       throw _privateConstructorUsedError;
   List<Folder> get listOfFolders => throw _privateConstructorUsedError;
+  List<Item> get listOfItems => throw _privateConstructorUsedError;
   String get folderName => throw _privateConstructorUsedError;
   List<Tag> get foldersTag => throw _privateConstructorUsedError;
   String get folderDescription => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $FolderStateCopyWith<$Res> {
       ApiRequestState<dynamic>? uploadStatus,
       ApiRequestState<dynamic>? moveStatus,
       List<Folder> listOfFolders,
+      List<Item> listOfItems,
       String folderName,
       List<Tag> foldersTag,
       String folderDescription,
@@ -78,6 +80,7 @@ class _$FolderStateCopyWithImpl<$Res, $Val extends FolderState>
     Object? uploadStatus = freezed,
     Object? moveStatus = freezed,
     Object? listOfFolders = null,
+    Object? listOfItems = null,
     Object? folderName = null,
     Object? foldersTag = null,
     Object? folderDescription = null,
@@ -105,6 +108,10 @@ class _$FolderStateCopyWithImpl<$Res, $Val extends FolderState>
           ? _value.listOfFolders
           : listOfFolders // ignore: cast_nullable_to_non_nullable
               as List<Folder>,
+      listOfItems: null == listOfItems
+          ? _value.listOfItems
+          : listOfItems // ignore: cast_nullable_to_non_nullable
+              as List<Item>,
       folderName: null == folderName
           ? _value.folderName
           : folderName // ignore: cast_nullable_to_non_nullable
@@ -205,6 +212,7 @@ abstract class _$$FolderStateImplCopyWith<$Res>
       ApiRequestState<dynamic>? uploadStatus,
       ApiRequestState<dynamic>? moveStatus,
       List<Folder> listOfFolders,
+      List<Item> listOfItems,
       String folderName,
       List<Tag> foldersTag,
       String folderDescription,
@@ -239,6 +247,7 @@ class __$$FolderStateImplCopyWithImpl<$Res>
     Object? uploadStatus = freezed,
     Object? moveStatus = freezed,
     Object? listOfFolders = null,
+    Object? listOfItems = null,
     Object? folderName = null,
     Object? foldersTag = null,
     Object? folderDescription = null,
@@ -266,6 +275,10 @@ class __$$FolderStateImplCopyWithImpl<$Res>
           ? _value._listOfFolders
           : listOfFolders // ignore: cast_nullable_to_non_nullable
               as List<Folder>,
+      listOfItems: null == listOfItems
+          ? _value._listOfItems
+          : listOfItems // ignore: cast_nullable_to_non_nullable
+              as List<Item>,
       folderName: null == folderName
           ? _value.folderName
           : folderName // ignore: cast_nullable_to_non_nullable
@@ -299,12 +312,14 @@ class _$FolderStateImpl implements _FolderState {
       this.uploadStatus = const InitialState(),
       this.moveStatus = const InitialState(),
       final List<Folder> listOfFolders = const [],
+      final List<Item> listOfItems = const [],
       this.folderName = '',
       final List<Tag> foldersTag = const [],
       this.folderDescription = '',
       this.stats,
       this.folderImage = ''})
       : _listOfFolders = listOfFolders,
+        _listOfItems = listOfItems,
         _foldersTag = foldersTag;
 
   @override
@@ -326,6 +341,15 @@ class _$FolderStateImpl implements _FolderState {
     if (_listOfFolders is EqualUnmodifiableListView) return _listOfFolders;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_listOfFolders);
+  }
+
+  final List<Item> _listOfItems;
+  @override
+  @JsonKey()
+  List<Item> get listOfItems {
+    if (_listOfItems is EqualUnmodifiableListView) return _listOfItems;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_listOfItems);
   }
 
   @override
@@ -351,7 +375,7 @@ class _$FolderStateImpl implements _FolderState {
 
   @override
   String toString() {
-    return 'FolderState(status: $status, folderIdStatus: $folderIdStatus, uploadStatus: $uploadStatus, moveStatus: $moveStatus, listOfFolders: $listOfFolders, folderName: $folderName, foldersTag: $foldersTag, folderDescription: $folderDescription, stats: $stats, folderImage: $folderImage)';
+    return 'FolderState(status: $status, folderIdStatus: $folderIdStatus, uploadStatus: $uploadStatus, moveStatus: $moveStatus, listOfFolders: $listOfFolders, listOfItems: $listOfItems, folderName: $folderName, foldersTag: $foldersTag, folderDescription: $folderDescription, stats: $stats, folderImage: $folderImage)';
   }
 
   @override
@@ -368,6 +392,8 @@ class _$FolderStateImpl implements _FolderState {
                 other.moveStatus == moveStatus) &&
             const DeepCollectionEquality()
                 .equals(other._listOfFolders, _listOfFolders) &&
+            const DeepCollectionEquality()
+                .equals(other._listOfItems, _listOfItems) &&
             (identical(other.folderName, folderName) ||
                 other.folderName == folderName) &&
             const DeepCollectionEquality()
@@ -387,6 +413,7 @@ class _$FolderStateImpl implements _FolderState {
       uploadStatus,
       moveStatus,
       const DeepCollectionEquality().hash(_listOfFolders),
+      const DeepCollectionEquality().hash(_listOfItems),
       folderName,
       const DeepCollectionEquality().hash(_foldersTag),
       folderDescription,
@@ -407,6 +434,7 @@ abstract class _FolderState implements FolderState {
       final ApiRequestState<dynamic>? uploadStatus,
       final ApiRequestState<dynamic>? moveStatus,
       final List<Folder> listOfFolders,
+      final List<Item> listOfItems,
       final String folderName,
       final List<Tag> foldersTag,
       final String folderDescription,
@@ -423,6 +451,8 @@ abstract class _FolderState implements FolderState {
   ApiRequestState<dynamic>? get moveStatus;
   @override
   List<Folder> get listOfFolders;
+  @override
+  List<Item> get listOfItems;
   @override
   String get folderName;
   @override

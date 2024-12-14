@@ -124,6 +124,7 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
                                     itemCount: folder.items.length,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) => ItemWidget(
+                                      folderId: folder.id,
                                       item: folder.items[index],
                                     ),
                                   ),

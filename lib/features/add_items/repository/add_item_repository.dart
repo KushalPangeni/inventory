@@ -24,6 +24,8 @@ abstract class AddItemRepository {
 
   EitherResponse getItems();
 
+  EitherResponse getItemsById(int itemId);
+
   EitherResponse editItems(List<MultipartFile> listOfFiles,
       {required String itemName,
       required String fabricNumber,
@@ -45,5 +47,8 @@ abstract class AddItemRepository {
       required List listOfColors,
       required String sku});
 
-  EitherResponse deleteItems(int tagId);
+  EitherResponse deleteItems(int itemId);
+
+  EitherResponse deleteImages({required int deletedId});
+
 }

@@ -1,19 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart';
 import 'package:inventory/global/bottom_modal_sheets/item_more_bottom_sheet.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
 class ItemWidget extends StatelessWidget {
+  final int folderId;
   final Item item;
 
-  const ItemWidget({super.key, required this.item});
+  const ItemWidget({super.key, required this.item, required this.folderId});
 
   @override
   Widget build(BuildContext context) {
-    log('Party Name is ==> onPressed ${item.partyName}');
-
     return Container(
       height: 90,
       padding: const EdgeInsets.only(top: 5, left: 16),
@@ -43,12 +40,13 @@ class ItemWidget extends StatelessWidget {
                   '000${item.id}',
                   style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                 ),
+                const SizedBox(height: 4),
                 AppText(item.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
-                AppText('${item.fabricNumber ?? 'No fabric number'} / ${item.name}',
+                AppText('${item.fabricNumber ?? 'No fabric number'} / ${item.quantity}',
                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500))
               ],
             ),
@@ -56,7 +54,7 @@ class ItemWidget extends StatelessWidget {
           //Menu
           IconButton(
               onPressed: () {
-                ItemMoreBottomModalSheet(context, item.id, item).showBottomSheet(title: item.name);
+                ItemMoreBottomModalSheet(context, item.id, folderId).showBottomSheet(title: item.name);
               },
               icon: const Icon(Icons.more_vert_rounded))
         ],

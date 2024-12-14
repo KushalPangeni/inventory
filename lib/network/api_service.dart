@@ -70,6 +70,11 @@ class DioClient {
             }
             handler.next(error);
           } else if (error.response?.statusCode == 500 || error.response?.statusCode == 502) {
+            handleApiResponse(Response(
+              requestOptions: RequestOptions(),
+              statusCode: 500,
+              statusMessage: "Internal Server Error",
+            ));
             handler.reject(error);
           } else {
             handleApiResponse(error.response!, error.response!.requestOptions.path);
@@ -211,6 +216,8 @@ class DioClient {
       }
     } catch (e) {
       if (e is DioException) {
+        handleApiResponse(e.response!);
+
         log('Message Exception 5 ==> ${e.message}');
         if (e.type == DioExceptionType.connectionError) {
           return Left(DataResponse.error('No Internet Connection'));

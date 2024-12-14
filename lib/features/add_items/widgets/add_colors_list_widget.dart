@@ -250,6 +250,12 @@ Widget customTextField(
       minLines: 1,
       maxLines: maxLines,
       controller: controller,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'This field cannot be empty.';
+        }
+        return null;
+      },
       onTapOutside: (a){
         KeyboardUtils().hideKeyBoard();
       },

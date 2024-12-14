@@ -30,6 +30,9 @@ class AddFolderScreen extends StatefulWidget {
 class _AddFolderScreenState extends State<AddFolderScreen> {
   ValueNotifier<List<File>> listOfImages = ValueNotifier([]);
   ValueNotifier<List<folder_model.Image>> listOfUrlImages = ValueNotifier([]);
+  final _formKey = GlobalKey<FormState>();
+  List<int> deletedImagesId = [];
+
 
   updateListOfImages(List<File> pickedImages) {
     listOfImages.value = [...listOfImages.value, ...pickedImages];
@@ -42,6 +45,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
   @override
   void initState() {
     super.initState();
+    deletedImagesId = [];
     if (widget.isEditScreen && widget.folder != null) {
       listOfUrlImages.value = widget.folder!.images ?? listOfUrlImages.value;
 
@@ -55,7 +59,6 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log('Add folder ==> Id is ${widget.folderId}');
     var bloc = BlocProvider.of<FolderCubit>(context);
     return PopScope(
       canPop: true,
@@ -77,95 +80,112 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ValueListenableBuilder(
-                        valueListenable: listOfImages,
-                        builder: (context, list, _) {
-                          return AddImageButton(
-                              onTap: () {
-                                showBottomSheet(context);
-                              },
-                              isEditScreen: false,
-                              onDelete: (a) {},
-                              isFromDraftScreen: false,
-                              listOfImages: listOfImages.value,
-                              listOfUrlImages: listOfUrlImages.value);
-                        }),
-                    const SizedBox(height: 16),
-                    //Name
-                    AppText('Folder Name',
-                        style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                    customTextField(
-                        hintText: 'Enter Folder Name',
-                        inputType: TextInputType.text,
-                        controller: bloc.folderNameController,
-                        onTyped: (s) {}),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ValueListenableBuilder(
+                        valueListenable: listOfUrlImages,
+                        builder: (context, listOfUrl, _) => ValueListenableBuilder(
+                            valueListenable: listOfImages,
+                            builder: (context, list, _) {
+                              return AddImageButton(
+                                onTap: () {
+                                  showBottomSheet(context);
+                                },
+                                isEditScreen: false,
+                                onDeleteNetworkImage: (a,deletedId) {
+                                  deletedImagesId.add(deletedId);
+                                  List<folder_model.Image> images = List.from(listOfUrlImages.value);
+                                  images.removeAt(a);
+                                  listOfUrlImages.value = images;
+                                },
+                                onDelete: (a) {
+                                  listOfImages.value.removeAt(a);
+                                  listOfImages.value = List.from(listOfImages.value); // Trigger rebuild
+                                },
+                                isFromDraftScreen: false,
+                                listOfImages: listOfImages.value,
+                                listOfUrlImages: listOfUrlImages.value,
+                              );
+                            }),
+                      ),
 
-                    //Tags
-                    AppText('Tags',
-                        style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            CupertinoPageRoute(builder: (context) => const AddTagsScreen(saveToFolderTag: true)));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: const Color(0xFFE4E4E7), width: 1.0),
-                          ),
-                          child: state.foldersTag.isEmpty
-                              ? Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(16.0),
-                                    child: AppText('Select Tag',
-                                        style: const TextStyle()
-                                            .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                                  ),
-                                )
-                              : Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Wrap(
-                                      runSpacing: 4,
-                                      spacing: 4,
-                                      crossAxisAlignment: WrapCrossAlignment.center,
-                                      children: [
-                                        ...List.generate(
-                                          state.foldersTag.length,
-                                          (index) => ChipWidget(
-                                            text: state.foldersTag[index].name,
-                                            onSelected: (s) {},
-                                          ),
-                                        )
-                                      ],
+                      const SizedBox(height: 16),
+                      //Name
+                      AppText('Folder Name',
+                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      customTextField(
+                          hintText: 'Enter Folder Name',
+                          inputType: TextInputType.text,
+                          controller: bloc.folderNameController,
+                          onTyped: (s) {}),
+
+                      //Tags
+                      AppText('Tags',
+                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              CupertinoPageRoute(builder: (context) => const AddTagsScreen(saveToFolderTag: true)));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: const Color(0xFFE4E4E7), width: 1.0),
+                            ),
+                            child: state.foldersTag.isEmpty
+                                ? Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: AppText('Select Tag',
+                                          style: const TextStyle()
+                                              .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                                    ),
+                                  )
+                                : Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Wrap(
+                                        runSpacing: 4,
+                                        spacing: 4,
+                                        crossAxisAlignment: WrapCrossAlignment.center,
+                                        children: [
+                                          ...List.generate(
+                                            state.foldersTag.length,
+                                            (index) => ChipWidget(
+                                              text: state.foldersTag[index].name,
+                                              onSelected: (s) {},
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
+                          ),
                         ),
                       ),
-                    ),
 
-                    //Description
-                    AppText('Description',
-                        style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                    customTextField(
-                        hintText: 'Enter Description',
-                        inputType: TextInputType.text,
-                        controller: bloc.folderDescriptionController,
-                        maxLines: 5,
-                        onTyped: (s) {
-                          // bloc.setFolderDetails(folderDescription: s);
-                        }),
-                  ],
+                      //Description
+                      AppText('Description',
+                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      customTextField(
+                          hintText: 'Enter Description',
+                          inputType: TextInputType.text,
+                          controller: bloc.folderDescriptionController,
+                          maxLines: 5,
+                          onTyped: (s) {
+                            // bloc.setFolderDetails(folderDescription: s);
+                          }),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -195,28 +215,30 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                           title: widget.isEditScreen ? 'Update' : 'Save',
                           color: Colors.orangeAccent,
                           onPressed: () {
-                            if (bloc.folderNameController.text.trim().isNotEmpty &&
-                                bloc.folderDescriptionController.text.trim().isNotEmpty) {
-                              if (state.uploadStatus is! LoadingState) {
-                                if (widget.isEditScreen) {
-                                  log('Is Edit Screen');
-                                  BlocProvider.of<FolderCubit>(context)
-                                      .editFolders(context, images: listOfImages.value, folderId: widget.folderId!);
-                                } else {
-                                  BlocProvider.of<FolderCubit>(context).addFolders(context,
-                                      listOfFiles: listOfImages.value, parentFolderId: widget.folderId);
+                            if (_formKey.currentState!.validate()) {
+                              if (bloc.folderNameController.text.trim().isNotEmpty &&
+                                  bloc.folderDescriptionController.text.trim().isNotEmpty) {
+                                if (state.uploadStatus is! LoadingState) {
+                                  if (widget.isEditScreen) {
+                                    log('Is Edit Screen');
+                                    BlocProvider.of<FolderCubit>(context)
+                                        .editFolders(context, images: listOfImages.value, folderId: widget.folderId!);
+                                  } else {
+                                    BlocProvider.of<FolderCubit>(context).addFolders(context,
+                                        listOfFiles: listOfImages.value, parentFolderId: widget.folderId);
+                                  }
                                 }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    elevation: 10,
+                                    backgroundColor: Colors.white,
+                                    duration: const Duration(milliseconds: 800),
+                                    content: AppText(
+                                      'Folder Name and Description is required.',
+                                      maxLines: 2,
+                                      style: const TextStyle().defaultTextStyle(color: Colors.red),
+                                    )));
                               }
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  elevation: 10,
-                                  backgroundColor: Colors.white,
-                                  duration: const Duration(milliseconds: 800),
-                                  content: AppText(
-                                    'Folder Name and Description is required.',
-                                    maxLines: 2,
-                                    style: const TextStyle().defaultTextStyle(color: Colors.red),
-                                  )));
                             }
                           })),
                 ],
@@ -241,11 +263,13 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Flexible(
+                    Flexible(
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: AppText('Pick Images',
-                            maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 18)),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                       ),
                     ),
                     const SizedBox(width: 12),

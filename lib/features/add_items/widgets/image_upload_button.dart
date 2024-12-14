@@ -1,16 +1,15 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart' as folder_model;
-import 'package:inventory/network/api_url.dart';
 
 import 'dotted_container.dart';
 
 class AddImageButton extends StatelessWidget {
   final VoidCallback onTap;
   final Function(int) onDelete;
+  final Function(int,int) onDeleteNetworkImage;
   final bool isEditScreen;
   final bool isFromDraftScreen;
   final List<File> listOfImages;
@@ -23,7 +22,7 @@ class AddImageButton extends StatelessWidget {
       required this.onDelete,
       required this.isFromDraftScreen,
       required this.listOfImages,
-      required this.listOfUrlImages});
+      required this.listOfUrlImages, required this.onDeleteNetworkImage});
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +116,9 @@ class AddImageButton extends StatelessWidget {
                                         Positioned(
                                           right: 0,
                                           child: GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              onDelete(index);
+                                            },
                                             child: const Icon(Icons.delete, color: Colors.red),
                                           ),
                                         ),
@@ -163,7 +164,9 @@ class AddImageButton extends StatelessWidget {
                                         Positioned(
                                           right: 0,
                                           child: GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              onDeleteNetworkImage(index,listOfUrlImages[index].id);
+                                            },
                                             child: const Icon(Icons.delete, color: Colors.red),
                                           ),
                                         ),

@@ -215,6 +215,191 @@ abstract class _ItemModelResponse implements ItemModelResponse {
       throw _privateConstructorUsedError;
 }
 
+ItemOnlyModel _$ItemOnlyModelFromJson(Map<String, dynamic> json) {
+  return _ItemOnlyModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ItemOnlyModel {
+  Item get result => throw _privateConstructorUsedError;
+  String get message => throw _privateConstructorUsedError;
+  int get status => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ItemOnlyModelCopyWith<ItemOnlyModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ItemOnlyModelCopyWith<$Res> {
+  factory $ItemOnlyModelCopyWith(
+          ItemOnlyModel value, $Res Function(ItemOnlyModel) then) =
+      _$ItemOnlyModelCopyWithImpl<$Res, ItemOnlyModel>;
+  @useResult
+  $Res call({Item result, String message, int status});
+
+  $ItemCopyWith<$Res> get result;
+}
+
+/// @nodoc
+class _$ItemOnlyModelCopyWithImpl<$Res, $Val extends ItemOnlyModel>
+    implements $ItemOnlyModelCopyWith<$Res> {
+  _$ItemOnlyModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? result = null,
+    Object? message = null,
+    Object? status = null,
+  }) {
+    return _then(_value.copyWith(
+      result: null == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Item,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ItemCopyWith<$Res> get result {
+    return $ItemCopyWith<$Res>(_value.result, (value) {
+      return _then(_value.copyWith(result: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$ItemOnlyModelImplCopyWith<$Res>
+    implements $ItemOnlyModelCopyWith<$Res> {
+  factory _$$ItemOnlyModelImplCopyWith(
+          _$ItemOnlyModelImpl value, $Res Function(_$ItemOnlyModelImpl) then) =
+      __$$ItemOnlyModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({Item result, String message, int status});
+
+  @override
+  $ItemCopyWith<$Res> get result;
+}
+
+/// @nodoc
+class __$$ItemOnlyModelImplCopyWithImpl<$Res>
+    extends _$ItemOnlyModelCopyWithImpl<$Res, _$ItemOnlyModelImpl>
+    implements _$$ItemOnlyModelImplCopyWith<$Res> {
+  __$$ItemOnlyModelImplCopyWithImpl(
+      _$ItemOnlyModelImpl _value, $Res Function(_$ItemOnlyModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? result = null,
+    Object? message = null,
+    Object? status = null,
+  }) {
+    return _then(_$ItemOnlyModelImpl(
+      result: null == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Item,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ItemOnlyModelImpl implements _ItemOnlyModel {
+  const _$ItemOnlyModelImpl(
+      {required this.result, required this.message, required this.status});
+
+  factory _$ItemOnlyModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ItemOnlyModelImplFromJson(json);
+
+  @override
+  final Item result;
+  @override
+  final String message;
+  @override
+  final int status;
+
+  @override
+  String toString() {
+    return 'ItemOnlyModel(result: $result, message: $message, status: $status)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ItemOnlyModelImpl &&
+            (identical(other.result, result) || other.result == result) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.status, status) || other.status == status));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, result, message, status);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ItemOnlyModelImplCopyWith<_$ItemOnlyModelImpl> get copyWith =>
+      __$$ItemOnlyModelImplCopyWithImpl<_$ItemOnlyModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ItemOnlyModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ItemOnlyModel implements ItemOnlyModel {
+  const factory _ItemOnlyModel(
+      {required final Item result,
+      required final String message,
+      required final int status}) = _$ItemOnlyModelImpl;
+
+  factory _ItemOnlyModel.fromJson(Map<String, dynamic> json) =
+      _$ItemOnlyModelImpl.fromJson;
+
+  @override
+  Item get result;
+  @override
+  String get message;
+  @override
+  int get status;
+  @override
+  @JsonKey(ignore: true)
+  _$$ItemOnlyModelImplCopyWith<_$ItemOnlyModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 FolderOnlyModel _$FolderOnlyModelFromJson(Map<String, dynamic> json) {
   return _FolderOnlyModel.fromJson(json);
 }
@@ -1392,7 +1577,7 @@ mixin _$Item {
   @JsonKey(name: 'order_quantity')
   String? get orderQuantity => throw _privateConstructorUsedError;
   @JsonKey(name: 'minimum_quantity')
-  int? get minimumQuantity => throw _privateConstructorUsedError;
+  String? get minimumQuantity => throw _privateConstructorUsedError;
   @JsonKey(name: 'accessories_notes')
   String? get accessoriesNotes => throw _privateConstructorUsedError;
   List<Image>? get images => throw _privateConstructorUsedError;
@@ -1426,7 +1611,7 @@ abstract class $ItemCopyWith<$Res> {
       @JsonKey(name: 'unit_id') int? unitId,
       @JsonKey(name: 'avg_unit') String? averageUnit,
       @JsonKey(name: 'order_quantity') String? orderQuantity,
-      @JsonKey(name: 'minimum_quantity') int? minimumQuantity,
+      @JsonKey(name: 'minimum_quantity') String? minimumQuantity,
       @JsonKey(name: 'accessories_notes') String? accessoriesNotes,
       List<Image>? images,
       List<ColorModel>? colors,
@@ -1528,7 +1713,7 @@ class _$ItemCopyWithImpl<$Res, $Val extends Item>
       minimumQuantity: freezed == minimumQuantity
           ? _value.minimumQuantity
           : minimumQuantity // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       accessoriesNotes: freezed == accessoriesNotes
           ? _value.accessoriesNotes
           : accessoriesNotes // ignore: cast_nullable_to_non_nullable
@@ -1575,7 +1760,7 @@ abstract class _$$ItemImplCopyWith<$Res> implements $ItemCopyWith<$Res> {
       @JsonKey(name: 'unit_id') int? unitId,
       @JsonKey(name: 'avg_unit') String? averageUnit,
       @JsonKey(name: 'order_quantity') String? orderQuantity,
-      @JsonKey(name: 'minimum_quantity') int? minimumQuantity,
+      @JsonKey(name: 'minimum_quantity') String? minimumQuantity,
       @JsonKey(name: 'accessories_notes') String? accessoriesNotes,
       List<Image>? images,
       List<ColorModel>? colors,
@@ -1674,7 +1859,7 @@ class __$$ItemImplCopyWithImpl<$Res>
       minimumQuantity: freezed == minimumQuantity
           ? _value.minimumQuantity
           : minimumQuantity // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       accessoriesNotes: freezed == accessoriesNotes
           ? _value.accessoriesNotes
           : accessoriesNotes // ignore: cast_nullable_to_non_nullable
@@ -1716,8 +1901,8 @@ class _$ItemImpl implements _Item {
       this.quantity = 0,
       @JsonKey(name: 'unit_id') this.unitId = 0,
       @JsonKey(name: 'avg_unit') this.averageUnit = '',
-      @JsonKey(name: 'order_quantity') this.orderQuantity = '0',
-      @JsonKey(name: 'minimum_quantity') this.minimumQuantity = 0,
+      @JsonKey(name: 'order_quantity') this.orderQuantity = '',
+      @JsonKey(name: 'minimum_quantity') this.minimumQuantity = '',
       @JsonKey(name: 'accessories_notes') this.accessoriesNotes = '',
       final List<Image>? images = const [],
       final List<ColorModel>? colors = const [],
@@ -1776,7 +1961,7 @@ class _$ItemImpl implements _Item {
   final String? orderQuantity;
   @override
   @JsonKey(name: 'minimum_quantity')
-  final int? minimumQuantity;
+  final String? minimumQuantity;
   @override
   @JsonKey(name: 'accessories_notes')
   final String? accessoriesNotes;
@@ -1908,7 +2093,7 @@ abstract class _Item implements Item {
       @JsonKey(name: 'unit_id') final int? unitId,
       @JsonKey(name: 'avg_unit') final String? averageUnit,
       @JsonKey(name: 'order_quantity') final String? orderQuantity,
-      @JsonKey(name: 'minimum_quantity') final int? minimumQuantity,
+      @JsonKey(name: 'minimum_quantity') final String? minimumQuantity,
       @JsonKey(name: 'accessories_notes') final String? accessoriesNotes,
       final List<Image>? images,
       final List<ColorModel>? colors,
@@ -1954,7 +2139,7 @@ abstract class _Item implements Item {
   String? get orderQuantity;
   @override
   @JsonKey(name: 'minimum_quantity')
-  int? get minimumQuantity;
+  String? get minimumQuantity;
   @override
   @JsonKey(name: 'accessories_notes')
   String? get accessoriesNotes;

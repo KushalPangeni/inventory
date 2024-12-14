@@ -9,6 +9,8 @@ import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart';
 import 'package:inventory/features/add_items/model/color_model.dart';
 import 'package:inventory/features/add_items/repository/add_item_repository.dart';
+
+// import 'package:inventory/features/search/model/search_response_model.dart';
 import 'package:inventory/features/tags/cubit/tags_cubit.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
 
@@ -28,6 +30,7 @@ class AddItemCubit extends Cubit<AddItemState> {
   TextEditingController widthController = TextEditingController();
   TextEditingController gsmController = TextEditingController();
   TextEditingController orderQuantityController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
   TextEditingController minQuantityController = TextEditingController();
   TextEditingController oneKgController = TextEditingController();
   TextEditingController averageController = TextEditingController();
@@ -35,11 +38,14 @@ class AddItemCubit extends Cubit<AddItemState> {
   TextEditingController shortageController = TextEditingController();
   TextEditingController notesController = TextEditingController();
 
+  Item? editItem;
+
   initializeTextController() {
     itemNameController.text = '';
     fabricNumberController.text = '';
     partyNameController.text = '';
     orderQuantityController.text = '';
+    quantityController.text = '';
     shortageController.text = '0';
     shopNameController.text = '';
     widthController.text = '0';
@@ -58,6 +64,7 @@ class AddItemCubit extends Cubit<AddItemState> {
     partyNameController.text = item.partyName ?? '';
     shortageController.text = item.shortage.toString() ?? '0';
     orderQuantityController.text = item.orderQuantity ?? '';
+    quantityController.text = item.quantity.toString() ?? '';
     shopNameController.text = item.shopName ?? '';
     widthController.text = item.width.toString();
     gsmController.text = item.gsm.toString();
@@ -70,14 +77,19 @@ class AddItemCubit extends Cubit<AddItemState> {
     if (item.colors != null && item.colors!.isNotEmpty) {
       colorsList = item.colors!
           .map((color) =>
-              ColorModelF(colorId: color.colorId, number: color.number, quantity: color.quantitys, roll: color.rolls))
+          ColorModelF(
+              colorId: color.colorId,
+              number: color.number,
+              quantity: color.quantitys,
+              roll: color.rolls))
           .toList();
     }
     emit(state.copyWith(colorList: colorsList));
   }
 
   getItems({bool showLoading = true}) async {
-    emit(state.copyWith(status: showLoading ? const LoadingState() : const InitialState()));
+    emit(state.copyWith(
+        status: showLoading ? const LoadingState() : const InitialState()));
     var response = await repository.getItems();
     response.fold((l) {
       emit(state.copyWith(status: const ErrorState()));
@@ -85,26 +97,51 @@ class AddItemCubit extends Cubit<AddItemState> {
     }, (r) {
       log('Get Items === > ${r.data}');
       ItemModelResponse itemModelResponse = r.data;
-      emit(state.copyWith(status: const LoadedState(), listOfItems: itemModelResponse.result));
+      emit(state.copyWith(
+          status: const LoadedState(), listOfItems: itemModelResponse.result));
     });
   }
 
-  addItems(BuildContext context, int? folderId, List<File> listOfFiles, int unitId) async {
+  Future<(bool, Item)> getItemsById({required int itemId}) async {
+    bool isSuccess = false;
+    var response = await repository.getItemsById(itemId);
+    response.fold((l) {
+      log('Get Items By Id === > $l');
+      isSuccess = false;
+    }, (r) {
+      log('Get Items By Id === > ${r.data}');
+      ItemOnlyModel itemModelResponse = r.data;
+      editItem = itemModelResponse.result;
+      isSuccess = true;
+    });
+    return (isSuccess, editItem!);
+  }
+
+  clearEditItem() {
+    editItem = null;
+  }
+
+  addItems(BuildContext context, int? folderId, List<File> listOfFiles,
+      int unitId) async {
     emit(state.copyWith(status: const LoadingState()));
     List<MultipartFile> listOfMultipartFiles = [];
     for (int i = 0; i < listOfFiles.length; i++) {
       listOfMultipartFiles.add(await MultipartFile.fromFile(
         listOfFiles[i].path,
-        filename: listOfFiles[i].path.split('/').last, // Specify the file name explicitly
+        filename: listOfFiles[i]
+            .path
+            .split('/')
+            .last,
       ));
     }
     List listOfColors = state.colorList
-        .map((colorModelF) => {
-              "color_id": colorModelF.colorId,
-              "quantitys": colorModelF.quantity,
-              "rolls": colorModelF.roll,
-              "number": colorModelF.number
-            })
+        .map((colorModelF) =>
+    {
+      "color_id": colorModelF.colorId,
+      "quantitys": colorModelF.quantity,
+      "rolls": colorModelF.roll,
+      "number": colorModelF.number
+    })
         .toList();
 
     var response = await repository.postItems(listOfMultipartFiles,
@@ -116,7 +153,7 @@ class AddItemCubit extends Cubit<AddItemState> {
         width: widthController.text,
         gsm: gsmController.text,
         unitId: unitId,
-        quantity: int.parse(minQuantityController.text),
+        quantity: 50,
         minimumQuantity: minQuantityController.text,
         kgToMeter: oneKgController.text,
         shortage: shortageController.text,
@@ -133,30 +170,40 @@ class AddItemCubit extends Cubit<AddItemState> {
       log('Post Items === > ${r.data}');
       emit(state.copyWith(status: const LoadedState()));
       Navigator.of(context).pop();
-      Navigator.of(context).pop();
       BlocProvider.of<FolderCubit>(context).getFolders();
       BlocProvider.of<TagsCubit>(context).getTags();
       initializeTextController();
     });
   }
 
-  editItems(BuildContext context, int? folderId, List<File> listOfFiles, int unitId, int? itemId) async {
+  deleteImages(List<int> deletedImageId) {
+    log('Deleted Images Ids ===> $deletedImageId' );
+    for (int i = 0 ; i<deletedImageId.length;i++){
+      repository.deleteImages(deletedId: deletedImageId[i]);
+    }
+  }
+
+  editItems(BuildContext context, int? folderId, List<File> listOfFiles,
+      int unitId, int? itemId) async {
     emit(state.copyWith(status: const LoadingState()));
 
     List<MultipartFile> listOfMultipartFiles = [];
     for (int i = 0; i < listOfFiles.length; i++) {
       listOfMultipartFiles.add(await MultipartFile.fromFile(
         listOfFiles[i].path,
-        filename: listOfFiles[i].path.split('/').last,
+        filename: listOfFiles[i].path
+            .split('/')
+            .last,
       ));
     }
     List listOfColors = state.colorList
-        .map((colorModelF) => {
-              "color_id": colorModelF.colorId,
-              "quantitys": colorModelF.quantity,
-              "rolls": colorModelF.roll,
-              "number": colorModelF.number
-            })
+        .map((colorModelF) =>
+    {
+      "color_id": colorModelF.colorId,
+      "quantitys": colorModelF.quantity,
+      "rolls": colorModelF.roll,
+      "number": colorModelF.number
+    })
         .toList();
 
     var response = await repository.editItems(listOfMultipartFiles,
@@ -168,7 +215,7 @@ class AddItemCubit extends Cubit<AddItemState> {
         width: widthController.text,
         gsm: gsmController.text,
         unitId: unitId,
-        quantity: int.parse(minQuantityController.text),
+        quantity: int.parse(quantityController.text),
         minimumQuantity: minQuantityController.text,
         kgToMeter: oneKgController.text,
         shortage: shortageController.text,
@@ -185,7 +232,6 @@ class AddItemCubit extends Cubit<AddItemState> {
     }, (r) {
       log('Post Items === > ${r.data}');
       emit(state.copyWith(status: const LoadedState()));
-      Navigator.of(context).pop();
       Navigator.of(context).pop();
       BlocProvider.of<FolderCubit>(context).getFolders();
       BlocProvider.of<TagsCubit>(context).getTags();
@@ -205,7 +251,8 @@ class AddItemCubit extends Cubit<AddItemState> {
     emit(state.copyWith(colorList: listOfColorModel));
   }
 
-  editColorItem(int index, {int? colorId, int? number, int? quantity, int? roll}) {
+  editColorItem(int index,
+      {int? colorId, int? number, int? quantity, int? roll}) {
     List<ColorModelF> listOfColorModel = List.from(state.colorList);
 
     listOfColorModel[index] = listOfColorModel[index].copyWith(
@@ -235,6 +282,7 @@ class AddItemCubit extends Cubit<AddItemState> {
     shopNameController.clear();
     widthController.clear();
     gsmController.clear();
+    quantityController.clear();
     minQuantityController.clear();
     oneKgController.clear();
     averageController.clear();

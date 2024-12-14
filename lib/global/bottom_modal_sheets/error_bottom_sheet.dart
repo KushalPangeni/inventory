@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
 bool _isBottomSheetVisible = false;
 
 Future<void> showErrorBottomSheet(BuildContext context,
-    {required String error, required String description, Widget? image}) async {
+    {required String error, required String description, Widget? image,double leftPadding = 38}) async {
   if (_isBottomSheetVisible) return;
 
   _isBottomSheetVisible = true;
@@ -19,13 +18,15 @@ Future<void> showErrorBottomSheet(BuildContext context,
       children: [
         Column(
           children: [
-            const BottomSheetHeader(
+            BottomSheetHeader(
               header: 'Error',
               headerColor: Colors.red,
+              leftPadding: leftPadding,
             ),
-            16.verticalSpace,
+            const SizedBox(height: 16),
             AppText(error),
-            8.verticalSpace,
+            const SizedBox(height: 8),
+
             AppText(
               description,
               maxLines: 10,
@@ -34,7 +35,7 @@ Future<void> showErrorBottomSheet(BuildContext context,
                 color: const Color(0xFF959595),
               ),
             ),
-            26.verticalSpace,
+            const SizedBox(height: 26),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: AppButton(
@@ -45,7 +46,7 @@ Future<void> showErrorBottomSheet(BuildContext context,
                 },
               ),
             ),
-            32.verticalSpace,
+            const SizedBox(height: 32),
           ],
         )
       ],
@@ -63,8 +64,8 @@ customShowBottomSheet(BuildContext context, Widget widget,
       isScrollControlled: true,
       isDismissible: isDismissible!,
       enableDrag: false,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16.r))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       context: context,
       builder: (context) {
         return widget;
@@ -77,56 +78,57 @@ class BottomSheetHeader extends StatelessWidget {
   final Color headerColor;
   final bool? showClearIcon;
   final Function()? onClear;
+  final double leftPadding;
 
   const BottomSheetHeader(
       {super.key,
         required this.header,
         this.headerColor = Colors.black,
         this.showClearIcon = false,
-        this.onClear});
+        this.onClear,  this.leftPadding = 38});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 16),
-          child: Text('---------'),
-        ),
-        12.verticalSpace,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 38, right: 0, top: 0, bottom: 0),
-              child: SizedBox(),
-            ),
-            AppText(
-              header,
-              style: const TextStyle().defaultTextStyle(color: headerColor, fontSize: 16),
-            ),
-            showClearIcon!
-                ? Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: onClear,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 0, right: 20, top: 0, bottom: 0),
-                  child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8), color: const Color(0xFFF4F4F4)),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('x'),
-                      )),
-                ),
+
+        const SizedBox(height: 12),
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: leftPadding, right: 0, top: 0, bottom: 0),
+                child: const SizedBox(),
               ),
-            )
-                : const SizedBox(),
-          ],
+              AppText(
+                header,
+                style: const TextStyle().defaultTextStyle(color: headerColor, fontSize: 16),
+              ),
+              showClearIcon!
+                  ? Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: onClear,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 0, right: 20, top: 0, bottom: 0),
+                    child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8), color: const Color(0xFFF4F4F4)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('x'),
+                        )),
+                  ),
+                ),
+              )
+                  : const SizedBox(),
+            ],
+          ),
         ),
-        20.verticalSpace,
+        const SizedBox(height: 20),
+
         const DividerWithNoPadding()
       ],
     );

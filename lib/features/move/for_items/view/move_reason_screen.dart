@@ -10,10 +10,11 @@ import 'package:inventory/network/exception.dart';
 import 'package:toastification/toastification.dart';
 
 class ItemsMoveReasonScreen extends StatefulWidget {
+  final int itemQuantity;
   final folder_model.Item selectedItem;
   final folder_model.Folder destinationFolder;
 
-  const ItemsMoveReasonScreen({super.key, required this.selectedItem, required this.destinationFolder});
+  const ItemsMoveReasonScreen({super.key, required this.selectedItem, required this.destinationFolder, required this.itemQuantity});
 
   @override
   State<ItemsMoveReasonScreen> createState() => _ItemsMoveReasonScreenState();
@@ -56,11 +57,7 @@ class _ItemsMoveReasonScreenState extends State<ItemsMoveReasonScreen> {
                   const SizedBox(width: 8),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
-                    child: Image.asset(
-                      'assets/folder.png',
-                      height: 40,
-                      width: 40,
-                    ),
+                    child: Image.asset('assets/inventory.png', height: 40, width: 40),
                   ),
                   const SizedBox(width: 8),
                   AppText(widget.selectedItem.name,

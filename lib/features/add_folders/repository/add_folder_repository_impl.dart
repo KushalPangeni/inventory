@@ -52,7 +52,7 @@ class AddFolderRepositoryImpl implements AddFolderRepository {
       var request = _client.get(
         endPoint: Request.createUrl('api/folders/0'),
       );
-      return await _client.handleNetworkCall(request, FolderModel.fromJson);
+      return await _client.handleNetworkCall(request, FolderOnlyModel.fromJson);
     }
   }
 
@@ -62,27 +62,15 @@ class AddFolderRepositoryImpl implements AddFolderRepository {
       String folderDescription = '',
       int? parentFolderId,
       required List<int> listOfTagsId}) async {
-    FormData formData;
-    if (parentFolderId == null) {
-      formData = FormData.fromMap({
-        "name": folderName,
-        "images[]": images,
-        "description": folderDescription,
-        "total_price": 0,
-        "total_units": "0",
-        "tag_ids[]": listOfTagsId, // Directly included; FormData handles lists automatically
-      });
-    } else {
-      formData = FormData.fromMap({
-        "name": folderName,
-        "image[]": images,
-        "description": folderDescription,
-        "parent_folder_id": parentFolderId,
-        "total_price": 0,
-        "total_units": "0",
-        "tag_ids[]": listOfTagsId, // Directly included; FormData handles lists automatically
-      });
-    }
+    FormData formData = FormData.fromMap({
+      "name": folderName,
+      "image[]": images,
+      "description": folderDescription,
+      "parent_folder_id": parentFolderId ?? 0,
+      "total_price": 0,
+      "total_units": "0",
+      "tag_ids[]": listOfTagsId, // Directly included; FormData handles lists automatically
+    });
     var request = _client.uploadFiles(endPoint: Request.createUrl('api/folders'), formData: formData);
     return await _client.handleNetworkCall(request);
   }

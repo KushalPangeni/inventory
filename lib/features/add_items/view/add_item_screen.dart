@@ -34,6 +34,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
   ValueNotifier<int?> dropdownValue = ValueNotifier(null);
   ValueNotifier<int?> unitId = ValueNotifier(null);
 
+  List<int> deletedImagesId = [];
+
   updateListOfImages(List<File> pickedImages) {
     listOfImages.value = [...listOfImages.value, ...pickedImages];
   }
@@ -45,14 +47,25 @@ class _AddItemScreenState extends State<AddItemScreen> {
   @override
   void initState() {
     super.initState();
+    deletedImagesId = [];
     if (widget.isEditScreen && widget.item != null) {
       listOfUrlImages.value = widget.item!.images ?? listOfUrlImages.value;
       unitId.value = widget.item!.unitId;
       BlocProvider.of<AddItemCubit>(context).initializeEditScreenTextController(widget.item!);
+
+      // editItemInit();
     } else {
       BlocProvider.of<AddItemCubit>(context).initializeTextController();
     }
     BlocProvider.of<UnitCubit>(context).getUnits();
+    BlocProvider.of<ColorCubit>(context).getColors();
+  }
+
+  editItemInit() async {
+    var (isSuccess, item) = await BlocProvider.of<AddItemCubit>(context).getItemsById(itemId: widget.item!.id);
+    if (isSuccess) {
+      BlocProvider.of<AddItemCubit>(context).initializeEditScreenTextController(item);
+    }
   }
 
   @override
@@ -75,19 +88,31 @@ class _AddItemScreenState extends State<AddItemScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ValueListenableBuilder(
-                  valueListenable: listOfImages,
-                  builder: (context, list, _) {
-                    return AddImageButton(
-                      onTap: () {
-                        showBottomSheet(context);
-                      },
-                      isEditScreen: false,
-                      onDelete: (a) {},
-                      isFromDraftScreen: false,
-                      listOfImages: listOfImages.value,
-                      listOfUrlImages: listOfUrlImages.value,
-                    );
-                  }),
+                valueListenable: listOfUrlImages,
+                builder: (context, listOfUrl, _) => ValueListenableBuilder(
+                    valueListenable: listOfImages,
+                    builder: (context, list, _) {
+                      return AddImageButton(
+                        onTap: () {
+                          showBottomSheet(context);
+                        },
+                        isEditScreen: false,
+                        onDeleteNetworkImage: (a,deletedId) {
+                          deletedImagesId.add(deletedId);
+                          List<folder_model.Image> images = List.from(listOfUrlImages.value);
+                          images.removeAt(a);
+                          listOfUrlImages.value = images;
+                        },
+                        onDelete: (a) {
+                          listOfImages.value.removeAt(a);
+                          listOfImages.value = List.from(listOfImages.value); // Trigger rebuild
+                        },
+                        isFromDraftScreen: false,
+                        listOfImages: listOfImages.value,
+                        listOfUrlImages: listOfUrlImages.value,
+                      );
+                    }),
+              ),
               const SizedBox(height: 16),
 
               //Name
@@ -289,42 +314,35 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 ),
                 BlocBuilder<ColorCubit, ColorState>(
                   builder: (context, colorState) {
-                    return BlocBuilder<AddItemCubit, AddItemState>(
-                        builder: (context, state) => ListView.builder(
-                            itemCount: state.colorList.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              if (state.colorList[index].colorId != null) {
-                                log("ColorList ==> ${state.colorList[index].colorId} '${colorState.listOfUnits.firstWhere((color) => color.id == state.colorList[index].colorId).name}'");
-                                return Table(
-                                  children: [
-                                    TableRow(children: [
-                                      AppText(colorState.listOfUnits
-                                          .firstWhere((color) => color.id == state.colorList[index].colorId)
-                                          .name),
-                                      AppText(state.colorList
-                                          .firstWhere((color) => color.colorId == state.colorList[index].colorId)
-                                          .number
-                                          .toString()),
-                                      AppText(state.colorList
-                                          .firstWhere((color) => color.colorId == state.colorList[index].colorId)
-                                          .quantity
-                                          .toString()),
-                                      AppText(state.colorList
-                                          .firstWhere((color) => color.colorId == state.colorList[index].colorId)
-                                          .roll
-                                          .toString()),
-                                    ])
-                                  ],
-                                  /*child: AppText(colorState.listOfUnits
+                    return colorState.status is LoadingState
+                        ? const SizedBox()
+                        : BlocBuilder<AddItemCubit, AddItemState>(
+                            builder: (context, state) => ListView.builder(
+                                itemCount: state.colorList.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  if (state.colorList[index].colorId != null) {
+                                    // log("ColorList ==> ${state.colorList[index].colorId} '${colorState.listOfUnits.firstWhere((color) => color.id == state.colorList[index].colorId).name}'");
+                                    return Table(
+                                      children: [
+                                        TableRow(children: [
+                                          AppText(colorState.listOfUnits
+                                              .firstWhere((color) => color.id == state.colorList[index].colorId)
+                                              .name),
+                                          AppText(state.colorList[index].number.toString()),
+                                          AppText(state.colorList[index].quantity.toString()),
+                                          AppText(state.colorList[index].roll.toString()),
+                                        ])
+                                      ],
+                                      /*child: AppText(colorState.listOfUnits
                                       .firstWhere((color) => color.id == state.colorList[index].colorId)
                                       .name),*/
-                                );
-                              } else {
-                                return const SizedBox();
-                              }
-                            }));
+                                    );
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                }));
                   },
                 ),
               ],
@@ -375,6 +393,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           bloc.shopNameController.text.trim().isNotEmpty) {
                         if (state.status is! LoadingState) {
                           if (widget.isEditScreen) {
+                            BlocProvider.of<AddItemCubit>(context).deleteImages(deletedImagesId);
                             BlocProvider.of<AddItemCubit>(context).editItems(
                               context,
                               widget.folderId,
@@ -421,11 +440,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Flexible(
+                    Flexible(
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: AppText('Pick Images',
-                            maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 18)),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -500,7 +521,7 @@ pickOptionWidget(String text, void Function()? onPressed) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AppText(text),
+          AppText(text, style: const TextStyle().defaultTextStyle()),
           const Icon(
             Icons.arrow_forward_ios,
             size: 16,

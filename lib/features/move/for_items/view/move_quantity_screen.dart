@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:inventory/core/keyboard_utils.dart';
 import 'package:inventory/features/add_folders/model/folder_model.dart' as folder_model;
-import 'package:inventory/features/move/view/move_reason_screen.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 
@@ -20,6 +19,8 @@ class ItemsMoveQuantityScreen extends StatefulWidget {
 }
 
 class _ItemsMoveQuantityScreenState extends State<ItemsMoveQuantityScreen> {
+  TextEditingController itemQuantity = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +72,10 @@ class _ItemsMoveQuantityScreenState extends State<ItemsMoveQuantityScreen> {
               alignment: Alignment.center,
               child: TextField(
                 textAlign: TextAlign.center,
-                controller: TextEditingController(),
+                onTapOutside: (s){
+                  KeyboardUtils().hideKeyBoard();
+                },
+                controller: itemQuantity,
                 style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -86,9 +90,9 @@ class _ItemsMoveQuantityScreenState extends State<ItemsMoveQuantityScreen> {
                 ),
               ),
             ),
-             AppText('of ${widget.selectedItem.orderQuantity} units', style: TextStyle(fontSize: 16)),
+            AppText('of ${widget.selectedItem.orderQuantity} units', style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 12),
-            InkWell(
+            /*InkWell(
               onTap: () {},
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -97,7 +101,7 @@ class _ItemsMoveQuantityScreenState extends State<ItemsMoveQuantityScreen> {
                   style: TextStyle(fontSize: 16, color: Colors.lightBlue),
                 ),
               ),
-            ),
+            ),*/
             const Divider(),
           ],
         ),
@@ -109,11 +113,15 @@ class _ItemsMoveQuantityScreenState extends State<ItemsMoveQuantityScreen> {
             color: Colors.orangeAccent,
             onPressed: () {
               KeyboardUtils().hideKeyBoard();
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                      builder: (context) => ItemsMoveReasonScreen(
-                          selectedItem: widget.selectedItem, destinationFolder: widget.destinationFolder)));
+              if(itemQuantity.text.trim().isNotEmpty && int.parse(itemQuantity.text) < (widget.selectedItem.quantity ?? 0) ){
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => ItemsMoveReasonScreen(
+                            itemQuantity: 0,
+                            selectedItem: widget.selectedItem,
+                            destinationFolder: widget.destinationFolder),),);
+              }
             }),
       ),
     );

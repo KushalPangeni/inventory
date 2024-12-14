@@ -40,8 +40,11 @@ class FolderCubit extends Cubit<FolderState> {
         log('Get Folders === > $l');
       }, (r) {
         log('Get Folders === > ${r.data}');
-        FolderModel folderModel = r.data;
-        emit(state.copyWith(status: const LoadedState(), listOfFolders: folderModel.result));
+        FolderOnlyModel folderModel = r.data;
+        emit(state.copyWith(
+            status: const LoadedState(),
+            listOfFolders: folderModel.result.subFolders,
+            listOfItems: folderModel.result.items));
       });
     } else {
       response.fold((l) {

@@ -19,6 +19,17 @@ class ItemModelResponse with _$ItemModelResponse {
 }
 
 @freezed
+class ItemOnlyModel with _$ItemOnlyModel {
+  const factory ItemOnlyModel({
+    required Item result,
+    required String message,
+    required int status,
+  }) = _ItemOnlyModel;
+
+  factory ItemOnlyModel.fromJson(Map<String, dynamic> json) => _$ItemOnlyModelFromJson(json);
+}
+
+@freezed
 class FolderOnlyModel with _$FolderOnlyModel {
   const factory FolderOnlyModel({
     required Folder result,
@@ -83,25 +94,25 @@ class Image with _$Image {
 class Item with _$Item {
   const factory Item(
       {required int id,
-      required String name,
-      @JsonKey(name: 'fabric_number') @Default('') String? fabricNumber,
-      @JsonKey(name: 'shop_name') @Default('') String? shopName,
-      @JsonKey(name: 'party_name') @Default('') String? partyName,
-      @Default('') String? width, // made nullable
-      @Default('') String? gsm, // made nullable
-      @JsonKey(name: 'kg_to_meter_ratio') String? kgToMeterRatio,
-      @Default('') String? average, // made nullable
-      @Default('') String? shortage, // made nullable
-      @Default(0) int? quantity, // made nullable
-      @JsonKey(name: 'unit_id') @Default(0) int? unitId,
-      @JsonKey(name: 'avg_unit') @Default('') String? averageUnit,
-      @JsonKey(name: 'order_quantity') @Default('0') String? orderQuantity,
-      @JsonKey(name: 'minimum_quantity') @Default(0) int? minimumQuantity,
-      @JsonKey(name: 'accessories_notes') @Default('') String? accessoriesNotes,
-      @Default([]) List<Image>? images,
-      @Default([]) List<ColorModel>? colors,
-      @JsonKey(name: 'folder_id') @Default(0) int? folderId,
-      @Default('') String? sku // made nullable
+        required String name,
+        @JsonKey(name: 'fabric_number') @Default('') String? fabricNumber,
+        @JsonKey(name: 'shop_name') @Default('') String? shopName,
+        @JsonKey(name: 'party_name') @Default('') String? partyName,
+        @Default('') String? width, // made nullable
+        @Default('') String? gsm, // made nullable
+        @JsonKey(name: 'kg_to_meter_ratio') String? kgToMeterRatio,
+        @Default('') String? average, // made nullable
+        @Default('') String? shortage, // made nullable
+        @Default(0) int? quantity, // made nullable
+        @JsonKey(name: 'unit_id') @Default(0) int? unitId,
+        @JsonKey(name: 'avg_unit') @Default('') String? averageUnit,
+        @JsonKey(name: 'order_quantity') @Default('') String? orderQuantity,
+        @JsonKey(name: 'minimum_quantity') @Default('') String? minimumQuantity,
+        @JsonKey(name: 'accessories_notes') @Default('') String? accessoriesNotes,
+        @Default([]) List<Image>? images,
+        @Default([]) List<ColorModel>? colors,
+        @JsonKey(name: 'folder_id') @Default(0) int? folderId,
+        @Default('') String? sku // made nullable
       }) = _Item;
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);

@@ -8,6 +8,7 @@ class FolderState with _$FolderState {
     @Default(InitialState()) ApiRequestState? uploadStatus,
     @Default(InitialState()) ApiRequestState? moveStatus,
     @Default([]) List<Folder> listOfFolders,
+    @Default([]) List<Item> listOfItems,
     @Default('') String folderName,
     @Default([]) List<Tag> foldersTag,
     @Default('') String folderDescription,

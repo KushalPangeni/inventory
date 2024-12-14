@@ -1,5 +1,3 @@
-
-
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -10,26 +8,20 @@ import 'package:toastification/toastification.dart';
 
 import 'api_url.dart';
 
-Future<String> handleApiResponse(Response<dynamic> response, [String? endPoint]) async {
+Future<String> handleApiResponse(Response<dynamic> response,
+    [String? endPoint]) async {
   switch (response.statusCode) {
     case 401:
-      if(endPoint == '${ApiUrl.baseUrl}}'){
-        showToast(navigatorKey.currentContext!, 'Error','Incorrect username or password. Please check your credentials and try again',ToastificationType.success);
+      if (endPoint == 'https://sorty.margintopsolutions.com/api/login') {
+        showToast(
+            navigatorKey.currentContext!,
+            'Error',
+            'Incorrect username or password. Please try again',
+            ToastificationType.error);
+      } else {
+        showToast(navigatorKey.currentContext!, 'Error', 'UnAuthorized',
+            ToastificationType.error);
 
-        showErrorBottomSheet(
-          navigatorKey.currentContext!,
-          error: "Login Failed",
-          description: "Incorrect username or password. Please check your credentials and try again.",
-        );
-      }else{
-        log('Message Exception ==> UnAuthorized');
-        showToast(navigatorKey.currentContext!, 'Error','UnAuthorized',ToastificationType.success);
-
-        showErrorBottomSheet(
-          navigatorKey.currentContext!,
-          error: "UnAuthorized",
-          description: "Your session has expired. Please try again.",
-        );
         await Future.delayed(const Duration(seconds: 1));
         // await StorageManager().clearAll();
         // Routes().navigateToLoginScreen(navigatorKey.currentContext!);
@@ -59,14 +51,23 @@ Future<String> handleApiResponse(Response<dynamic> response, [String? endPoint])
       log('Message Exception ==> Connection request timeout');
 
       return 'Connection request timeout';
+    case 422:
+      showToast(
+          navigatorKey.currentContext!,
+          'Error',
+          'Incorrect username or password. Please try again',
+          ToastificationType.error);
+
+      return 'Connection request timeout';
     case 500:
       log('Message Exception ==> Internal Server Error');
-
-      showErrorBottomSheet(
-        navigatorKey.currentContext!,
-        error: "Internal Server Error",
-        description: "Something went wrong. Please try again.",
-      );
+      showToast(navigatorKey.currentContext!, 'Error', 'Internal Server Error',
+          ToastificationType.error);
+      // showErrorBottomSheet(
+      //   navigatorKey.currentContext!,
+      //   error: "Internal Server Error",
+      //   description: "Something went wrong. Please try again.",
+      // );
       return 'Internal Server Error';
 
     case 502:
@@ -75,7 +76,7 @@ Future<String> handleApiResponse(Response<dynamic> response, [String? endPoint])
     case 503:
       return 'Service unavailable';
     case 506:
-      // log('Message Exception ==> No Internet Connection');
+    // log('Message Exception ==> No Internet Connection');
 
       showErrorBottomSheet(
         navigatorKey.currentContext!,
@@ -88,13 +89,14 @@ Future<String> handleApiResponse(Response<dynamic> response, [String? endPoint])
       return 'Received invalid status code: ${response.statusCode}';
   }
 }
+
 void showToast(BuildContext context, String title, String description,
     ToastificationType type) {
   toastification.show(
     context: context,
     type: type,
     title: Text(title),
-    description: Text(description),
+    description: FittedBox(child: Text(description, maxLines: 2)),
     primaryColor: Colors.white,
     autoCloseDuration: const Duration(seconds: 3),
     progressBarTheme: ProgressIndicatorThemeData(

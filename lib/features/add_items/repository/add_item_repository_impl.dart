@@ -28,26 +28,34 @@ class AddItemRepositoryImpl implements AddItemRepository {
   }
 
   @override
+  EitherResponse getItemsById(int itemId) async {
+    var request = _client.get(
+      endPoint: Request.createUrl('api/items/$itemId'),
+    );
+    return await _client.handleNetworkCall(request, ItemOnlyModel.fromJson);
+  }
+
+  @override
   EitherResponse editItems(List<MultipartFile> listOfFiles,
       {required String itemName,
-      required String fabricNumber,
-      required String partyName,
-      required String orderQuantity,
-      required String minimumQuantity,
-      required String shopName,
-      required String width,
-      required String gsm,
-      required int unitId,
-      required String kgToMeter,
-      required String average,
-      required String averageUnit,
-      required String shortage,
-      required int quantity,
-      required String notes,
-      int? folderId,
-      int? itemId,
-      required List listOfColors,
-      required String sku}) async {
+        required String fabricNumber,
+        required String partyName,
+        required String orderQuantity,
+        required String minimumQuantity,
+        required String shopName,
+        required String width,
+        required String gsm,
+        required int unitId,
+        required String kgToMeter,
+        required String average,
+        required String averageUnit,
+        required String shortage,
+        required int quantity,
+        required String notes,
+        int? folderId,
+        int? itemId,
+        required List listOfColors,
+        required String sku}) async {
     final formData = FormData.fromMap({
       "name": itemName,
       "party_name": partyName,
@@ -71,30 +79,31 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "_method": "PUT"
     });
 
-    var request = _client.uploadFiles(endPoint: Request.createUrl('api/items/$itemId'), formData: formData);
+    var request = _client.uploadFiles(
+        endPoint: Request.createUrl('api/items/$itemId'), formData: formData);
     return await _client.handleNetworkCall(request);
   }
 
   @override
   EitherResponse postItems(List<MultipartFile> listOfFiles,
       {required String itemName,
-      required String fabricNumber,
-      required String partyName,
-      required String orderQuantity,
-      required String minimumQuantity,
-      required String averageUnit,
-      required String shopName,
-      required String width,
-      required String gsm,
-      required int unitId,
-      required String kgToMeter,
-      required String average,
-      required String shortage,
-      required int quantity,
-      required String notes,
-      int? folderId,
-      required List listOfColors,
-      required String sku}) async {
+        required String fabricNumber,
+        required String partyName,
+        required String orderQuantity,
+        required String minimumQuantity,
+        required String averageUnit,
+        required String shopName,
+        required String width,
+        required String gsm,
+        required int unitId,
+        required String kgToMeter,
+        required String average,
+        required String shortage,
+        required int quantity,
+        required String notes,
+        int? folderId,
+        required List listOfColors,
+        required String sku}) async {
     final formData = FormData.fromMap({
       "name": itemName,
       "party_name": partyName,
@@ -112,7 +121,7 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "avg_unit": averageUnit,
       "unit_id": unitId,
       "accessories_notes": notes,
-      "folder_id": folderId,
+      "folder_id": folderId ?? 0,
       "sku": "string",
       "colors": listOfColors
     });
@@ -134,7 +143,14 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "folder_id": 28,
       "sku": "string",
     });*/
-    var request = _client.uploadFiles(endPoint: Request.createUrl('api/items'), formData: formData);
+    var request = _client.uploadFiles(
+        endPoint: Request.createUrl('api/items'), formData: formData);
+    return await _client.handleNetworkCall(request);
+  }
+
+  @override
+  EitherResponse deleteImages({required int deletedId}) async {
+    var request = _client.get(endPoint: Request.createUrl('api/deletefile/$deletedId'));
     return await _client.handleNetworkCall(request);
   }
 }

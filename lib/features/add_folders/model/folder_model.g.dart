@@ -26,6 +26,20 @@ Map<String, dynamic> _$$ItemModelResponseImplToJson(
       'status': instance.status,
     };
 
+_$ItemOnlyModelImpl _$$ItemOnlyModelImplFromJson(Map<String, dynamic> json) =>
+    _$ItemOnlyModelImpl(
+      result: Item.fromJson(json['result'] as Map<String, dynamic>),
+      message: json['message'] as String,
+      status: (json['status'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$ItemOnlyModelImplToJson(_$ItemOnlyModelImpl instance) =>
+    <String, dynamic>{
+      'result': instance.result,
+      'message': instance.message,
+      'status': instance.status,
+    };
+
 _$FolderOnlyModelImpl _$$FolderOnlyModelImplFromJson(
         Map<String, dynamic> json) =>
     _$FolderOnlyModelImpl(
@@ -144,8 +158,8 @@ _$ItemImpl _$$ItemImplFromJson(Map<String, dynamic> json) => _$ItemImpl(
       quantity: (json['quantity'] as num?)?.toInt() ?? 0,
       unitId: (json['unit_id'] as num?)?.toInt() ?? 0,
       averageUnit: json['avg_unit'] as String? ?? '',
-      orderQuantity: json['order_quantity'] as String? ?? '0',
-      minimumQuantity: (json['minimum_quantity'] as num?)?.toInt() ?? 0,
+      orderQuantity: json['order_quantity'] as String? ?? '',
+      minimumQuantity: json['minimum_quantity'] as String? ?? '',
       accessoriesNotes: json['accessories_notes'] as String? ?? '',
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => Image.fromJson(e as Map<String, dynamic>))
