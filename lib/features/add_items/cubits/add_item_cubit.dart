@@ -10,9 +10,10 @@ import 'package:inventory/features/add_folders/model/folder_model.dart';
 import 'package:inventory/features/add_items/model/color_model.dart';
 import 'package:inventory/features/add_items/repository/add_item_repository.dart';
 
-// import 'package:inventory/features/search/model/search_response_model.dart';
 import 'package:inventory/features/tags/cubit/tags_cubit.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
+import 'package:inventory/network/exception.dart';
+import 'package:toastification/toastification.dart';
 
 part 'add_item_state.dart';
 
@@ -55,6 +56,7 @@ class AddItemCubit extends Cubit<AddItemState> {
     averageController.text = '0';
     averageUnitController.text = '';
     notesController.text = ' ';
+    emit(state.copyWith(colorList: [],status: const InitialState()));
   }
 
   initializeEditScreenTextController(Item item) {
@@ -84,7 +86,7 @@ class AddItemCubit extends Cubit<AddItemState> {
               roll: color.rolls))
           .toList();
     }
-    emit(state.copyWith(colorList: colorsList));
+    emit(state.copyWith(colorList: colorsList,status: const InitialState()));
   }
 
   getItems({bool showLoading = true}) async {
@@ -122,8 +124,7 @@ class AddItemCubit extends Cubit<AddItemState> {
   }
 
   addItems(BuildContext context, int? folderId, List<File> listOfFiles,
-      int unitId) async {
-    emit(state.copyWith(status: const LoadingState()));
+      int unitId,Function() onSuccess) async {
     List<MultipartFile> listOfMultipartFiles = [];
     for (int i = 0; i < listOfFiles.length; i++) {
       listOfMultipartFiles.add(await MultipartFile.fromFile(
@@ -144,36 +145,47 @@ class AddItemCubit extends Cubit<AddItemState> {
     })
         .toList();
 
-    var response = await repository.postItems(listOfMultipartFiles,
-        folderId: folderId,
-        itemName: itemNameController.text,
-        fabricNumber: fabricNumberController.text,
-        partyName: partyNameController.text,
-        shopName: shopNameController.text,
-        width: widthController.text,
-        gsm: gsmController.text,
-        unitId: unitId,
-        quantity: 50,
-        minimumQuantity: minQuantityController.text,
-        kgToMeter: oneKgController.text,
-        shortage: shortageController.text,
-        notes: notesController.text,
-        listOfColors: listOfColors,
-        average: averageController.text,
-        orderQuantity: orderQuantityController.text,
-        averageUnit: averageUnitController.text,
-        sku: '');
-    response.fold((l) {
-      emit(state.copyWith(status: const ErrorState()));
-      log('Post Items === > $l');
-    }, (r) {
-      log('Post Items === > ${r.data}');
-      emit(state.copyWith(status: const LoadedState()));
-      Navigator.of(context).pop();
-      BlocProvider.of<FolderCubit>(context).getFolders();
-      BlocProvider.of<TagsCubit>(context).getTags();
-      initializeTextController();
-    });
+    if(listOfColors.isEmpty){
+      showToast(context, 'Invalid', 'Please add color', ToastificationType.warning);
+
+    }else{
+      emit(state.copyWith(status: const LoadingState()));
+
+      var response = await repository.postItems(listOfMultipartFiles,
+          folderId: folderId,
+          itemName: itemNameController.text,
+          fabricNumber: fabricNumberController.text,
+          partyName: partyNameController.text,
+          shopName: shopNameController.text,
+          width: widthController.text,
+          gsm: gsmController.text,
+          unitId: unitId,
+          quantity: 50,
+          minimumQuantity: minQuantityController.text,
+          kgToMeter: oneKgController.text,
+          shortage: shortageController.text,
+          notes: notesController.text,
+          listOfColors: listOfColors,
+          average: averageController.text,
+          orderQuantity: orderQuantityController.text,
+          averageUnit: averageUnitController.text,
+          sku: '');
+      response.fold((l) {
+        emit(state.copyWith(status: const ErrorState()));
+        log('Post Items === > $l');
+      }, (r) {
+        log('Post Items === > ${r.data}');
+        emit(state.copyWith(status: const LoadedState()));
+        Navigator.of(context).pop();
+        BlocProvider.of<FolderCubit>(context).getFolders();
+        BlocProvider.of<TagsCubit>(context).getTags();
+        initializeTextController();
+        onSuccess();
+        showToast(context, 'Success', 'Item added successfully', ToastificationType.success);
+      });
+    }
+
+
   }
 
   deleteImages(List<int> deletedImageId) {
@@ -206,6 +218,12 @@ class AddItemCubit extends Cubit<AddItemState> {
     })
         .toList();
 
+    if(listOfColors.isEmpty){
+      showToast(context, 'Invalid', 'Please add color', ToastificationType.warning);
+
+    }else{
+      emit(state.copyWith(status: const LoadingState()));
+
     var response = await repository.editItems(listOfMultipartFiles,
         folderId: folderId,
         itemName: itemNameController.text,
@@ -236,7 +254,9 @@ class AddItemCubit extends Cubit<AddItemState> {
       BlocProvider.of<FolderCubit>(context).getFolders();
       BlocProvider.of<TagsCubit>(context).getTags();
       initializeTextController();
-    });
+      showToast(context, 'Success', 'Item edited successfully', ToastificationType.success);
+
+    });}
   }
 
   addColorInColorList(ColorModelF color) {
@@ -249,6 +269,28 @@ class AddItemCubit extends Cubit<AddItemState> {
     List<ColorModelF> listOfColorModel = List.from(state.colorList);
     listOfColorModel.removeAt(index);
     emit(state.copyWith(colorList: listOfColorModel));
+  }
+
+  moveFolder(BuildContext context,
+      {required int itemId,
+        required int destinationFolderId,
+        required int moveQuantity,
+        required String reasonToMove,
+        required String note}) async {
+    var response = await repository.moveFolder(
+        itemId: itemId, moveQuantity: moveQuantity,destinationFolderId: destinationFolderId, reasonToMove: reasonToMove, note: note);
+
+    response.fold((l) {
+      emit(state.copyWith(status: const ErrorState()));
+
+      log('Move Folders === > $l');
+    }, (r) {
+      log('Move Folders === > ${r.data}');
+      emit(state.copyWith(status: const LoadedState()));
+      showToast(context, 'Success', 'Folder moved successfully.', ToastificationType.success);
+      Navigator.pop(context);
+      Navigator.pop(context);
+    });
   }
 
   editColorItem(int index,

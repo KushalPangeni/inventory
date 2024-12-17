@@ -49,6 +49,8 @@ abstract class AddItemRepository {
 
   EitherResponse deleteItems(int itemId);
 
+  EitherResponse moveFolder({required int itemId, required int moveQuantity,required int destinationFolderId, required String reasonToMove,required String note});
+
   EitherResponse deleteImages({required int deletedId});
 
 }

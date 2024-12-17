@@ -15,8 +15,7 @@ class AddNewItemsBottomModalSheet {
 
   AddNewItemsBottomModalSheet(this.context, this.folderId, {this.canBuildItem = true, this.canBuildFolder = true});
 
-  showBottomSheet() {
-    log('Folder id ==> $folderId');
+  showBottomSheet(Function() onPop) {
     showModalBottomSheet(
         backgroundColor: Colors.white,
         context: context,
@@ -59,7 +58,9 @@ class AddNewItemsBottomModalSheet {
                       onTap: () {
                         Navigator.of(context).pop();
                         Navigator.push(
-                            context, CupertinoPageRoute(builder: (context) => AddItemScreen(folderId: folderId)));
+                            context, CupertinoPageRoute(builder: (context) => AddItemScreen(folderId: folderId,onPop: (){
+                              onPop();
+                        },)));
                       },
                       child: listTileAddFileFolder(Image.asset('assets/inventory.png', height: 40), 'Add Items')),
                 if (canBuildFolder)
@@ -67,7 +68,9 @@ class AddNewItemsBottomModalSheet {
                       onTap: () async {
                         Navigator.of(context).pop();
                         Navigator.push(
-                            context, CupertinoPageRoute(builder: (context) => AddFolderScreen(folderId: folderId)));
+                            context, CupertinoPageRoute(builder: (context) => AddFolderScreen(folderId: folderId,onPop: (){
+                              onPop();
+                        },)));
                       },
                       child: listTileAddFileFolder(Image.asset('assets/folder.png', height: 40), 'Add Folders')),
               ],

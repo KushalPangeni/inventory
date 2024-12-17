@@ -22,12 +22,11 @@ import 'package:toastification/toastification.dart';
 void main() {
   setupLocator();
   runApp(const MyApp());
-
 }
 
+const double maxScreenWidth = 600.0;
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -36,20 +35,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<FolderCubit>(
-            create: (BuildContext context) => FolderCubit(di())),
-        BlocProvider<AuthCubit>(
-            create: (BuildContext context) => AuthCubit(di())),
-        BlocProvider<AddItemCubit>(
-            create: (BuildContext context) => AddItemCubit(di())),
-        BlocProvider<TagsCubit>(
-            create: (BuildContext context) => TagsCubit(di())),
-        BlocProvider<UnitCubit>(
-            create: (BuildContext context) => UnitCubit(di())),
-        BlocProvider<ColorCubit>(
-            create: (BuildContext context) => ColorCubit(di())),
-        BlocProvider<SearchCubit>(
-            create: (BuildContext context) => SearchCubit(di())),
+        BlocProvider<FolderCubit>(create: (BuildContext context) => FolderCubit(di())),
+        BlocProvider<AuthCubit>(create: (BuildContext context) => AuthCubit(di())),
+        BlocProvider<AddItemCubit>(create: (BuildContext context) => AddItemCubit(di())),
+        BlocProvider<TagsCubit>(create: (BuildContext context) => TagsCubit(di())),
+        BlocProvider<UnitCubit>(create: (BuildContext context) => UnitCubit(di())),
+        BlocProvider<ColorCubit>(create: (BuildContext context) => ColorCubit(di())),
+        BlocProvider<SearchCubit>(create: (BuildContext context) => SearchCubit(di())),
       ],
       child: ToastificationWrapper(
         child: MaterialApp(
@@ -99,43 +91,28 @@ class _SignInScreenState extends State<SignInScreen> {
                       SizedBox(height: constraints.maxHeight * 0.1),
                       Text(
                         "Log In",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: constraints.maxHeight * 0.05),
                       Form(
                         key: _formKey,
                         child: Column(
                           children: [
-                            customTextField(
-                                hintText: 'Username',
-                                controller: bloc.userNameController,
-                                onTyped: (s) {}),
+                            customTextField(hintText: 'Username', controller: bloc.userNameController, onTyped: (s) {}),
                             Padding(
-                              padding:
-                              const EdgeInsets.symmetric(vertical: 8.0),
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: customTextField(
-                                  hintText: 'Password',
-                                  controller: bloc.passwordController,
-                                  onTyped: (s) {}),
+                                  hintText: 'Password', controller: bloc.passwordController, onTyped: (s) {}),
                             ),
                             BlocBuilder<AuthCubit, AuthState>(
                               builder: (context, state) {
                                 return ConstrainedBox(
-                                  constraints:
-                                  const BoxConstraints(maxWidth: 400),
+                                  constraints: const BoxConstraints(maxWidth: 400),
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      if (bloc.userNameController.text
-                                          .trim()
-                                          .isNotEmpty &&
-                                          bloc.passwordController.text
-                                              .trim()
-                                              .isNotEmpty) {
-                                        BlocProvider.of<AuthCubit>(context)
-                                            .signIn(context);
+                                      if (bloc.userNameController.text.trim().isNotEmpty &&
+                                          bloc.passwordController.text.trim().isNotEmpty) {
+                                        BlocProvider.of<AuthCubit>(context).signIn(context);
 
                                         /*Navigator.pushAndRemoveUntil(
                                           context,
@@ -143,20 +120,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                           (route) => false,
                                         );*/
                                       } else {
-                                        showToast(
-                                            context,
-                                            'Invalid',
-                                            'Please enter both username and password',
+                                        showToast(context, 'Invalid', 'Please enter both username and password',
                                             ToastificationType.error);
 
-                                        /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                            elevation: 10,
-                                            backgroundColor: Colors.white,
-                                            duration: const Duration(milliseconds: 600),
-                                            content: AppText(
-                                              'Please enter both username and password',
-                                              style: const TextStyle().defaultTextStyle(color: Colors.teal),
-                                            )));*/
                                       }
                                       /* BlocProvider.of<AuthCubit>(context).signIn();
                                   if (_formKey.currentState!.validate()) {
@@ -168,13 +134,11 @@ class _SignInScreenState extends State<SignInScreen> {
                                       elevation: 0,
                                       backgroundColor: Colors.orangeAccent,
                                       foregroundColor: Colors.white,
-                                      minimumSize:
-                                      const Size(double.infinity, 48),
+                                      minimumSize: const Size(double.infinity, 48),
                                       shape: const StadiumBorder(),
                                     ),
                                     child: state.status is LoadingState
-                                        ? const CircularProgressIndicator(
-                                        strokeWidth: 1)
+                                        ? const CircularProgressIndicator(strokeWidth: 1)
                                         : const Text("Sign in"),
                                   ),
                                 );
@@ -185,16 +149,9 @@ class _SignInScreenState extends State<SignInScreen> {
                               onPressed: () {},
                               child: Text(
                                 'Forgot Password? Contact to your admin',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color!
-                                      .withOpacity(0.64),
-                                ),
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                      color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.64),
+                                    ),
                               ),
                             ),
                           ],

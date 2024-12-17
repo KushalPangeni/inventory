@@ -55,7 +55,7 @@ Future<String> handleApiResponse(Response<dynamic> response,
       showToast(
           navigatorKey.currentContext!,
           'Error',
-          'Incorrect username or password. Please try again',
+          'Internal Server Error',
           ToastificationType.error);
 
       return 'Connection request timeout';

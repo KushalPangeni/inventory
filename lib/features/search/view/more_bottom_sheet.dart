@@ -70,7 +70,9 @@ class SearchFolderItemMoreBottomModalSheet {
                               onTap: () {
                                 Navigator.of(context).pop();
                                 Navigator.push(context,
-                                    CupertinoPageRoute(builder: (context) => MoveScreen(selectedFolder: folder)));
+                                    CupertinoPageRoute(builder: (context) => MoveScreen(selectedFolder: folder,onPop: (){
+                                      searchFolderDetails(folderId);
+                                    },)));
                               },
                               child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
                           GestureDetector(
@@ -90,7 +92,9 @@ class SearchFolderItemMoreBottomModalSheet {
                                         builder: (context) => AddFolderScreen(
                                             isEditScreen: true,
                                             folder: folder,
-                                            folderId: folderId == 0 ? null : folderId)));
+                                            folderId: folderId == 0 ? null : folderId,onPop: (){
+                                          searchFolderDetails(folderId);
+                                        },)));
                               },
                               child: listTileAddFileFolder(Image.asset('assets/edit.png', height: 28), 'Edit')),
                           GestureDetector(

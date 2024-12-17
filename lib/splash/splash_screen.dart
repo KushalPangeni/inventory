@@ -27,7 +27,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         Navigator.pushAndRemoveUntil(
           context,
           CupertinoPageRoute(builder: (context) => const HomeScreen()),
-              (route) => false,
+          (route) => false,
         );
       });
     } else {
@@ -35,7 +35,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         Navigator.pushAndRemoveUntil(
           context,
           CupertinoPageRoute(builder: (context) => const SignInScreen()),
-              (route) => false,
+          (route) => false,
         );
       });
     }
@@ -50,34 +50,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: screenWidth > 600
-              ? Row(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: AspectRatio(aspectRatio: 1, child: Image.asset('assets/inventory.jpg')),
-              ),
-              ErrorInfo(
-                title: "Hello and Welcome",
-                description: "We're setting things up for you. This will only take a moment.",
-                press: () {},
-              ),
-            ],
-          )
+              ? Center(
+                  child: FittedBox(
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: AspectRatio(aspectRatio: 1, child: Image.asset('assets/inventory.jpg')),
+                        ),
+                        ErrorInfo(
+                          title: "Hello and Welcome",
+                          description: "We're setting things up for you. This will only take a moment.",
+                          press: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               : Column(
-            children: [
-              const Spacer(flex: 2),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: AspectRatio(aspectRatio: 1, child: Image.asset('assets/inventory.jpg')),
-              ),
-              const Spacer(flex: 2),
-              ErrorInfo(
-                title: "Hello and Welcome",
-                description: "We're setting things up for you. This will only take a moment.",
-                press: () {},
-              ),
-            ],
-          ),
+                  children: [
+                    const Spacer(flex: 2),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: AspectRatio(aspectRatio: 1, child: Image.asset('assets/inventory.jpg')),
+                    ),
+                    const Spacer(flex: 2),
+                    ErrorInfo(
+                      title: "Hello and Welcome",
+                      description: "We're setting things up for you. This will only take a moment.",
+                      press: () {},
+                    ),
+                  ],
+                ),
         ),
       ),
     );

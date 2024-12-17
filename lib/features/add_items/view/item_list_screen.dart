@@ -9,6 +9,7 @@ import 'package:inventory/features/add_items/cubits/add_item_cubit.dart';
 import 'package:inventory/global/bottom_modal_sheets/add_new_items_bottom_modal_sheet.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:inventory/global/widgets/folder_widget.dart';
+import 'package:inventory/main.dart';
 
 import 'item_widget.dart';
 
@@ -69,6 +70,7 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.sizeOf(context).width;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -97,37 +99,84 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
                               constraints: const BoxConstraints(minHeight: 500),
                               child: Column(
                                 children: [
-                                  ListView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: folder.subFolders.length,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) => GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  ItemsListScreen(folder: folder.subFolders[index], index: index)),
-                                        );
-                                      },
-                                      child: Container(
-                                        color: Colors.transparent,
-                                        child: FolderWidget(
-                                          folder: folder.subFolders[index],
-                                          parentFolderId: widget.folder.id,
+                                  screenWidth > maxScreenWidth
+                                      ? Wrap(
+                                          children:
+                                              List.generate(folder.subFolders.length + folder.items.length, (index) {
+                                            return index < folder.subFolders.length
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      // folderId.value = state.listOfFolders[index].id;
+                                                      Navigator.push(
+                                                          context,
+                                                          CupertinoPageRoute(
+                                                              builder: (context) => ItemsListScreen(
+                                                                  folder: folder.subFolders[index], index: index)));
+                                                    },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: FolderWidget(
+                                                        folder: folder.subFolders[index],
+                                                        parentFolderId: widget.folder.id,
+                                                        onPop: () {
+                                                          getFoldersUsingId();
+                                                        },
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: ItemWidget(
+                                                      folderId: folder.id,
+                                                      item: folder.items[index - folder.subFolders.length],
+                                                      onPop: () {
+                                                        getFoldersUsingId();
+                                                      },
+                                                    ),
+                                                  );
+                                          }),
+                                        )
+                                      : ListView.builder(
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemCount: folder.subFolders.length,
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) => GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                CupertinoPageRoute(
+                                                    builder: (context) => ItemsListScreen(
+                                                        folder: folder.subFolders[index], index: index)),
+                                              );
+                                            },
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                                child: FolderWidget(
+                                                  folder: folder.subFolders[index],
+                                                  parentFolderId: widget.folder.id,
+                                                  onPop: () {
+                                                    getFoldersUsingId();
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                         ),
+                                  if (screenWidth < maxScreenWidth)
+                                    ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: folder.items.length,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) => ItemWidget(
+                                        folderId: folder.id,
+                                        item: folder.items[index],
+                                        onPop: () {
+                                          getFoldersUsingId();
+                                        },
                                       ),
                                     ),
-                                  ),
-                                  ListView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: folder.items.length,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) => ItemWidget(
-                                      folderId: folder.id,
-                                      item: folder.items[index],
-                                    ),
-                                  ),
                                 ],
                               ),
                             );
@@ -139,7 +188,9 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
       ),
       floatingActionButton: GestureDetector(
         onTap: () {
-          AddNewItemsBottomModalSheet(context, widget.folder.id).showBottomSheet();
+          AddNewItemsBottomModalSheet(context, widget.folder.id).showBottomSheet(() {
+            getFoldersUsingId();
+          });
         },
         child: Container(
           height: 50,

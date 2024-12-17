@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory/features/add_folders/cubit/folder_cubit.dart';
+import 'package:inventory/features/add_items/cubits/add_item_cubit.dart';
 import 'package:inventory/features/add_items/widgets/add_colors_list_widget.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
@@ -141,11 +142,12 @@ class _ItemsMoveReasonScreenState extends State<ItemsMoveReasonScreen> {
                       if (reason == null || reason.trim().isEmpty) {
                         showToast(context, 'Invalid', 'Please Select Reason to Move', ToastificationType.warning);
                       } else {
-                        /*BlocProvider.of<FolderCubit>(context).moveFolder(context,
+                        BlocProvider.of<AddItemCubit>(context).moveFolder(context,
                             reasonToMove: reason,
                             destinationFolderId: widget.destinationFolder.id,
-                            folderId: widget.selectedItem.id,
-                            note: noteController.text);*/
+                            moveQuantity: widget.itemQuantity,
+                            itemId: widget.selectedItem.id,
+                            note: noteController.text);
                       }
                     }),
               );

@@ -14,14 +14,16 @@ import 'package:inventory/features/tags/view/add_tags_screen.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
 import 'package:inventory/global/widgets/chip_widget.dart';
+import 'package:inventory/main.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
 
 class AddFolderScreen extends StatefulWidget {
   final bool isEditScreen;
   final folder_model.Folder? folder;
   final int? folderId;
+  final Function() onPop;
 
-  const AddFolderScreen({super.key, this.isEditScreen = false, this.folder, this.folderId});
+  const AddFolderScreen({super.key, this.isEditScreen = false, this.folder, this.folderId, required this.onPop});
 
   @override
   State<AddFolderScreen> createState() => _AddFolderScreenState();
@@ -32,7 +34,6 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
   ValueNotifier<List<folder_model.Image>> listOfUrlImages = ValueNotifier([]);
   final _formKey = GlobalKey<FormState>();
   List<int> deletedImagesId = [];
-
 
   updateListOfImages(List<File> pickedImages) {
     listOfImages.value = [...listOfImages.value, ...pickedImages];
@@ -59,10 +60,12 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.sizeOf(context).width;
     var bloc = BlocProvider.of<FolderCubit>(context);
     return PopScope(
       canPop: true,
       onPopInvoked: (s) {
+        widget.onPop();
         bloc.clearAll();
       },
       child: Scaffold(
@@ -71,9 +74,71 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
             scrolledUnderElevation: 0.0,
             elevation: 0.0,
             backgroundColor: Colors.white,
-            title: AppText(
-              '${widget.isEditScreen ? 'Edit' : 'Add'} Folder',
-              style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            title: Row(
+              children: [
+                AppText(
+                  '${widget.isEditScreen ? 'Edit' : 'Add'} Folder',
+                  style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                Spacer(),
+                BlocBuilder<FolderCubit, FolderState> (
+                  builder: (context, state) {
+                    return Padding(
+                      padding:
+                      EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 8.0, right: 16, left: 16, top: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            width:120,
+                            child: AppButton(
+                                title: 'Cancel',
+                                color: Colors.grey,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }),
+                          ),
+                          const SizedBox(width: 8),
+                          SizedBox(
+                            width:120,
+                            child: AppButton(
+                                isLoading: state.uploadStatus is LoadingState,
+                                title: widget.isEditScreen ? 'Update' : 'Save',
+                                color: Colors.orangeAccent,
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (bloc.folderNameController.text.trim().isNotEmpty &&
+                                        bloc.folderDescriptionController.text.trim().isNotEmpty) {
+                                      if (state.uploadStatus is! LoadingState) {
+                                        if (widget.isEditScreen) {
+                                          log('Is Edit Screen');
+                                          BlocProvider.of<FolderCubit>(context)
+                                              .editFolders(context, images: listOfImages.value, folderId: widget.folderId!);
+                                        } else {
+                                          BlocProvider.of<FolderCubit>(context).addFolders(context,
+                                              listOfFiles: listOfImages.value, parentFolderId: widget.folderId);
+                                        }
+                                      }
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                          elevation: 10,
+                                          backgroundColor: Colors.white,
+                                          duration: const Duration(milliseconds: 800),
+                                          content: AppText(
+                                            'Folder Name and Description is required.',
+                                            maxLines: 2,
+                                            style: const TextStyle().defaultTextStyle(color: Colors.red),
+                                          )));
+                                    }
+                                  }
+                                }),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
             )),
         body: BlocBuilder<FolderCubit, FolderState>(
           builder: (context, state) {
@@ -82,108 +147,117 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
               child: SingleChildScrollView(
                 child: Form(
                   key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      ValueListenableBuilder(
-                        valueListenable: listOfUrlImages,
-                        builder: (context, listOfUrl, _) => ValueListenableBuilder(
-                            valueListenable: listOfImages,
-                            builder: (context, list, _) {
-                              return AddImageButton(
-                                onTap: () {
-                                  showBottomSheet(context);
-                                },
-                                isEditScreen: false,
-                                onDeleteNetworkImage: (a,deletedId) {
-                                  deletedImagesId.add(deletedId);
-                                  List<folder_model.Image> images = List.from(listOfUrlImages.value);
-                                  images.removeAt(a);
-                                  listOfUrlImages.value = images;
-                                },
-                                onDelete: (a) {
-                                  listOfImages.value.removeAt(a);
-                                  listOfImages.value = List.from(listOfImages.value); // Trigger rebuild
-                                },
-                                isFromDraftScreen: false,
-                                listOfImages: listOfImages.value,
-                                listOfUrlImages: listOfUrlImages.value,
-                              );
-                            }),
-                      ),
-
-                      const SizedBox(height: 16),
-                      //Name
-                      AppText('Folder Name',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                      customTextField(
-                          hintText: 'Enter Folder Name',
-                          inputType: TextInputType.text,
-                          controller: bloc.folderNameController,
-                          onTyped: (s) {}),
-
-                      //Tags
-                      AppText('Tags',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                              CupertinoPageRoute(builder: (context) => const AddTagsScreen(saveToFolderTag: true)));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: const Color(0xFFE4E4E7), width: 1.0),
+                      SizedBox(width: screenWidth > maxScreenWidth ? screenWidth * 0.2 : 0),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ValueListenableBuilder(
+                              valueListenable: listOfUrlImages,
+                              builder: (context, listOfUrl, _) => ValueListenableBuilder(
+                                  valueListenable: listOfImages,
+                                  builder: (context, list, _) {
+                                    return AddImageButton(
+                                      onTap: () {
+                                        showBottomSheet(context);
+                                      },
+                                      isEditScreen: false,
+                                      onDeleteNetworkImage: (a, deletedId) {
+                                        deletedImagesId.add(deletedId);
+                                        List<folder_model.Image> images = List.from(listOfUrlImages.value);
+                                        images.removeAt(a);
+                                        listOfUrlImages.value = images;
+                                      },
+                                      onDelete: (a) {
+                                        listOfImages.value.removeAt(a);
+                                        listOfImages.value = List.from(listOfImages.value); // Trigger rebuild
+                                      },
+                                      isFromDraftScreen: false,
+                                      listOfImages: listOfImages.value,
+                                      listOfUrlImages: listOfUrlImages.value,
+                                    );
+                                  }),
                             ),
-                            child: state.foldersTag.isEmpty
-                                ? Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: AppText('Select Tag',
-                                          style: const TextStyle()
-                                              .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                                    ),
-                                  )
-                                : Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Wrap(
-                                        runSpacing: 4,
-                                        spacing: 4,
-                                        crossAxisAlignment: WrapCrossAlignment.center,
-                                        children: [
-                                          ...List.generate(
-                                            state.foldersTag.length,
-                                            (index) => ChipWidget(
-                                              text: state.foldersTag[index].name,
-                                              onSelected: (s) {},
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
+
+                            const SizedBox(height: 16),
+                            //Name
+                            AppText('Folder Name',
+                                style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                            customTextField(
+                                hintText: 'Enter Folder Name',
+                                inputType: TextInputType.text,
+                                controller: bloc.folderNameController,
+                                onTyped: (s) {}),
+
+                            //Tags
+                            AppText('Tags',
+                                style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(context,
+                                    CupertinoPageRoute(builder: (context) => const AddTagsScreen(saveToFolderTag: true)));
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: const Color(0xFFE4E4E7), width: 1.0),
                                   ),
-                          ),
+                                  child: state.foldersTag.isEmpty
+                                      ? Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: AppText('Select Tag',
+                                                style: const TextStyle()
+                                                    .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                                          ),
+                                        )
+                                      : Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Wrap(
+                                              runSpacing: 4,
+                                              spacing: 4,
+                                              crossAxisAlignment: WrapCrossAlignment.center,
+                                              children: [
+                                                ...List.generate(
+                                                  state.foldersTag.length,
+                                                  (index) => ChipWidget(
+                                                    text: state.foldersTag[index].name,
+                                                    onSelected: (s) {},
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ),
+
+                            //Description
+                            AppText('Description',
+                                style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                            customTextField(
+                                hintText: 'Enter Description',
+                                inputType: TextInputType.text,
+                                controller: bloc.folderDescriptionController,
+                                maxLines: 5,
+                                onTyped: (s) {
+                                  // bloc.setFolderDetails(folderDescription: s);
+                                }),
+                          ],
                         ),
                       ),
+                      SizedBox(width: screenWidth > maxScreenWidth ? screenWidth * 0.2 : 0),
 
-                      //Description
-                      AppText('Description',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                      customTextField(
-                          hintText: 'Enter Description',
-                          inputType: TextInputType.text,
-                          controller: bloc.folderDescriptionController,
-                          maxLines: 5,
-                          onTyped: (s) {
-                            // bloc.setFolderDetails(folderDescription: s);
-                          }),
                     ],
                   ),
                 ),
@@ -191,7 +265,7 @@ class _AddFolderScreenState extends State<AddFolderScreen> {
             );
           },
         ),
-        bottomNavigationBar: BlocBuilder<FolderCubit, FolderState>(
+        bottomNavigationBar:screenWidth > maxScreenWidth ? null : BlocBuilder<FolderCubit, FolderState>(
           builder: (context, state) {
             return Padding(
               padding:

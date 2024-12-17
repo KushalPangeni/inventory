@@ -9,7 +9,7 @@ import 'dotted_container.dart';
 class AddImageButton extends StatelessWidget {
   final VoidCallback onTap;
   final Function(int) onDelete;
-  final Function(int,int) onDeleteNetworkImage;
+  final Function(int, int) onDeleteNetworkImage;
   final bool isEditScreen;
   final bool isFromDraftScreen;
   final List<File> listOfImages;
@@ -22,7 +22,8 @@ class AddImageButton extends StatelessWidget {
       required this.onDelete,
       required this.isFromDraftScreen,
       required this.listOfImages,
-      required this.listOfUrlImages, required this.onDeleteNetworkImage});
+      required this.listOfUrlImages,
+      required this.onDeleteNetworkImage});
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +156,10 @@ class AddImageButton extends StatelessWidget {
                                           child: Stack(
                                             alignment: Alignment.bottomCenter,
                                             children: [
-                                              Image.network(listOfUrlImages[index].path),
+                                              Image.network(
+                                                listOfUrlImages[index].path,
+                                                errorBuilder: (context, a, b) => const Center(child: Icon(Icons.error,color: Colors.red,)),
+                                              ),
                                               // Image.memory(Uint8List.fromList(bytes)),
                                               // Image.file(listOfImages[index]),
                                             ],
@@ -165,7 +169,7 @@ class AddImageButton extends StatelessWidget {
                                           right: 0,
                                           child: GestureDetector(
                                             onTap: () {
-                                              onDeleteNetworkImage(index,listOfUrlImages[index].id);
+                                              onDeleteNetworkImage(index, listOfUrlImages[index].id);
                                             },
                                             child: const Icon(Icons.delete, color: Colors.red),
                                           ),

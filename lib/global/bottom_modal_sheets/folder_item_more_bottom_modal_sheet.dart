@@ -15,10 +15,19 @@ class FolderItemMoreBottomModalSheet {
   final BuildContext context;
   final int folderId;
   final int? parentFolderId;
+  final Function() onPop;
 
-  FolderItemMoreBottomModalSheet(this.context, this.folder, this.folderId, this.parentFolderId);
+  FolderItemMoreBottomModalSheet(this.context, this.folder, this.folderId, this.parentFolderId, this.onPop);
+
+  ValueNotifier<folder_model.Folder?> fetchedFolder = ValueNotifier(null);
+
+  fetchFolder() async {
+    var folderFetched = await BlocProvider.of<FolderCubit>(context).getFolders(folderId: folder.id);
+    fetchedFolder.value = folderFetched;
+  }
 
   showBottomSheet({String title = 'Folder/Item Name ;'}) {
+    fetchFolder();
     showModalBottomSheet(
         backgroundColor: Colors.white,
         context: context,
@@ -55,39 +64,61 @@ class FolderItemMoreBottomModalSheet {
                 ),
                 const SizedBox(height: 36),
                 const Divider(),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => MoveScreen(selectedFolder: folder, parentId: parentFolderId)));
-                    },
-                    child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context, CupertinoPageRoute(builder: (context) => HistoryScreen(folderItemId: folderId)));
-                    },
-                    child: listTileAddFileFolder(Image.asset('assets/history.png', height: 28), 'History')),
-                listTileAddFileFolder(Image.asset('assets/export.png', height: 28), 'Export'),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => AddFolderScreen(
-                                  isEditScreen: true, folder: folder, folderId: folderId == 0 ? null : folderId)));
-                    },
-                    child: listTileAddFileFolder(Image.asset('assets/edit.png', height: 28), 'Edit')),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      BlocProvider.of<FolderCubit>(context).deleteFolder(folderId);
-                    },
-                    child: listTileAddFileFolder(Image.asset('assets/delete.png', height: 28), 'Delete')),
+                ValueListenableBuilder(
+                    valueListenable: fetchedFolder,
+                    builder: (context, folder, _) {
+                      return folder == null
+                          ? const CircularProgressIndicator(strokeCap: StrokeCap.round)
+                          : Column(
+                              children: [
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              builder: (context) => MoveScreen(
+                                                    selectedFolder: folder,
+                                                    parentId: parentFolderId,
+                                                    onPop: () {},
+                                                  )));
+                                    },
+                                    child: listTileAddFileFolder(Image.asset('assets/move.png', height: 28), 'Move')),
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              builder: (context) => HistoryScreen(folderItemId: folderId)));
+                                    },
+                                    child: listTileAddFileFolder(
+                                        Image.asset('assets/history.png', height: 28), 'History')),
+                                listTileAddFileFolder(Image.asset('assets/export.png', height: 28), 'Export'),
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              builder: (context) => AddFolderScreen(
+                                                    isEditScreen: true,
+                                                    folder: folder,
+                                                    folderId: folderId == 0 ? null : folderId,
+                                                    onPop: () {},
+                                                  )));
+                                    },
+                                    child: listTileAddFileFolder(Image.asset('assets/edit.png', height: 28), 'Edit')),
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      BlocProvider.of<FolderCubit>(context).deleteFolder(folderId);
+                                    },
+                                    child:
+                                        listTileAddFileFolder(Image.asset('assets/delete.png', height: 28), 'Delete')),
+                              ],
+                            );
+                    })
               ],
             ),
           );

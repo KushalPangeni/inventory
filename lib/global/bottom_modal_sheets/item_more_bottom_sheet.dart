@@ -12,8 +12,9 @@ class ItemMoreBottomModalSheet {
   final int itemId;
   final int folderId;
   final BuildContext context;
+  final Function() onPop;
 
-  ItemMoreBottomModalSheet(this.context, this.itemId, this.folderId);
+  ItemMoreBottomModalSheet(this.context, this.itemId, this.folderId, this.onPop);
 
   ValueNotifier<import_item.Item?> item = ValueNotifier(null);
 
@@ -134,7 +135,9 @@ class ItemMoreBottomModalSheet {
                                         context,
                                         CupertinoPageRoute(
                                             builder: (context) =>
-                                                AddItemScreen(folderId: folderId, isEditScreen: true, item: item)));
+                                                AddItemScreen(folderId: folderId, isEditScreen: true, item: item,onPop: (){
+                                                  onPop();
+                                                },)));
                                   },
                                   child: listTileAddFileFolder(Image.asset('assets/edit.png', height: 28), 'Edit')),
                               GestureDetector(

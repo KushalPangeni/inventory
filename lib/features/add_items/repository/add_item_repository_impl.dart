@@ -79,8 +79,7 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "_method": "PUT"
     });
 
-    var request = _client.uploadFiles(
-        endPoint: Request.createUrl('api/items/$itemId'), formData: formData);
+    var request = _client.uploadFiles(endPoint: Request.createUrl('api/items/$itemId'), formData: formData);
     return await _client.handleNetworkCall(request);
   }
 
@@ -143,14 +142,29 @@ class AddItemRepositoryImpl implements AddItemRepository {
       "folder_id": 28,
       "sku": "string",
     });*/
-    var request = _client.uploadFiles(
-        endPoint: Request.createUrl('api/items'), formData: formData);
+    var request = _client.uploadFiles(endPoint: Request.createUrl('api/items'), formData: formData);
     return await _client.handleNetworkCall(request);
   }
 
   @override
   EitherResponse deleteImages({required int deletedId}) async {
     var request = _client.get(endPoint: Request.createUrl('api/deletefile/$deletedId'));
+    return await _client.handleNetworkCall(request);
+  }
+
+  @override
+  EitherResponse moveFolder({required int itemId,
+    required int moveQuantity,
+    required int destinationFolderId,
+    required String reasonToMove,
+    required String note}) async {
+    var request = _client.post(endPoint: Request.createUrl('api/items/move'), data: {
+      "item_id": itemId,
+      "quantity": moveQuantity,
+      "destination_folder_id": destinationFolderId,
+      "reason": reasonToMove,
+      "note": note
+    });
     return await _client.handleNetworkCall(request);
   }
 }

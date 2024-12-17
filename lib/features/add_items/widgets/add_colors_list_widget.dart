@@ -243,7 +243,8 @@ Widget customTextField(
     int maxLines = 2,
     TextInputType inputType = TextInputType.text,
     required TextEditingController controller,
-    required Function(String) onTyped}) {
+    required Function(String) onTyped,
+    bool checkValidator = true}) {
   return Padding(
     padding: const EdgeInsets.only(top: 8, bottom: 8, right: 4),
     child: TextFormField(
@@ -251,12 +252,14 @@ Widget customTextField(
       maxLines: maxLines,
       controller: controller,
       validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'This field cannot be empty.';
+        if (checkValidator) {
+          if (value == null || value.isEmpty) {
+            return 'This field cannot be empty.';
+          }
         }
         return null;
       },
-      onTapOutside: (a){
+      onTapOutside: (a) {
         KeyboardUtils().hideKeyBoard();
       },
       inputFormatters: inputType == TextInputType.number

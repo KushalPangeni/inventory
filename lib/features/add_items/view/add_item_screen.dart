@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,14 +16,18 @@ import 'package:inventory/features/units/cubit/unit_cubit.dart';
 import 'package:inventory/features/units/model/unit_model.dart';
 import 'package:inventory/global/widgets/app_button.dart';
 import 'package:inventory/global/widgets/app_text.dart';
+import 'package:inventory/main.dart';
 import 'package:inventory/network/api_request_state/api_request_state.dart';
+import 'package:inventory/network/exception.dart';
+import 'package:toastification/toastification.dart';
 
 class AddItemScreen extends StatefulWidget {
   final bool isEditScreen;
   final int? folderId;
   final folder_model.Item? item;
+  final Function() onPop;
 
-  const AddItemScreen({super.key, this.folderId, this.isEditScreen = false, this.item});
+  const AddItemScreen({super.key, this.folderId, this.isEditScreen = false, this.item, required this.onPop});
 
   @override
   State<AddItemScreen> createState() => _AddItemScreenState();
@@ -33,6 +38,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   ValueNotifier<List<folder_model.Image>> listOfUrlImages = ValueNotifier([]);
   ValueNotifier<int?> dropdownValue = ValueNotifier(null);
   ValueNotifier<int?> unitId = ValueNotifier(null);
+  final _formKey = GlobalKey<FormState>();
 
   List<int> deletedImagesId = [];
 
@@ -70,359 +76,479 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.sizeOf(context).width;
+
     var bloc = BlocProvider.of<AddItemCubit>(context);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-          scrolledUnderElevation: 0.0,
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          title: AppText(
-            '${widget.isEditScreen ? 'Edit' : 'Add'} Item',
-            style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          )),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ValueListenableBuilder(
-                valueListenable: listOfUrlImages,
-                builder: (context, listOfUrl, _) => ValueListenableBuilder(
-                    valueListenable: listOfImages,
-                    builder: (context, list, _) {
-                      return AddImageButton(
-                        onTap: () {
-                          showBottomSheet(context);
-                        },
-                        isEditScreen: false,
-                        onDeleteNetworkImage: (a,deletedId) {
-                          deletedImagesId.add(deletedId);
-                          List<folder_model.Image> images = List.from(listOfUrlImages.value);
-                          images.removeAt(a);
-                          listOfUrlImages.value = images;
-                        },
-                        onDelete: (a) {
-                          listOfImages.value.removeAt(a);
-                          listOfImages.value = List.from(listOfImages.value); // Trigger rebuild
-                        },
-                        isFromDraftScreen: false,
-                        listOfImages: listOfImages.value,
-                        listOfUrlImages: listOfUrlImages.value,
-                      );
-                    }),
-              ),
-              const SizedBox(height: 16),
-
-              //Name
-              AppText('Name', style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              customTextField(
-                  hintText: 'Name',
-                  inputType: TextInputType.text,
-                  controller: bloc.itemNameController,
-                  onTyped: (s) {}),
-              //Fabric No.
-              AppText('Fabric Number',
-                  style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              customTextField(
-                  hintText: 'Fabric Number',
-                  inputType: TextInputType.number,
-                  controller: bloc.fabricNumberController,
-                  onTyped: (s) {}),
-              // Party Name
-              AppText('Party Name',
-                  style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              customTextField(
-                  hintText: 'Party Name',
-                  inputType: TextInputType.text,
-                  controller: bloc.partyNameController,
-                  onTyped: (s) {}),
-              //Shop name
-              AppText('Shop name',
-                  style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              customTextField(
-                  hintText: 'Shop Name',
-                  inputType: TextInputType.text,
-                  controller: bloc.shopNameController,
-                  onTyped: (s) {}),
-              // Order Quantity
-              AppText('Order Quantity',
-                  style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              customTextField(
-                  hintText: 'Eg. 1000',
-                  inputType: TextInputType.number,
-                  controller: bloc.orderQuantityController,
-                  onTyped: (s) {}),
-              Row(
-                children: [
-                  Expanded(
-                      child: AppText('Width',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
-                  const SizedBox(width: 10),
-                  Expanded(
-                      child: AppText('GSM',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: customTextField(
-                          hintText: '150 cm',
-                          inputType: TextInputType.number,
-                          controller: bloc.widthController,
-                          onTyped: (s) {})),
-                  const SizedBox(width: 10),
-                  Expanded(
-                      child: customTextField(
-                          hintText: 'GSM',
-                          inputType: TextInputType.number,
-                          controller: bloc.gsmController,
-                          onTyped: (s) {})),
-                ],
-              ),
-              AppText('Shortage (%)',
-                  style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              customTextField(
-                  hintText: 'Shortage',
-                  inputType: TextInputType.number,
-                  controller: bloc.shortageController,
-                  onTyped: (s) {}),
-              BlocBuilder<UnitCubit, UnitState>(
-                builder: (context, state) {
-                  return Row(
-                    children: [
-                      Expanded(
-                          child: AppText('Min. Quantity',
-                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
-                      const SizedBox(width: 10),
-                      Expanded(
-                          child: AppText('Unit',
-                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
-                    ],
-                  );
-                },
-              ),
-              BlocBuilder<UnitCubit, UnitState>(
-                builder: (context, state) {
-                  return Row(
-                    children: [
-                      Expanded(
-                          child: customTextField(
-                              hintText: '0',
-                              inputType: TextInputType.number,
-                              controller: bloc.minQuantityController,
-                              onTyped: (s) {})),
-                      const SizedBox(width: 10),
-                      state.listOfUnits.isNotEmpty
-                          ? Expanded(
-                              flex: 1,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 0, right: 4),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: const Color(0xFFE4E4E7))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 4.0),
-                                    child: ValueListenableBuilder<int?>(
-                                      valueListenable: unitId,
-                                      builder: (context, colorId, _) => DropdownButton<int?>(
-                                        value: unitId.value,
-                                        icon: const SizedBox(),
-                                        elevation: 16,
-                                        style: const TextStyle(color: Colors.deepPurple),
-                                        underline: const SizedBox(),
-                                        onChanged: (int? value) {
-                                          // This is called when the user selects an item.
-                                          log("$value ?? 'No id'");
-                                          unitId.value = value;
-                                        },
-                                        items: state.listOfUnits.map<DropdownMenuItem<int>>((Unit unit) {
-                                          return DropdownMenuItem<int>(
-                                            value: unit.id,
-                                            child: Text(unit.name),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : const Text("No Units available", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                    ],
-                  );
-                },
-              ),
-              AppText('Kg / meter',
-                  style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              customTextField(
-                  hintText: 'Enter in meter',
-                  inputType: TextInputType.number,
-                  controller: bloc.oneKgController,
-                  onTyped: (s) {}),
-              Row(
-                children: [
-                  Expanded(
-                      child: AppText('Average',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
-                  Expanded(
-                      child: AppText('Avg Unit',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: customTextField(
-                        hintText: 'Average',
-                        inputType: TextInputType.number,
-                        controller: bloc.averageController,
-                        onTyped: (s) {}),
-                  ),
-                  Expanded(
-                    child: customTextField(
-                        hintText: 'Avg Unit',
-                        inputType: TextInputType.text,
-                        controller: bloc.averageUnitController,
-                        onTyped: (s) {}),
-                  ),
-                ],
-              ),
-
-              ...[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0),
-                  child: AppText('Selected Colors',
-                      style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+    return PopScope(
+      onPopInvoked: (s) {
+        widget.onPop();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+            scrolledUnderElevation: 0.0,
+            elevation: 0.0,
+            backgroundColor: Colors.white,
+            title: Row(
+              children: [
+                AppText(
+                  '${widget.isEditScreen ? 'Edit' : 'Add'} Item',
+                  style: const TextStyle().defaultTextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
-                Table(
+                const Spacer(),
+                if (screenWidth > maxScreenWidth)
+                  BlocBuilder<AddItemCubit, AddItemState>(
+                    builder: (context, state) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: 120,
+                              child: AppButton(
+                                  title: 'Cancel',
+                                  color: Colors.grey,
+                                  onPressed: () {
+                                    if (state.status is! LoadingState) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  }),
+                            ),
+                            const SizedBox(width: 8),
+                            SizedBox(
+                              width: 120,
+                              child: AppButton(
+                                title: widget.isEditScreen ? 'Update' : 'Save',
+                                isLoading: state.status is LoadingState,
+                                color: Colors.orangeAccent,
+                                onPressed: () {
+                                  var bloc = BlocProvider.of<AddItemCubit>(context);
+
+                                  if (_formKey.currentState!.validate()) {
+                                    if (bloc.itemNameController.text.trim().isNotEmpty &&
+                                        bloc.fabricNumberController.text.trim().isNotEmpty &&
+                                        bloc.notesController.text.trim().isNotEmpty &&
+                                        bloc.shopNameController.text.trim().isNotEmpty) {
+                                      if (state.status is! LoadingState) {
+                                        if (widget.isEditScreen) {
+                                          BlocProvider.of<AddItemCubit>(context).deleteImages(deletedImagesId);
+                                          BlocProvider.of<AddItemCubit>(context).editItems(
+                                            context,
+                                            widget.folderId,
+                                            listOfImages.value,
+                                            unitId.value ?? 0,
+                                            widget.item!.id,
+                                          );
+                                        } else {
+                                          if (unitId.value == null) {
+                                            showToast(
+                                                context, 'Invalid', 'Please select Unit', ToastificationType.warning);
+                                          } else {
+                                            BlocProvider.of<AddItemCubit>(context).addItems(
+                                                context, widget.folderId, listOfImages.value, unitId.value!, () {
+                                              // getFoldersUsingId();
+                                            });
+                                          }
+                                        }
+                                      }
+                                    } else {
+                                      showToast(context, 'Invalid', 'Please enter notes.', ToastificationType.warning);
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+              ],
+            )),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Row(
                   children: [
-                    TableRow(children: [
-                      AppText('Color',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                      AppText('Number',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                      AppText('Quantity',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                      AppText('Rolls',
-                          style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                    ]),
+                    SizedBox(width: screenWidth > maxScreenWidth ? screenWidth * 0.2 : 0),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ValueListenableBuilder(
+                            valueListenable: listOfUrlImages,
+                            builder: (context, listOfUrl, _) => ValueListenableBuilder(
+                                valueListenable: listOfImages,
+                                builder: (context, list, _) {
+                                  return AddImageButton(
+                                    onTap: () {
+                                      if (kIsWeb) {
+                                        log('It is web');
+
+                                      } else {
+                                        showBottomSheet(context);
+                                      }
+                                    },
+                                    isEditScreen: false,
+                                    onDeleteNetworkImage: (a, deletedId) {
+                                      deletedImagesId.add(deletedId);
+                                      List<folder_model.Image> images = List.from(listOfUrlImages.value);
+                                      images.removeAt(a);
+                                      listOfUrlImages.value = images;
+                                    },
+                                    onDelete: (a) {
+                                      listOfImages.value.removeAt(a);
+                                      listOfImages.value = List.from(listOfImages.value); // Trigger rebuild
+                                    },
+                                    isFromDraftScreen: false,
+                                    listOfImages: listOfImages.value,
+                                    listOfUrlImages: listOfUrlImages.value,
+                                  );
+                                }),
+                          ),
+                          const SizedBox(height: 16),
+
+                          //Name
+                          AppText('Name',
+                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          customTextField(
+                              hintText: 'Name',
+                              inputType: TextInputType.text,
+                              controller: bloc.itemNameController,
+                              onTyped: (s) {}),
+                          //Fabric No.
+                          AppText('Fabric Number',
+                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          customTextField(
+                              hintText: 'Fabric Number',
+                              inputType: TextInputType.name,
+                              controller: bloc.fabricNumberController,
+                              onTyped: (s) {}),
+                          // Party Name
+                          AppText('Party Name',
+                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          customTextField(
+                              hintText: 'Party Name',
+                              inputType: TextInputType.text,
+                              controller: bloc.partyNameController,
+                              onTyped: (s) {}),
+                          //Shop name
+                          AppText('Shop name',
+                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          customTextField(
+                              hintText: 'Shop Name',
+                              inputType: TextInputType.text,
+                              controller: bloc.shopNameController,
+                              onTyped: (s) {}),
+                          // Order Quantity
+                          AppText('Order Quantity',
+                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          customTextField(
+                              hintText: 'Eg. 1000',
+                              inputType: TextInputType.number,
+                              controller: bloc.orderQuantityController,
+                              onTyped: (s) {}),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: AppText('Width',
+                                      style: const TextStyle()
+                                          .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                  child: AppText('GSM',
+                                      style: const TextStyle()
+                                          .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: customTextField(
+                                      hintText: '150 cm',
+                                      inputType: TextInputType.number,
+                                      controller: bloc.widthController,
+                                      onTyped: (s) {})),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                  child: customTextField(
+                                      hintText: 'GSM',
+                                      inputType: TextInputType.number,
+                                      controller: bloc.gsmController,
+                                      onTyped: (s) {})),
+                            ],
+                          ),
+                          AppText('Shortage (%)',
+                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          customTextField(
+                              hintText: 'Shortage',
+                              inputType: TextInputType.number,
+                              controller: bloc.shortageController,
+                              onTyped: (s) {}),
+                          BlocBuilder<UnitCubit, UnitState>(
+                            builder: (context, state) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                      child: AppText('Min. Quantity',
+                                          style: const TextStyle()
+                                              .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                      child: AppText('Unit',
+                                          style: const TextStyle()
+                                              .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                                ],
+                              );
+                            },
+                          ),
+                          BlocBuilder<UnitCubit, UnitState>(
+                            builder: (context, state) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                      child: customTextField(
+                                          hintText: '0',
+                                          inputType: TextInputType.number,
+                                          controller: bloc.minQuantityController,
+                                          onTyped: (s) {})),
+                                  const SizedBox(width: 10),
+                                  state.listOfUnits.isNotEmpty
+                                      ? Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(bottom: 0, right: 4),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                  border: Border.all(color: const Color(0xFFE4E4E7))),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 4.0),
+                                                child: ValueListenableBuilder<int?>(
+                                                  valueListenable: unitId,
+                                                  builder: (context, colorId, _) => DropdownButton<int?>(
+                                                    value: unitId.value,
+                                                    icon: const SizedBox(),
+                                                    elevation: 16,
+                                                    style: const TextStyle(color: Colors.deepPurple),
+                                                    underline: const SizedBox(),
+                                                    onChanged: (int? value) {
+                                                      // This is called when the user selects an item.
+                                                      log("$value ?? 'No id'");
+                                                      unitId.value = value;
+                                                    },
+                                                    items: state.listOfUnits.map<DropdownMenuItem<int>>((Unit unit) {
+                                                      return DropdownMenuItem<int>(
+                                                        value: unit.id,
+                                                        child: Text(unit.name),
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const Text("No Units available",
+                                          style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                ],
+                              );
+                            },
+                          ),
+                          AppText('Kg / meter',
+                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          customTextField(
+                              hintText: 'Enter in meter',
+                              inputType: TextInputType.number,
+                              controller: bloc.oneKgController,
+                              onTyped: (s) {}),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: AppText('Average',
+                                      style: const TextStyle()
+                                          .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                              Expanded(
+                                  child: AppText('Avg Unit',
+                                      style: const TextStyle()
+                                          .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: customTextField(
+                                    hintText: 'Average',
+                                    inputType: TextInputType.number,
+                                    controller: bloc.averageController,
+                                    onTyped: (s) {}),
+                              ),
+                              Expanded(
+                                child: customTextField(
+                                    hintText: 'Avg Unit',
+                                    inputType: TextInputType.text,
+                                    controller: bloc.averageUnitController,
+                                    checkValidator: false,
+                                    onTyped: (s) {}),
+                              ),
+                            ],
+                          ),
+
+                          ...[
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 12.0),
+                              child: AppText('Selected Colors',
+                                  style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                            ),
+                            Table(
+                              children: [
+                                TableRow(children: [
+                                  AppText('Color',
+                                      style: const TextStyle()
+                                          .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                                  AppText('Number',
+                                      style: const TextStyle()
+                                          .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                                  AppText('Quantity',
+                                      style: const TextStyle()
+                                          .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                                  AppText('Rolls',
+                                      style: const TextStyle()
+                                          .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                                ]),
+                              ],
+                            ),
+                            BlocBuilder<ColorCubit, ColorState>(
+                              builder: (context, colorState) {
+                                return colorState.status is LoadingState
+                                    ? const SizedBox()
+                                    : BlocBuilder<AddItemCubit, AddItemState>(
+                                        builder: (context, state) => ListView.builder(
+                                            itemCount: state.colorList.length,
+                                            shrinkWrap: true,
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) {
+                                              if (state.colorList[index].colorId != null) {
+                                                // log("ColorList ==> ${state.colorList[index].colorId} '${colorState.listOfUnits.firstWhere((color) => color.id == state.colorList[index].colorId).name}'");
+                                                return Table(
+                                                  children: [
+                                                    TableRow(children: [
+                                                      AppText(colorState.listOfUnits
+                                                          .firstWhere(
+                                                              (color) => color.id == state.colorList[index].colorId)
+                                                          .name),
+                                                      AppText(state.colorList[index].number.toString()),
+                                                      AppText(state.colorList[index].quantity.toString()),
+                                                      AppText(state.colorList[index].roll.toString()),
+                                                    ])
+                                                  ],
+                                                  /*child: AppText(colorState.listOfUnits
+                                                  .firstWhere((color) => color.id == state.colorList[index].colorId)
+                                                  .name),*/
+                                                );
+                                              } else {
+                                                return const SizedBox();
+                                              }
+                                            }));
+                              },
+                            ),
+                          ],
+                          TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context, CupertinoPageRoute(builder: (context) => const AddColorsListWidget()));
+                              },
+                              child: Text('Add Colors',
+                                  style: const TextStyle().defaultTextStyle(
+                                      fontSize: 14, fontWeight: FontWeight.w600, color: Colors.blue))),
+                          AppText('Notes',
+                              style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                          customTextField(
+                              hintText: 'Notes',
+                              inputType: TextInputType.text,
+                              controller: bloc.notesController,
+                              checkValidator: true,
+                              onTyped: (s) {}),
+                          const SizedBox(height: 32)
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: screenWidth > maxScreenWidth ? screenWidth * 0.2 : 0),
                   ],
                 ),
-                BlocBuilder<ColorCubit, ColorState>(
-                  builder: (context, colorState) {
-                    return colorState.status is LoadingState
-                        ? const SizedBox()
-                        : BlocBuilder<AddItemCubit, AddItemState>(
-                            builder: (context, state) => ListView.builder(
-                                itemCount: state.colorList.length,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  if (state.colorList[index].colorId != null) {
-                                    // log("ColorList ==> ${state.colorList[index].colorId} '${colorState.listOfUnits.firstWhere((color) => color.id == state.colorList[index].colorId).name}'");
-                                    return Table(
-                                      children: [
-                                        TableRow(children: [
-                                          AppText(colorState.listOfUnits
-                                              .firstWhere((color) => color.id == state.colorList[index].colorId)
-                                              .name),
-                                          AppText(state.colorList[index].number.toString()),
-                                          AppText(state.colorList[index].quantity.toString()),
-                                          AppText(state.colorList[index].roll.toString()),
-                                        ])
-                                      ],
-                                      /*child: AppText(colorState.listOfUnits
-                                      .firstWhere((color) => color.id == state.colorList[index].colorId)
-                                      .name),*/
-                                    );
-                                  } else {
-                                    return const SizedBox();
-                                  }
-                                }));
-                  },
-                ),
-              ],
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(context, CupertinoPageRoute(builder: (context) => const AddColorsListWidget()));
-                  },
-                  child: Text('Add Colors',
-                      style: const TextStyle()
-                          .defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.blue))),
-              AppText('Notes', style: const TextStyle().defaultTextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              customTextField(
-                  hintText: 'Notes', inputType: TextInputType.text, controller: bloc.notesController, onTyped: (s) {}),
-            ],
+              ),
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: BlocBuilder<AddItemCubit, AddItemState>(
-        builder: (context, state) {
-          return Padding(
-            padding:
-                EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 8.0, right: 16, left: 16, top: 4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Flexible(
-                    flex: 2,
-                    child: AppButton(
-                        title: 'Cancel',
-                        color: Colors.grey,
-                        onPressed: () {
-                          if (state.status is! LoadingState) {
-                            Navigator.of(context).pop();
-                          }
-                        })),
-                const SizedBox(width: 10),
-                Flexible(
-                  flex: 2,
-                  child: AppButton(
-                    title: widget.isEditScreen ? 'Update' : 'Save',
-                    isLoading: state.status is LoadingState,
-                    color: Colors.orangeAccent,
-                    onPressed: () {
-                      var bloc = BlocProvider.of<AddItemCubit>(context);
-                      if (bloc.itemNameController.text.trim().isNotEmpty &&
-                          bloc.fabricNumberController.text.trim().isNotEmpty &&
-                          bloc.notesController.text.trim().isNotEmpty &&
-                          bloc.shopNameController.text.trim().isNotEmpty) {
-                        if (state.status is! LoadingState) {
-                          if (widget.isEditScreen) {
-                            BlocProvider.of<AddItemCubit>(context).deleteImages(deletedImagesId);
-                            BlocProvider.of<AddItemCubit>(context).editItems(
-                              context,
-                              widget.folderId,
-                              listOfImages.value,
-                              unitId.value ?? 0,
-                              widget.item!.id,
-                            );
-                          } else {
-                            BlocProvider.of<AddItemCubit>(context)
-                                .addItems(context, widget.folderId, listOfImages.value, unitId.value!);
-                          }
-                        }
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            elevation: 10,
-                            backgroundColor: Colors.white,
-                            duration: Duration(seconds: 1),
-                            content: AppText(
-                              'Item name, Fabric number, Shop Name and Notes is required.',
-                              maxLines: 2,
-                            )));
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+        bottomNavigationBar: screenWidth > maxScreenWidth
+            ? null
+            : BlocBuilder<AddItemCubit, AddItemState>(
+                builder: (context, state) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom + 8.0, right: 16, left: 16, top: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Flexible(
+                            flex: 2,
+                            child: AppButton(
+                                title: 'Cancel',
+                                color: Colors.grey,
+                                onPressed: () {
+                                  if (state.status is! LoadingState) {
+                                    Navigator.of(context).pop();
+                                  }
+                                })),
+                        const SizedBox(width: 10),
+                        Flexible(
+                          flex: 2,
+                          child: AppButton(
+                            title: widget.isEditScreen ? 'Update' : 'Save',
+                            isLoading: state.status is LoadingState,
+                            color: Colors.orangeAccent,
+                            onPressed: () {
+                              var bloc = BlocProvider.of<AddItemCubit>(context);
+
+                              if (_formKey.currentState!.validate()) {
+                                if (bloc.notesController.text.trim().isNotEmpty) {
+                                  if (state.status is! LoadingState) {
+                                    if (widget.isEditScreen) {
+                                      BlocProvider.of<AddItemCubit>(context).deleteImages(deletedImagesId);
+                                      BlocProvider.of<AddItemCubit>(context).editItems(
+                                        context,
+                                        widget.folderId,
+                                        listOfImages.value,
+                                        unitId.value ?? 0,
+                                        widget.item!.id,
+                                      );
+                                    } else {
+                                      if (unitId.value == null) {
+                                        showToast(context, 'Invalid', 'Please select Unit', ToastificationType.warning);
+                                      } else {
+                                        BlocProvider.of<AddItemCubit>(context)
+                                            .addItems(context, widget.folderId, listOfImages.value, unitId.value!, () {
+                                          // getFoldersUsingId();
+                                        });
+                                      }
+                                    }
+                                  }
+                                } else {
+                                  showToast(context, 'Invalid', 'Please enter notes.', ToastificationType.warning);
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }

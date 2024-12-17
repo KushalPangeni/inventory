@@ -64,7 +64,7 @@ class AddFolderRepositoryImpl implements AddFolderRepository {
       required List<int> listOfTagsId}) async {
     FormData formData = FormData.fromMap({
       "name": folderName,
-      "image[]": images,
+      "images[]": images,
       "description": folderDescription,
       "parent_folder_id": parentFolderId ?? 0,
       "total_price": 0,

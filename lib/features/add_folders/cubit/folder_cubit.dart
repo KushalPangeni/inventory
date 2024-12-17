@@ -98,14 +98,7 @@ class FolderCubit extends Cubit<FolderState> {
       // FolderModel folderModel = r.data;
       emit(state.copyWith(uploadStatus: const LoadedState()));
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          elevation: 10,
-          backgroundColor: Colors.white,
-          duration: const Duration(milliseconds: 800),
-          content: AppText(
-            'Folder added successfully.',
-            style: const TextStyle().defaultTextStyle(),
-          )));
+      showToast(context, 'Success', 'Folder added successfully', ToastificationType.success);
       clearAll();
     });
   }
@@ -128,14 +121,7 @@ class FolderCubit extends Cubit<FolderState> {
       log('Edit Folders === > ${r.data}');
       emit(state.copyWith(uploadStatus: const LoadedState()));
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          elevation: 10,
-          backgroundColor: Colors.white,
-          duration: const Duration(milliseconds: 800),
-          content: AppText(
-            'Folder added successfully.',
-            style: const TextStyle().defaultTextStyle(),
-          )));
+      showToast(context, 'Success', 'Folder updated successfully', ToastificationType.success);
       clearAll();
     });
   }
@@ -156,7 +142,6 @@ class FolderCubit extends Cubit<FolderState> {
       log('Move Folders === > ${r.data}');
       emit(state.copyWith(status: const LoadedState()));
       showToast(context, 'Success', 'Folder moved successfully.', ToastificationType.success);
-      Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context);
     });

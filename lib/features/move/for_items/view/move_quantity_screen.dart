@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -90,7 +92,7 @@ class _ItemsMoveQuantityScreenState extends State<ItemsMoveQuantityScreen> {
                 ),
               ),
             ),
-            AppText('of ${widget.selectedItem.orderQuantity} units', style: const TextStyle(fontSize: 16)),
+            AppText('of ${widget.selectedItem.quantity} units', style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 12),
             /*InkWell(
               onTap: () {},
@@ -113,12 +115,13 @@ class _ItemsMoveQuantityScreenState extends State<ItemsMoveQuantityScreen> {
             color: Colors.orangeAccent,
             onPressed: () {
               KeyboardUtils().hideKeyBoard();
+              log('Quantity ---> ${widget.selectedItem.quantity}');
               if(itemQuantity.text.trim().isNotEmpty && int.parse(itemQuantity.text) < (widget.selectedItem.quantity ?? 0) ){
                 Navigator.push(
                     context,
                     CupertinoPageRoute(
                         builder: (context) => ItemsMoveReasonScreen(
-                            itemQuantity: 0,
+                            itemQuantity: int.parse(itemQuantity.text),
                             selectedItem: widget.selectedItem,
                             destinationFolder: widget.destinationFolder),),);
               }
